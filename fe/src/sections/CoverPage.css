@@ -1,0 +1,37 @@
+.cover-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #d3a6a7;
+    color: white;
+    text-align: center;
+  }
+  
+  .cover-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .cover-content p {
+    font-size: 1.5rem;
+    color: #ccc;
+  }
+
+  .scroll-indicator {
+    font-size: 2rem;
+    margin-top: 2rem;
+    animation: bounce 2s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
