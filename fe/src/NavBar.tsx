@@ -46,9 +46,12 @@ const Navbar: React.FC = () => {
             <li><a href="#about" onClick={() => handleScroll('about')}>About Me</a></li>
             <li><a href="#experience" onClick={() => handleScroll('experience')}>Experience</a></li>
             <li><a href="#education" onClick={() => handleScroll('education')}>Education</a></li>
+            <li><a href="#skills" onClick={() => handleScroll('skills')}>Skills</a></li>
+            <li><a href="#hobbies" onClick={() => handleScroll('hobbies')}>Hobbies</a></li>
             <li><a href="#projects" onClick={() => handleScroll('projects')}>Projects</a></li>
             <li><a href="#resume" onClick={() => handleScroll('resume')}>Resume</a></li>
             <li><a href="#contact" onClick={() => handleScroll('contact')}>Contact</a></li>
+            <li><a href="#comments" onClick={() => handleScroll('comments')}>Comments</a></li>
             <li>
               <button className="login-button">Log In</button>
             </li>
