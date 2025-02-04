@@ -2,8 +2,8 @@ package business.about;
 
 import data.about.About;
 import data.about.AboutRepository;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import presentation.about.AboutRequestModel;
@@ -12,9 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import utils.EntityModelUtil;
 import utils.exceptions.NotFoundException;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -48,7 +45,7 @@ public class AboutServiceImpl implements AboutService {
 
 
     @Override
-    public Mono<AboutResponseModel> updateAbout(@PathVariable String aboutId, Mono<AboutRequestModel> aboutRequestModel) {
+    public Mono<AboutResponseModel> updateAbout(@PathVariable String aboutId,  Mono<AboutRequestModel> aboutRequestModel) {
         return aboutRepository.findAboutByAboutId(aboutId)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("About Id not found: " + aboutId))))
                 .flatMap(existingAbout -> {
