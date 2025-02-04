@@ -19,8 +19,8 @@ public class AboutController {
     }
 
     @GetMapping("/{id}")
-    public AboutResponseModel getAbout(@PathVariable Long id) {
-        return aboutService.getAbout(id);
+    public AboutResponseModel getAbout(@PathVariable String aboutId) {
+        return aboutService.getAbout(aboutId);
     }
 
     @GetMapping
@@ -29,12 +29,12 @@ public class AboutController {
     }
 
     @PutMapping("/{id}")
-    public AboutResponseModel updateAbout(@PathVariable Long id, @RequestBody AboutRequestModel request) {
-        return aboutService.updateAbout(id, request);
+    public AboutResponseModel updateAbout(@PathVariable String aboutId, @RequestBody AboutRequestModel request) {
+        return aboutService.updateAbout(aboutId, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAbout(@PathVariable Long id) {
-        aboutService.deleteAbout(id);
+    public void deleteAbout(@PathVariable String aboutId) {
+        aboutService.deleteAbout(aboutId);
     }
 }

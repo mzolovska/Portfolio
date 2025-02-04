@@ -8,8 +8,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ContactResponseModel {
-    private Long id;
+    private String contactId;
     private String name;
     private String email;
     private String message;
+
+    public ContactResponseModel() {
+
+    }
 }

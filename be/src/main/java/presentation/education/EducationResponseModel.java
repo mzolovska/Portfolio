@@ -8,10 +8,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class EducationResponseModel {
-    private Long id;
+    private String educationId;
     private String institution;
     private String degree;
     private String fieldOfStudy;
     private int startYear;
     private int endYear;
+
+    public EducationResponseModel() {
+
+    }
 }

@@ -2,42 +2,67 @@ package business.experience;
 
 import data.experience.Experience;
 import data.experience.ExperienceRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import presentation.experience.ExperienceRequestModel;
 import presentation.experience.ExperienceResponseModel;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class ExperienceServiceImpl implements ExperienceService {
 
     private final ExperienceRepository experienceRepository;
 
-    @Override
-    public ExperienceResponseModel addExperience(ExperienceRequestModel request) {
-        Experience experience = Experience.builder()
-                .company(request.getCompany())
-                .role(request.getRole())
-                .description(request.getDescription())
-                .startYear(request.getStartYear())
-                .endYear(request.getEndYear())
-                .build();
+    public ExperienceServiceImpl(ExperienceRepository experienceRepository) {
+        this.experienceRepository = experienceRepository;
+    }
 
-        experience = experienceRepository.save(experience);
-        return new ExperienceResponseModel(experience.getId(), experience.getCompany(),
-                experience.getRole(), experience.getDescription(),
-                experience.getStartYear(), experience.getEndYear());
+
+    @Override
+    public Mono<ExperienceResponseModel> addExperience(Experience experience) {
+        return experienceRepository.save(experience)
+                .doOnSuccess(savedExperience -> log.info("Added new experience: {}", savedExperience))
+                .map(EntityModelUtil::toExperienceResponseModel);
     }
 
     @Override
-    public List<ExperienceResponseModel> getAllExperience() {
-        return experienceRepository.findAll().stream()
-                .map(experience -> new ExperienceResponseModel(experience.getId(), experience.getCompany(),
-                        experience.getRole(), experience.getDescription(),
-                        experience.getStartYear(), experience.getEndYear()))
-                .collect(Collectors.toList());
+    public Flux<ExperienceResponseModel> getAllExperience() {
+        return experienceRepository.findAll()
+                .map(EntityModelUtil::toExperienceResponseModel);
+    }
+
+    @Override
+    public Mono<ExperienceResponseModel> getExperienceByExperienceId(String experienceId) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .map(EntityModelUtil::toExperienceResponseModel);
+    }
+
+    @Override
+    public Mono<ExperienceResponseModel> updateExperience(@PathVariable String experienceId, Mono<ExperienceRequestModel> experienceRequestModel) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .flatMap(existingExperience -> {
+                    return experienceRequestModel.map(request -> {
+                        existingExperience.setCompany(request.getCompany());
+                        existingExperience.setRole(request.getRole());
+                        return existingExperience;
+                    });
+                })
+                .doOnSuccess(updatedExperience -> log.info("Updated Experience {}: ", updatedExperience))
+                .map(EntityModelUtil::toExperienceResponseModel);
+    }
+
+    @Override
+    public Mono<Void> deleteExperience(String experienceId) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .flatMap(experienceRepository::delete)
+                .doOnSuccess(deletedExperience -> log.info("Deleted Experience {}: ", deletedExperience));
     }
 }

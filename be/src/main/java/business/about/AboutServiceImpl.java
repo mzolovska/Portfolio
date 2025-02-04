@@ -2,58 +2,74 @@ package business.about;
 
 import data.about.About;
 import data.about.AboutRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import presentation.about.AboutRequestModel;
 import presentation.about.AboutResponseModel;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class AboutServiceImpl implements AboutService {
 
-    @Autowired
     private AboutRepository aboutRepository;
 
     @Override
-    public AboutResponseModel createAbout(AboutRequestModel request) {
-        About about = new About();
-        about.setName(request.getName());
-        about.setDescription(request.getDescription());
-        About savedAbout = aboutRepository.save(about);
-        return new AboutResponseModel(savedAbout.getId(), savedAbout.getName(), savedAbout.getDescription());
-    }
-
-    @Override
-    public AboutResponseModel getAbout(Long id) {
-        About about = aboutRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("About section not found"));
-        return new AboutResponseModel(about.getId(), about.getName(), about.getDescription());
-    }
-
-    @Override
-    public List<AboutResponseModel> getAllAbouts() {
+    public Flux<AboutResponseModel> getAllAbouts() {
         return aboutRepository.findAll()
-                .stream()
-                .map(about -> new AboutResponseModel(about.getId(), about.getName(), about.getDescription()))
-                .collect(Collectors.toList());
+                .map(EntityModelUtil::toAboutResponseModel);
     }
 
+
     @Override
-    public AboutResponseModel updateAbout(Long id, AboutRequestModel request) {
-        About about = aboutRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("About section not found"));
-
-        about.setName(request.getName());
-        about.setDescription(request.getDescription());
-
-        About updatedAbout = aboutRepository.save(about);
-        return new AboutResponseModel(updatedAbout.getId(), updatedAbout.getName(), updatedAbout.getDescription());
+    public Mono<AboutResponseModel> getAboutByAboutId(String aboutId) {
+        return aboutRepository.findAboutByAboutId(aboutId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("About Id not found: " + aboutId))))
+                .map(EntityModelUtil::toAboutResponseModel);
     }
 
+
     @Override
-    public void deleteAbout(Long id) {
-        aboutRepository.deleteById(id);
+    public Mono<AboutResponseModel> createAbout(About about) {
+        return aboutRepository.save(about)
+                .doOnNext(savedAbout -> log.info("Added new about: {}", savedAbout))
+                .map(EntityModelUtil::toAboutResponseModel);
+    }
+
+
+
+
+    @Override
+    public Mono<AboutResponseModel> updateAbout(@PathVariable String aboutId, Mono<AboutRequestModel> aboutRequestModel) {
+        return aboutRepository.findAboutByAboutId(aboutId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("About Id not found: " + aboutId))))
+                .flatMap(existingAbout -> {
+                    return aboutRequestModel.map(request -> {
+                        existingAbout.setName(request.getName());
+                        existingAbout.setDescription(request.getDescription());
+                        return existingAbout;
+                    });
+                })
+                .flatMap(aboutRepository::save)
+                .doOnSuccess(updatedAbout -> log.info("Updated About {}: ", updatedAbout))
+                .map(EntityModelUtil::toAboutResponseModel);
+    }
+
+
+
+    @Override
+    public Mono<Void> deleteAbout(String aboutId) {
+        return aboutRepository.findAboutByAboutId(aboutId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("About Id not found: " + aboutId))))
+                .flatMap(aboutRepository::delete)
+                .doOnSuccess(unused -> log.info("Deleted about with id {}: ", aboutId));
     }
 }

@@ -8,9 +8,13 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class ProjectsResponseModel {
-    private Long id;
+    private String projectId;
     private String title;
     private String description;
     private String technologies;
     private String link;
+
+    public ProjectsResponseModel() {
+
+    }
 }

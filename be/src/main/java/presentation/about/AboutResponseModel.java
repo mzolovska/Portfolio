@@ -8,7 +8,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AboutResponseModel {
-    private Long id;
+    private String aboutId;
     private String name;
     private String description;
+
+    public AboutResponseModel() {
+
+    }
 }

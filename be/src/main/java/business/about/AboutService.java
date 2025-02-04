@@ -1,14 +1,17 @@
 package business.about;
 
+import data.about.About;
 import presentation.about.AboutRequestModel;
 import presentation.about.AboutResponseModel;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public interface AboutService {
-    AboutResponseModel createAbout(AboutRequestModel request);
-    AboutResponseModel getAbout(Long id);
-    List<AboutResponseModel> getAllAbouts();
-    AboutResponseModel updateAbout(Long id, AboutRequestModel request);
-    void deleteAbout(Long id);
+    Mono<AboutResponseModel> createAbout(About about);
+    Mono<AboutResponseModel> getAboutByAboutId(String aboutId);
+    Flux<AboutResponseModel> getAllAbouts();
+    Mono<AboutResponseModel> updateAbout(String aboutId, Mono<AboutRequestModel> aboutRequestModel);
+    Mono<Void> deleteAbout(String aboutId);
 }

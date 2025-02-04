@@ -2,42 +2,66 @@ package business.education;
 
 import data.education.Education;
 import data.education.EducationRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import presentation.education.EducationRequestModel;
 import presentation.education.EducationResponseModel;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class EducationServiceImpl implements EducationService {
 
     private final EducationRepository educationRepository;
 
-    @Override
-    public EducationResponseModel addEducation(EducationRequestModel request) {
-        Education education = Education.builder()
-                .institution(request.getInstitution())
-                .degree(request.getDegree())
-                .fieldOfStudy(request.getFieldOfStudy())
-                .startYear(request.getStartYear())
-                .endYear(request.getEndYear())
-                .build();
+    public EducationServiceImpl(EducationRepository educationRepository) {
+        this.educationRepository = educationRepository;
+    }
 
-        education = educationRepository.save(education);
-        return new EducationResponseModel(education.getId(), education.getInstitution(),
-                education.getDegree(), education.getFieldOfStudy(),
-                education.getStartYear(), education.getEndYear());
+
+    @Override
+    public Mono<EducationResponseModel> addEducation(Education education) {
+        return educationRepository.save(education)
+                .doOnSuccess(savedEducation -> log.info("Added new education: {}", savedEducation))
+                .map(EntityModelUtil::toEducationResponseModel);
     }
 
     @Override
-    public List<EducationResponseModel> getAllEducation() {
-        return educationRepository.findAll().stream()
-                .map(education -> new EducationResponseModel(education.getId(), education.getInstitution(),
-                        education.getDegree(), education.getFieldOfStudy(),
-                        education.getStartYear(), education.getEndYear()))
-                .collect(Collectors.toList());
+    public Flux<EducationResponseModel> getAllEducation() {
+        return educationRepository.findAll()
+                .map(EntityModelUtil::toEducationResponseModel);
+    }
+
+    @Override
+    public Mono<EducationResponseModel> getEducationByEducationId(String educationId) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .map(EntityModelUtil::toEducationResponseModel);
+    }
+
+    @Override
+    public Mono<EducationResponseModel> updateEducation(String educationId, Mono<EducationRequestModel> educationRequestModel) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .flatMap(existingEducation -> {
+                    return educationRequestModel.map(request -> {
+                        existingEducation.setInstitution(request.getInstitution());
+                        existingEducation.setFieldOfStudy(request.getFieldOfStudy());
+                        return existingEducation;
+                    });
+                })
+                .doOnSuccess(updatedEducation -> log.info("Updated Education {}: ", updatedEducation))
+                .map(EntityModelUtil::toEducationResponseModel);
+    }
+
+    @Override
+    public Mono<Void> deleteEducation(String educationId) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .flatMap(educationRepository::delete)
+                .doOnSuccess(deletedEducation -> log.info("Deleted Education {}: ", deletedEducation));
     }
 }

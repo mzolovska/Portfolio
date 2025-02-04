@@ -1,6 +1,11 @@
 package data.about;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AboutRepository extends JpaRepository<About, Long> {
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
+import reactor.core.publisher.Mono;
+
+@Repository
+public interface AboutRepository extends ReactiveMongoRepository<About, String> {
+    Mono<About> findAboutByAboutId(String aboutId);
 }

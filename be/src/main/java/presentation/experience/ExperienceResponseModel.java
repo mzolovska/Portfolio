@@ -7,10 +7,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ExperienceResponseModel {
-    private Long id;
+    private String experienceId;
     private String company;
     private String role;
     private String description;
     private int startYear;
     private int endYear;
+
+    public ExperienceResponseModel() {
+
+    }
 }
