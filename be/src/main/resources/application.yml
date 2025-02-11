@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: be
+
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      database: ptdb
+      username: root
+      password: password
+      authentication-database: admin
+
+  profiles:
+    active: default # Set the default profile here
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.be-pt: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    com.pt.be.config.security: DEBUG
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 5.0.5
+
+fe:
+  domain: ${FRONTEND_DOMAIN}
+
+app:
+  base-url: ${BASE_URL}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      uri: ${MONGO_DB_URI}
+      database: ptdb
+      username: root
+      password: password
+      authentication-database: admin
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      database: ptdb
+      username: root
+      password: password
+      authentication-database: admin
+
+logging:
+  level:
+    root: DEBUG
+    com.be-pt: TRACE

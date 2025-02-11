@@ -1,10 +1,11 @@
 package com.example.pt.presentation.about;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AboutRequestModel {
     private String name;
     private String description;

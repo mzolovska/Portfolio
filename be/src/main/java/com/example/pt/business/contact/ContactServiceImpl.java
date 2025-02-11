@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.pt.presentation.contact.ContactRequestModel;
 import com.example.pt.presentation.contact.ContactResponseModel;
-import com.example.pt.utils.EntityModelUtil;
-import com.example.pt.utils.exceptions.NotFoundException;
+import org.springframework.web.bind.annotation.PathVariable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,47 +25,47 @@ public class ContactServiceImpl implements ContactService {
         this.contactRepository = contactRepository;
     }
 
+
     @Override
-    public ContactResponseModel createContact(Contact contact) {
-        Contact savedContact = contactRepository.save(contact);
-        log.info("Added new contact: {}", savedContact);
-        return EntityModelUtil.toContactResponseModel(savedContact);
+    public Mono<ContactResponseModel> createContact(Contact contact) {
+        return contactRepository.save(contact)
+                .doOnSuccess(savedContact -> log.info("Added new contact: {}", savedContact))
+                .map(EntityModelUtil::toContactResponseModel);
     }
 
     @Override
-    public List<ContactResponseModel> getAllContacts() {
+    public Flux<ContactResponseModel> getAllContacts() {
         return contactRepository.findAll()
-                .stream()
-                .map(EntityModelUtil::toContactResponseModel)
-                .collect(Collectors.toList());
+                .map(EntityModelUtil::toContactResponseModel);
     }
 
     @Override
-    public ContactResponseModel getContactByContactId(String contactId) {
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new NotFoundException("Contact Id not found: " + contactId));
-        return EntityModelUtil.toContactResponseModel(contact);
+    public Mono<ContactResponseModel> getContactByContactId(String contactId) {
+        return contactRepository.findContactByContactId(contactId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
+                .map(EntityModelUtil::toContactResponseModel);
     }
 
     @Override
-    public ContactResponseModel updateContact(String contactId, ContactRequestModel contactRequestModel) {
-        Contact existingContact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new NotFoundException("Contact Id not found: " + contactId));
-
-        existingContact.setName(contactRequestModel.getName());
-        existingContact.setMessage(contactRequestModel.getMessage());
-
-        Contact updatedContact = contactRepository.save(existingContact);
-        log.info("Updated Contact {}: ", updatedContact);
-        return EntityModelUtil.toContactResponseModel(updatedContact);
+    public Mono<ContactResponseModel> updateContact(@PathVariable String contactId, Mono<ContactRequestModel> contactRequestModel) {
+        return contactRepository.findContactByContactId(contactId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
+                .flatMap(existingContact -> {
+                    return contactRequestModel.map(request -> {
+                        existingContact.setName(request.getName());
+                        existingContact.setMessage(request.getMessage());
+                        return existingContact;
+                    });
+                })
+                .doOnSuccess(updatedContact -> log.info("Updated Contact {}: ", updatedContact))
+                .map(EntityModelUtil::toContactResponseModel);
     }
 
     @Override
-    public void deleteContact(String contactId) {
-        Contact contact = contactRepository.findById(contactId)
-                .orElseThrow(() -> new NotFoundException("Contact Id not found: " + contactId));
-
-        contactRepository.delete(contact);
-        log.info("Deleted Contact with id: {}", contactId);
+    public Mono<Void> deleteContact(String contactId) {
+        return contactRepository.findContactByContactId(contactId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
+                .flatMap(contactRepository::delete)
+                .doOnSuccess(deletedContact -> log.info("Deleted Contact {}: ", deletedContact));
     }
 }

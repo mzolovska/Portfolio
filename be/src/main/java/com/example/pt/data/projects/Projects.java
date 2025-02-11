@@ -1,7 +1,5 @@
-package data.about;
+package com.example.pt.data.projects;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,13 +9,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "about")
+@Document(collection = "projects")
 
-public class About {
+public class Projects {
     @Id
     private String id;
 
-    private String aboutId;
-    private String name;
+    private String projectId;
+    private String title;
     private String description;
+    private String technologies;
+    private String link;
 }

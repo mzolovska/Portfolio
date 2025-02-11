@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.pt.utils.EntityModelUtil;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
 
 import java.util.List;
 
@@ -16,47 +18,48 @@ import java.util.List;
 @RequestMapping("/api/v1/projects")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin("http://localhost:3000")
-
 public class ProjectsController {
-
     private final ProjectsService projectsService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProjectsResponseModel>> getAllProjects() {
-        List<ProjectsResponseModel> projects = projectsService.getAllProjects();
-        log.info("Fetched all projects: {}", projects.size());
-        return ResponseEntity.ok(projects);
+    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ProjectsResponseModel> getAllProjects() {
+        return projectsService.getAllProjects()
+                .doOnNext(project -> log.info("Project: {}", project));
     }
 
     @GetMapping(value = "/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectsResponseModel> getProjectByProjectId(@PathVariable String projectId) {
-        ProjectsResponseModel project = projectsService.getProjectByProjectId(projectId);
-        log.info("Fetched Project: {}", project);
-        return ResponseEntity.ok(project);
+    public Mono<ResponseEntity<ProjectsResponseModel>> getProjectByProjectId(@PathVariable String projectId) {
+        return projectsService.getProjectByProjectId(projectId)
+                .doOnNext(project -> log.info("Fetched Project: {}", project))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectsResponseModel> addProject(@RequestBody ProjectsRequestModel projectsRequestModel) {
-        log.info("Adding new Project: {}", projectsRequestModel.getTitle());
-        Projects projectEntity = EntityModelUtil.toProjectsEntity(projectsRequestModel);
-        ProjectsResponseModel savedProject = projectsService.addProject(projectEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedProject);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ProjectsResponseModel> addProject(@RequestBody ProjectsRequestModel projectsRequestModel) {
+        log.info("Added new Project: {}", projectsRequestModel.getTitle());
+        return projectsService.addProject(EntityModelUtil.toProjectsEntity(projectsRequestModel));
     }
 
-    @PutMapping(value = "/{projectId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProjectsResponseModel> updateProject(
+    @PutMapping(value = {"/{projectId}"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<ProjectsResponseModel>> updateProject(
             @PathVariable String projectId,
             @RequestBody ProjectsRequestModel projectsRequestModel) {
         log.info("Updating project with id: {}", projectId);
-        ProjectsResponseModel updatedProject = projectsService.updateProject(projectId, projectsRequestModel);
-        return ResponseEntity.ok(updatedProject);
+
+        Projects updatedProject = EntityModelUtil.toProjectsEntity(projectsRequestModel);
+        updatedProject.setProjectId(projectId);
+
+        return projectsService.updateProject(projectId, Mono.just(projectsRequestModel))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @DeleteMapping(value = "/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> deleteProject(@PathVariable String projectId) {
+    @DeleteMapping(value = {"/{projectId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteProject(@PathVariable String projectId) {
         log.info("Deleting project with id: {}", projectId);
-        projectsService.deleteProject(projectId);
-        return ResponseEntity.noContent().build();
+        return projectsService.deleteProject(projectId);
     }
 }

@@ -1,21 +1,21 @@
 package utils;
 
-import data.about.About;
-import data.contact.Contact;
-import data.education.Education;
-import data.experience.Experience;
-import data.projects.Projects;
+import com.example.pt.data.about.About;
+import com.example.pt.data.contact.Contact;
+import com.example.pt.data.education.Education;
+import com.example.pt.data.experience.Experience;
+import com.example.pt.data.projects.Projects;
+import com.example.pt.presentation.about.AboutRequestModel;
+import com.example.pt.presentation.about.AboutResponseModel;
+import com.example.pt.presentation.contact.ContactRequestModel;
+import com.example.pt.presentation.contact.ContactResponseModel;
+import com.example.pt.presentation.education.EducationRequestModel;
+import com.example.pt.presentation.education.EducationResponseModel;
+import com.example.pt.presentation.experience.ExperienceRequestModel;
+import com.example.pt.presentation.experience.ExperienceResponseModel;
+import com.example.pt.presentation.projects.ProjectsRequestModel;
+import com.example.pt.presentation.projects.ProjectsResponseModel;
 import org.springframework.beans.BeanUtils;
-import presentation.about.AboutRequestModel;
-import presentation.about.AboutResponseModel;
-import presentation.contact.ContactRequestModel;
-import presentation.contact.ContactResponseModel;
-import presentation.education.EducationRequestModel;
-import presentation.education.EducationResponseModel;
-import presentation.experience.ExperienceRequestModel;
-import presentation.experience.ExperienceResponseModel;
-import presentation.projects.ProjectsRequestModel;
-import presentation.projects.ProjectsResponseModel;
 
 import java.util.UUID;
 

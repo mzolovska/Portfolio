@@ -8,55 +8,61 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.pt.utils.EntityModelUtil;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/experience")
 @RequiredArgsConstructor
-@Slf4j
-@CrossOrigin("http://localhost:3000")
-
-public class ExperienceController {
+@Slf4j public class ExperienceController {
 
     private final ExperienceService experienceService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ExperienceResponseModel>> getAllExperiences() {
-        List<ExperienceResponseModel> experiences = experienceService.getAllExperience();
-        log.info("Fetched {} experiences", experiences.size());
-        return ResponseEntity.ok(experiences);
+    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<ExperienceResponseModel> getAllExperiences() {
+        return experienceService.getAllExperience()
+                .doOnNext(experience -> log.info("Experience: {}", experience));
     }
 
     @GetMapping(value = "/{experienceId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ExperienceResponseModel> getExperienceByExperienceId(@PathVariable String experienceId) {
-        ExperienceResponseModel experience = experienceService.getExperienceByExperienceId(experienceId);
-        log.info("Fetched Experience: {}", experience);
-        return ResponseEntity.ok(experience);
+    public Mono<ResponseEntity<ExperienceResponseModel>> getExperienceByExperienceId(@PathVariable String experienceId) {
+        return experienceService.getExperienceByExperienceId(experienceId)
+                .doOnNext(experience -> log.info("Fetched Experience: {}", experience))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ExperienceResponseModel> addExperience(@RequestBody ExperienceRequestModel experienceRequestModel) {
-        log.info("Adding new experience: {}", experienceRequestModel.getCompany());
-        Experience newExperience = EntityModelUtil.toExperienceEntity(experienceRequestModel);
-        ExperienceResponseModel savedExperience = experienceService.addExperience(newExperience);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedExperience);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<ExperienceResponseModel> addExperience(@RequestBody ExperienceRequestModel experienceRequestModel) {
+        log.info("Added new Experience: {}", experienceRequestModel.getCompany());
+        return experienceService.addExperience(EntityModelUtil.toExperienceEntity(experienceRequestModel));
     }
 
-    @PutMapping(value = "/{experienceId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ExperienceResponseModel> updateExperience(
+
+    @PutMapping(value = {"/{experienceId}"}, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<ExperienceResponseModel>> updateExperience(
             @PathVariable String experienceId,
             @RequestBody ExperienceRequestModel experienceRequestModel) {
-        log.info("Updating experience with ID: {}", experienceId);
-        ExperienceResponseModel updatedExperience = experienceService.updateExperience(experienceId, experienceRequestModel);
-        return ResponseEntity.ok(updatedExperience);
+        log.info("Updating experience with id: {}", experienceId);
+
+        Experience updatedExperience = EntityModelUtil.toExperienceEntity(experienceRequestModel);
+        updatedExperience.setExperienceId(experienceId);
+
+        return experienceService.updateExperience(experienceId, Mono.just(experienceRequestModel))
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @DeleteMapping(value = "/{experienceId}")
-    public ResponseEntity<Void> deleteExperience(@PathVariable String experienceId) {
-        log.info("Deleting experience with ID: {}", experienceId);
-        experienceService.deleteExperience(experienceId);
-        return ResponseEntity.noContent().build();
+
+    @DeleteMapping(value = {"/{experienceId}"}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteExperience(@PathVariable String experienceId) {
+        log.info("Deleting experience with id: {}", experienceId);
+        return experienceService.deleteExperience(experienceId);
     }
 }

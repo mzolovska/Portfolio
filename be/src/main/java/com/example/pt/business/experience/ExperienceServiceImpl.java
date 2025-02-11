@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.pt.presentation.experience.ExperienceRequestModel;
 import com.example.pt.presentation.experience.ExperienceResponseModel;
-import com.example.pt.utils.EntityModelUtil;
-import com.example.pt.utils.exceptions.NotFoundException;
+import org.springframework.web.bind.annotation.PathVariable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,47 +25,47 @@ public class ExperienceServiceImpl implements ExperienceService {
         this.experienceRepository = experienceRepository;
     }
 
+
     @Override
-    public ExperienceResponseModel addExperience(Experience experience) {
-        Experience savedExperience = experienceRepository.save(experience);
-        log.info("Added new experience: {}", savedExperience);
-        return EntityModelUtil.toExperienceResponseModel(savedExperience);
+    public Mono<ExperienceResponseModel> addExperience(Experience experience) {
+        return experienceRepository.save(experience)
+                .doOnSuccess(savedExperience -> log.info("Added new experience: {}", savedExperience))
+                .map(EntityModelUtil::toExperienceResponseModel);
     }
 
     @Override
-    public List<ExperienceResponseModel> getAllExperience() {
-        return experienceRepository.findAll().stream()
-                .map(EntityModelUtil::toExperienceResponseModel)
-                .collect(Collectors.toList());
+    public Flux<ExperienceResponseModel> getAllExperience() {
+        return experienceRepository.findAll()
+                .map(EntityModelUtil::toExperienceResponseModel);
     }
 
     @Override
-    public ExperienceResponseModel getExperienceByExperienceId(String experienceId) {
-        Experience experience = experienceRepository.findExperienceByExperienceId(experienceId)
-                .orElseThrow(() -> new NotFoundException("Experience Id not found: " + experienceId));
-        return EntityModelUtil.toExperienceResponseModel(experience);
+    public Mono<ExperienceResponseModel> getExperienceByExperienceId(String experienceId) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .map(EntityModelUtil::toExperienceResponseModel);
     }
 
     @Override
-    public ExperienceResponseModel updateExperience(String experienceId, ExperienceRequestModel experienceRequestModel) {
-        Experience existingExperience = experienceRepository.findExperienceByExperienceId(experienceId)
-                .orElseThrow(() -> new NotFoundException("Experience Id not found: " + experienceId));
-
-        existingExperience.setCompany(experienceRequestModel.getCompany());
-        existingExperience.setRole(experienceRequestModel.getRole());
-
-        Experience updatedExperience = experienceRepository.save(existingExperience);
-        log.info("Updated Experience: {}", updatedExperience);
-
-        return EntityModelUtil.toExperienceResponseModel(updatedExperience);
+    public Mono<ExperienceResponseModel> updateExperience(@PathVariable String experienceId, Mono<ExperienceRequestModel> experienceRequestModel) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .flatMap(existingExperience -> {
+                    return experienceRequestModel.map(request -> {
+                        existingExperience.setCompany(request.getCompany());
+                        existingExperience.setRole(request.getRole());
+                        return existingExperience;
+                    });
+                })
+                .doOnSuccess(updatedExperience -> log.info("Updated Experience {}: ", updatedExperience))
+                .map(EntityModelUtil::toExperienceResponseModel);
     }
 
     @Override
-    public void deleteExperience(String experienceId) {
-        Experience experience = experienceRepository.findExperienceByExperienceId(experienceId)
-                .orElseThrow(() -> new NotFoundException("Experience Id not found: " + experienceId));
-
-        experienceRepository.delete(experience);
-        log.info("Deleted Experience: {}", experience);
+    public Mono<Void> deleteExperience(String experienceId) {
+        return experienceRepository.findExperienceByExperienceId(experienceId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Experience Id not found: " + experienceId))))
+                .flatMap(experienceRepository::delete)
+                .doOnSuccess(deletedExperience -> log.info("Deleted Experience {}: ", deletedExperience));
     }
 }

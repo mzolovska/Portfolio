@@ -1,15 +1,15 @@
 package utils;
 
-import data.about.About;
-import data.about.AboutRepository;
-import data.contact.Contact;
-import data.contact.ContactRepository;
-import data.education.Education;
-import data.education.EducationRepository;
-import data.experience.Experience;
-import data.experience.ExperienceRepository;
-import data.projects.Projects;
-import data.projects.ProjectsRepository;
+import com.example.pt.data.about.About;
+import com.example.pt.data.about.AboutRepository;
+import com.example.pt.data.contact.Contact;
+import com.example.pt.data.contact.ContactRepository;
+import com.example.pt.data.education.Education;
+import com.example.pt.data.education.EducationRepository;
+import com.example.pt.data.experience.Experience;
+import com.example.pt.data.experience.ExperienceRepository;
+import com.example.pt.data.projects.Projects;
+import com.example.pt.data.projects.ProjectsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

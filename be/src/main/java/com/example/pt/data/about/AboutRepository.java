@@ -1,4 +1,4 @@
-package data.about;
+package com.example.pt.data.about;
 
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

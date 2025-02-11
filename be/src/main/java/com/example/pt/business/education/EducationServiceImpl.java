@@ -6,8 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.pt.presentation.education.EducationRequestModel;
 import com.example.pt.presentation.education.EducationResponseModel;
-import com.example.pt.utils.EntityModelUtil;
-import com.example.pt.utils.exceptions.NotFoundException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,48 +24,47 @@ public class EducationServiceImpl implements EducationService {
         this.educationRepository = educationRepository;
     }
 
+
     @Override
-    public EducationResponseModel addEducation(Education education) {
-        Education savedEducation = educationRepository.save(education);
-        log.info("Added new education: {}", savedEducation);
-        return EntityModelUtil.toEducationResponseModel(savedEducation);
+    public Mono<EducationResponseModel> addEducation(Education education) {
+        return educationRepository.save(education)
+                .doOnSuccess(savedEducation -> log.info("Added new education: {}", savedEducation))
+                .map(EntityModelUtil::toEducationResponseModel);
     }
 
     @Override
-    public List<EducationResponseModel> getAllEducation() {
-        return educationRepository.findAll().stream()
-                .map(EntityModelUtil::toEducationResponseModel)
-                .collect(Collectors.toList());
+    public Flux<EducationResponseModel> getAllEducation() {
+        return educationRepository.findAll()
+                .map(EntityModelUtil::toEducationResponseModel);
     }
 
     @Override
-    public EducationResponseModel getEducationByEducationId(String educationId) {
-        Education education = educationRepository.findEducationByEducationId(educationId)
-                .orElseThrow(() -> new NotFoundException("Education Id not found: " + educationId));
-
-        return EntityModelUtil.toEducationResponseModel(education);
+    public Mono<EducationResponseModel> getEducationByEducationId(String educationId) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .map(EntityModelUtil::toEducationResponseModel);
     }
 
     @Override
-    public EducationResponseModel updateEducation(String educationId, EducationRequestModel educationRequestModel) {
-        Education existingEducation = educationRepository.findEducationByEducationId(educationId)
-                .orElseThrow(() -> new NotFoundException("Education Id not found: " + educationId));
-
-        existingEducation.setInstitution(educationRequestModel.getInstitution());
-        existingEducation.setFieldOfStudy(educationRequestModel.getFieldOfStudy());
-
-        Education updatedEducation = educationRepository.save(existingEducation);
-        log.info("Updated Education: {}", updatedEducation);
-
-        return EntityModelUtil.toEducationResponseModel(updatedEducation);
+    public Mono<EducationResponseModel> updateEducation(String educationId, Mono<EducationRequestModel> educationRequestModel) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .flatMap(existingEducation -> {
+                    return educationRequestModel.map(request -> {
+                        existingEducation.setInstitution(request.getInstitution());
+                        existingEducation.setFieldOfStudy(request.getFieldOfStudy());
+                        return existingEducation;
+                    });
+                })
+                .doOnSuccess(updatedEducation -> log.info("Updated Education {}: ", updatedEducation))
+                .map(EntityModelUtil::toEducationResponseModel);
     }
 
     @Override
-    public void deleteEducation(String educationId) {
-        Education education = educationRepository.findEducationByEducationId(educationId)
-                .orElseThrow(() -> new NotFoundException("Education Id not found: " + educationId));
-
-        educationRepository.delete(education);
-        log.info("Deleted Education: {}", education);
+    public Mono<Void> deleteEducation(String educationId) {
+        return educationRepository.findEducationByEducationId(educationId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Education Id not found: " + educationId))))
+                .flatMap(educationRepository::delete)
+                .doOnSuccess(deletedEducation -> log.info("Deleted Education {}: ", deletedEducation));
     }
 }

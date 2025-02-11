@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import com.example.pt.presentation.projects.ProjectsRequestModel;
 import com.example.pt.presentation.projects.ProjectsResponseModel;
-import com.example.pt.utils.EntityModelUtil;
-import com.example.pt.utils.exceptions.NotFoundException;
+import org.springframework.web.bind.annotation.PathVariable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,46 +25,47 @@ public class ProjectsServiceImpl implements ProjectsService {
         this.projectsRepository = projectsRepository;
     }
 
+
     @Override
-    public ProjectsResponseModel addProject(Projects project) {
-        Projects savedProject = projectsRepository.save(project);
-        log.info("Added new project: {}", savedProject);
-        return EntityModelUtil.toProjectsResponseModel(savedProject);
+    public Mono<ProjectsResponseModel> addProject(Projects projects) {
+        return projectsRepository.save(projects)
+                .doOnSuccess(savedProjects -> log.info("Added new projects: {}", savedProjects))
+                .map(EntityModelUtil::toProjectsResponseModel);
     }
 
     @Override
-    public List<ProjectsResponseModel> getAllProjects() {
-        return projectsRepository.findAll().stream()
-                .map(EntityModelUtil::toProjectsResponseModel)
-                .collect(Collectors.toList());
+    public Flux<ProjectsResponseModel> getAllProjects() {
+        return projectsRepository.findAll()
+                .map(EntityModelUtil::toProjectsResponseModel);
     }
 
     @Override
-    public ProjectsResponseModel getProjectByProjectId(String projectId) {
-        Projects project = projectsRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("Project Id not found: " + projectId));
-        return EntityModelUtil.toProjectsResponseModel(project);
+    public Mono<ProjectsResponseModel> getProjectByProjectId(String projectId) {
+        return projectsRepository.findProjectsByProjectId(projectId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Project Id not found: " + projectId))))
+                .map(EntityModelUtil::toProjectsResponseModel);
     }
 
     @Override
-    public ProjectsResponseModel updateProject(String projectId, ProjectsRequestModel projectsRequestModel) {
-        Projects existingProject = projectsRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("Project Id not found: " + projectId));
-
-        existingProject.setTitle(projectsRequestModel.getTitle());
-        existingProject.setDescription(projectsRequestModel.getDescription());
-
-        Projects updatedProject = projectsRepository.save(existingProject);
-        log.info("Updated Project: {}", updatedProject);
-        return EntityModelUtil.toProjectsResponseModel(updatedProject);
+    public Mono<ProjectsResponseModel> updateProject(@PathVariable String projectId, Mono<ProjectsRequestModel> projectsRequestModel) {
+        return projectsRepository.findProjectsByProjectId(projectId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Project Id not found: " + projectId))))
+                .flatMap(existingProjects -> {
+                    return projectsRequestModel.map(request -> {
+                        existingProjects.setTitle(request.getTitle());
+                        existingProjects.setDescription(request.getDescription());
+                        return existingProjects;
+                    });
+                })
+                .doOnSuccess(updatedProjects -> log.info("Updated Projects {}: ", updatedProjects))
+                .map(EntityModelUtil::toProjectsResponseModel);
     }
 
     @Override
-    public void deleteProject(String projectId) {
-        Projects project = projectsRepository.findById(projectId)
-                .orElseThrow(() -> new NotFoundException("Project Id not found: " + projectId));
-
-        projectsRepository.delete(project);
-        log.info("Deleted Project: {}", project);
+    public Mono<Void> deleteProject(String projectId) {
+        return projectsRepository.findProjectsByProjectId(projectId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Project Id not found: " + projectId))))
+                .flatMap(projectsRepository::delete)
+                .doOnSuccess(deletedProjects -> log.info("Deleted Projects {}: ", deletedProjects));
     }
 }
