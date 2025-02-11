@@ -1,4 +1,4 @@
-package presentation.contact;
+package com.example.pt.presentation.contact;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

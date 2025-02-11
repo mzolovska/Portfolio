@@ -1,4 +1,4 @@
-package presentation.about;
+package com.example.pt.presentation.about;
 
 import lombok.Getter;
 import lombok.Setter;
