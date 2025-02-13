@@ -1,17 +1,41 @@
 import React from 'react';
 import Section from '../Section';
 import './Projects.css';
+import { useEffect, useState } from "react";
+import { useProjectsApi, ProjectResponseModel } from '../api/useProjectsApi';
 
-const Projects: React.FC = () => {
+
+const Projects = () => {
+  const { fetchAllProjects } = useProjectsApi();
+  const [projectData, setProjectData] = useState<ProjectResponseModel[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAllProjects();
+        setProjectData(data);
+      } catch (error) {
+        console.error("Error fetching Project data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="projects-page">
     <Section id="projects" title="Projects">
-      <ul>
-        <li>Project 1 - Explanation - Dates</li>
-        <li>Project 2 - Explanation - Dates</li>
-      </ul>
+      {projectData.length > 0 ? (
+        <ul>
+          {projectData.map((proj) => (
+            <li key={proj.projectId}>
+              {proj.name} - {proj.description}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )}
     </Section>
-    </div>
   );
 };
 

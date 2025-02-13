@@ -1,16 +1,34 @@
-import React from 'react';
-import Section from '../Section';
-import './Contact.css';
+import { useEffect, useState } from "react";
+import { useContactApi, ContactResponseModel } from '../api/useContactApi';
 
-const Contact: React.FC = () => {
+const Contact = () => {
+  const { fetchAllContacts } = useContactApi();
+  const [contacts, setContacts] = useState<ContactResponseModel[]>([]);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      const data = await fetchAllContacts();
+      setContacts(data);
+    };
+
+    fetchContacts();
+  }, []);
+
   return (
-    <div className="contact-page">
-    <Section id="contact" title="Contact Me">
-      <ul>
-        <li>LinkedIn:</li>
-        <li>GitHub:</li>
-      </ul>
-    </Section>
+    <div>
+      <h2>Contacts</h2>
+      {contacts.length > 0 ? (
+        <ul>
+          {contacts.map((contact) => (
+            <li key={contact.contactId}>
+              <strong>{contact.name}</strong> - {contact.email}
+              <p>{contact.message}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No contacts found.</p>
+      )}
     </div>
   );
 };

@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import axiosInstance from '../shared/useAxiosInstance';
+import { useState } from "react";
+import axiosInstance from "../shared/useAxiosInstance";
 
 // Define types
 export interface AboutResponseModel {
   aboutId: string;
   name: string;
   description: string;
-  // Add other properties if needed
 }
 
 export interface AboutRequestModel {
@@ -14,104 +13,63 @@ export interface AboutRequestModel {
   description: string;
 }
 
-// Custom hook for About API calls
 export const useAboutApi = () => {
-  const [aboutData, setAboutData] = useState<AboutResponseModel[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  // Fetch All About Data (SSE Stream)
+  const fetchAllAbouts = async (): Promise<AboutResponseModel[]> => {
+    const abouts: AboutResponseModel[] = [];
 
-  // Fetch all about details (handles SSE stream)
-  const fetchAllAbouts = () => {
-    setLoading(true);
-    setError(null);
-    setAboutData([]);
-
-    const eventSource = new EventSource(`${axiosInstance.defaults.baseURL}/about`, {
-      withCredentials: true,
+    const response = await axiosInstance.get("/about", {
+      responseType: "text",
+      headers: {
+        Accept: "text/event-stream",
+      },
     });
 
-    eventSource.onmessage = (event) => {
-      try {
-        const about: AboutResponseModel = JSON.parse(event.data);
-        setAboutData((prev) => [...prev, about]);
-      } catch (error) {
-        console.error("Error parsing SSE event:", error);
+    // Parse SSE Stream
+    const lines = response.data.split("\n");
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      if (trimmedLine.startsWith("data:")) {
+        try {
+          const about = JSON.parse(trimmedLine.substring(5).trim());
+          abouts.push(about);
+        } catch (error) {
+          console.error("Error parsing SSE event:", trimmedLine, error);
+        }
       }
-    };
+    }
 
-    eventSource.onerror = (err) => {
-      console.error("SSE Error:", err);
-      setError("Failed to fetch data.");
-      eventSource.close();
-      setLoading(false);
-    };
-
-    return () => eventSource.close();
+    return abouts;
   };
 
   // Fetch About by ID
-  const fetchAboutById = async (aboutId: string) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.get<AboutResponseModel>(`/about/${aboutId}`);
-      setLoading(false);
-      return response.data;
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching About:", error);
-      throw error;
-    }
+  const fetchAboutById = async (aboutId: string): Promise<AboutResponseModel> => {
+    const response = await axiosInstance.get<AboutResponseModel>(`/about/${aboutId}`);
+    return response.data;
   };
 
-  // Add About
-  const createAbout = async (about: AboutRequestModel) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.post<AboutResponseModel>("/about", about);
-      setLoading(false);
-      return response.data;
-    } catch (error) {
-      setLoading(false);
-      console.error("Error adding About:", error);
-      throw error;
-    }
+  // Create About
+  const createAbout = async (about: AboutRequestModel): Promise<AboutResponseModel> => {
+    const response = await axiosInstance.post<AboutResponseModel>("/about", about);
+    return response.data;
   };
 
   // Update About
-  const updateAbout = async (aboutId: string, about: AboutRequestModel) => {
-    try {
-      setLoading(true);
-      const response = await axiosInstance.put<AboutResponseModel>(`/about/${aboutId}`, about);
-      setLoading(false);
-      return response.data;
-    } catch (error) {
-      setLoading(false);
-      console.error("Error updating About:", error);
-      throw error;
-    }
+  const updateAbout = async (aboutId: string, about: AboutRequestModel): Promise<AboutResponseModel> => {
+    const response = await axiosInstance.put<AboutResponseModel>(`/about/${aboutId}`, about);
+    return response.data;
   };
 
   // Delete About
-  const deleteAbout = async (aboutId: string) => {
-    try {
-      setLoading(true);
-      await axiosInstance.delete(`/about/${aboutId}`);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error deleting About:", error);
-      throw error;
-    }
+  const deleteAbout = async (aboutId: string): Promise<void> => {
+    await axiosInstance.delete(`/about/${aboutId}`);
   };
 
   return {
-    aboutData,
     fetchAllAbouts,
     fetchAboutById,
     createAbout,
     updateAbout,
     deleteAbout,
-    loading,
-    error,
   };
 };
