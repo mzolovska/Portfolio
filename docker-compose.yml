@@ -11,19 +11,24 @@ services:
         - BUILD_MODE=development
     ports:
       - "3000:3000"
+    env_file:
+      - fe/.env
     volumes:
       - ./fe/src:/app/src
 
+
   be:
     image: openjdk:17
-    hostname: be
+    container_name: be
     build:
       context: ./be
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_PROFILES_ACTIVE=prod
+    env_file:
+      - be/.env
     depends_on:
       - mongo
 
@@ -34,8 +39,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: mzolovska25
+      MONGO_INITDB_ROOT_PASSWORD: 7H9maG9NbtsXmcPI
     volumes:
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
 
@@ -45,8 +50,8 @@ services:
     ports:
       - "8082:8081"
     environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=mzolovska25
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=7H9maG9NbtsXmcPI
       - ME_CONFIG_MONGODB_SERVER=mongo
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
     depends_on:

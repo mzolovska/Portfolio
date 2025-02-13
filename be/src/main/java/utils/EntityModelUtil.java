@@ -1,12 +1,15 @@
 package utils;
 
 import com.example.pt.data.about.About;
+import com.example.pt.data.comments.Comment;
 import com.example.pt.data.contact.Contact;
 import com.example.pt.data.education.Education;
 import com.example.pt.data.experience.Experience;
 import com.example.pt.data.projects.Projects;
 import com.example.pt.presentation.about.AboutRequestModel;
 import com.example.pt.presentation.about.AboutResponseModel;
+import com.example.pt.presentation.comments.CommentRequestModel;
+import com.example.pt.presentation.comments.CommentResponseModel;
 import com.example.pt.presentation.contact.ContactRequestModel;
 import com.example.pt.presentation.contact.ContactResponseModel;
 import com.example.pt.presentation.education.EducationRequestModel;
@@ -39,6 +42,21 @@ public class EntityModelUtil {
                 .description(aboutRequestModel.getDescription())
                 .build();
     }
+
+    public static CommentResponseModel toCommentResponseModel(Comment comment) {
+        CommentResponseModel commentResponseModel = new CommentResponseModel();
+        BeanUtils.copyProperties(comment, commentResponseModel);
+        return commentResponseModel;
+    }
+
+    public static Comment toCommentEntity(CommentRequestModel commentRequestModel) {
+        return Comment.builder()
+                .commentId(generateUUIDString())
+                .title(commentRequestModel.getTitle())
+                .comment(commentRequestModel.getComment())
+                .build();
+    }
+
 
     public static ContactResponseModel toContactResponseModel(Contact contact) {
         ContactResponseModel contactResponseModel = new ContactResponseModel();

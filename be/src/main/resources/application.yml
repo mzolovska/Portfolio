@@ -6,9 +6,9 @@ spring:
     mongodb:
       host: mongo
       port: 27017
-      database: ptdb
-      username: root
-      password: password
+      database: pt
+      username: mzolovska25
+      password: 7H9maG9NbtsXmcPI
       authentication-database: admin
 
   profiles:
@@ -23,7 +23,6 @@ logging:
     com.be-pt: DEBUG
     org.hibernate.SQL: DEBUG
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-    com.pt.be.config.security: DEBUG
 
 de:
   flapdoodle:
@@ -49,9 +48,9 @@ spring:
       host: mongo
       port: 27017
       uri: ${MONGO_DB_URI}
-      database: ptdb
-      username: root
-      password: password
+      database: pt
+      username: mzolovska25
+      password: 7H9maG9NbtsXmcPI
       authentication-database: admin
 
 ---
@@ -65,9 +64,9 @@ spring:
     mongodb:
       host: mongo
       port: 27017
-      database: ptdb
-      username: root
-      password: password
+      database: pt
+      username: mzolovska25
+      password: 7H9maG9NbtsXmcPI
       authentication-database: admin
 
 logging:

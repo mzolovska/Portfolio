@@ -2,6 +2,8 @@ package utils;
 
 import com.example.pt.data.about.About;
 import com.example.pt.data.about.AboutRepository;
+import com.example.pt.data.comments.Comment;
+import com.example.pt.data.comments.CommentRepository;
 import com.example.pt.data.contact.Contact;
 import com.example.pt.data.contact.ContactRepository;
 import com.example.pt.data.education.Education;
@@ -13,6 +15,7 @@ import com.example.pt.data.projects.ProjectsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -23,123 +26,98 @@ import java.util.List;
 public class DatabaseLoader {
 
     private final AboutRepository aboutRepository;
-
-    @PostConstruct
-    public void loadAbout() {
-        List<About> sampleAbout = List.of(
-                About.builder()
-                        .aboutId("91c940b1-24e8-463f-96ef-f54f7e4aaf1d")
-                        .name("About Me")
-                        .description("I am a software engineer.")
-                        .build()
-        );
-
-        // Clear existing data and insert new data
-        aboutRepository.deleteAll()
-                .thenMany(aboutRepository.saveAll(sampleAbout))
-                .doOnNext(about -> log.info("Preloaded about section: {}", about))
-                .subscribe(
-                        success -> log.info("About Section preload successful"),
-                        error -> log.error("Error loading About section: {}", error.getMessage())
-                );
-    }
-
     private final ContactRepository contactRepository;
-
-    @PostConstruct
-    public void loadContact() {
-        List<Contact> sampleContact = List.of(
-                Contact.builder()
-                        .contactId("91c940b1-24e8-463f-96ef-f54f7e4aaf2r")
-                        .name("Contact Me")
-                        .message("You can contact me at")
-                        .email("fesfferf")
-                        .build()
-        );
-
-        // Clear existing data and insert new data
-        contactRepository.deleteAll()
-                .thenMany(contactRepository.saveAll(sampleContact))
-                .doOnNext(contact -> log.info("Preloaded contact section: {}", contact))
-                .subscribe(
-                        success -> log.info("Contact Section preload successful"),
-                        error -> log.error("Error loading Contact section: {}", error.getMessage())
-                );
-
-
-    }
-
     private final EducationRepository educationRepository;
-    @PostConstruct
-    public void loadEducation() {
-        List<Education> sampleEducation = List.of(
-                Education.builder()
-                        .educationId("91c940b1-24e8-463f-96ef-f54f7e4aaf3p")
-                        .institution("University of Lagos")
-                        .degree("BSc")
-                        .fieldOfStudy("Computer Science")
-                        .startYear(2015)
-                        .endYear(2019)
-                        .build()
-        );
-
-        // Clear existing data and insert new data
-        educationRepository.deleteAll()
-                .thenMany(educationRepository.saveAll(sampleEducation))
-                .doOnNext(education -> log.info("Preloaded education section: {}", education))
-                .subscribe(
-                        success -> log.info("Education Section preload successful"),
-                        error -> log.error("Error loading Education section: {}", error.getMessage())
-                );
-    }
-
-
     private final ExperienceRepository experienceRepository;
-
-
-    @PostConstruct
-    public void loadExperience() {
-        List<Experience> sampleExperience = List.of(
-                Experience.builder()
-                        .experienceId("91c940b1-24e8-463f-96ef-f54f7e4aaf0u")
-                        .company("Google")
-                        .role("Software Engineer")
-                        .startYear(2010)
-                        .endYear(2012)
-                        .build()
-        );
-
-        // Clear existing data and insert new data
-        experienceRepository.deleteAll()
-                .thenMany(experienceRepository.saveAll(sampleExperience))
-                .doOnNext(experience -> log.info("Preloaded experience section: {}", experience))
-                .subscribe(
-                        success -> log.info("Experience Section preload successful"),
-                        error -> log.error("Error loading Experience section: {}", error.getMessage())
-                );
-    }
-
-
     private final ProjectsRepository projectsRepository;
-
+    private final CommentRepository commentRepository;
 
     @PostConstruct
-    public void loadProjects() {
-        List<Projects> sampleProjects = List.of(
-                Projects.builder()
-                        .projectId("91c940b1-24e8-463f-96ef-f54f7e4aaf1d")
-                        .title("Project 1")
-                        .description("This is a project")
-                        .build()
-        );
+    public void loadData() {
+        Mono<Void> aboutMono = aboutRepository.deleteAll()
+                .thenMany(aboutRepository.saveAll(List.of(
+                        About.builder()
+                                .id(null)
+                                .aboutId("91c940b1-24e8-463f-96ef-f54f7e4aaf1d")
+                                .name("About Me")
+                                .description("I am a software engineer.")
+                                .build()
+                )))
+                .doOnNext(about -> log.info("Preloaded about section: {}", about))
+                .then();
 
-        // Clear existing data and insert new data
-        projectsRepository.deleteAll()
-                .thenMany(projectsRepository.saveAll(sampleProjects))
+        Mono<Void> contactMono = contactRepository.deleteAll()
+                .thenMany(contactRepository.saveAll(List.of(
+                        Contact.builder()
+                                .id(null)
+                                .contactId("91c940b1-24e8-463f-96ef-f54f7e4aaf2r")
+                                .name("Contact Me")
+                                .message("You can contact me at")
+                                .email("fesfferf@example.com")
+                                .build()
+                )))
+                .doOnNext(contact -> log.info("Preloaded contact section: {}", contact))
+                .then();
+
+        Mono<Void> educationMono = educationRepository.deleteAll()
+                .thenMany(educationRepository.saveAll(List.of(
+                        Education.builder()
+                                .id(null)
+                                .educationId("91c940b1-24e8-463f-96ef-f54f7e4aaf3p")
+                                .institution("University of Lagos")
+                                .degree("BSc")
+                                .fieldOfStudy("Computer Science")
+                                .startYear(2015)
+                                .endYear(2019)
+                                .build()
+                )))
+                .doOnNext(education -> log.info("Preloaded education section: {}", education))
+                .then();
+
+        Mono<Void> commentMono = commentRepository.deleteAll()
+                .thenMany(commentRepository.saveAll(List.of(
+                        Comment.builder()
+                                .id(null)
+                                .commentId("91c940b1-24e8-463f-96ef-f54f7e4aaf2b")
+                                .title("Comment 1")
+                                .comment("This is a comment")
+                                .build()
+                )))
+                .doOnNext(comment -> log.info("Preloaded comment section: {}", comment))
+                .then();
+
+
+        Mono<Void> experienceMono = experienceRepository.deleteAll()
+                .thenMany(experienceRepository.saveAll(List.of(
+                        Experience.builder()
+                                .id(null)
+                                .experienceId("91c940b1-24e8-463f-96ef-f54f7e4aaf0u")
+                                .company("Google")
+                                .role("Software Engineer")
+                                .startYear(2010)
+                                .endYear(2012)
+                                .build()
+                )))
+                .doOnNext(experience -> log.info("Preloaded experience section: {}", experience))
+                .then();
+
+        Mono<Void> projectsMono = projectsRepository.deleteAll()
+                .thenMany(projectsRepository.saveAll(List.of(
+                        Projects.builder()
+                                .id(null)
+                                .projectId("91c940b1-24e8-463f-96ef-f54f7e4aaf1e") // Changed project ID to avoid duplicate
+                                .title("Project 1")
+                                .description("This is a project")
+                                .build()
+                )))
                 .doOnNext(projects -> log.info("Preloaded projects section: {}", projects))
+                .then();
+
+        // Combine all Monos and subscribe once
+        Mono.when(aboutMono, contactMono, educationMono, experienceMono, projectsMono)
                 .subscribe(
-                        success -> log.info("Projects Section preload successful"),
-                        error -> log.error("Error loading Projects section: {}", error.getMessage())
+                        success -> log.info("Database preload completed successfully"),
+                        error -> log.error("Error preloading database: {}", error.getMessage())
                 );
     }
 }

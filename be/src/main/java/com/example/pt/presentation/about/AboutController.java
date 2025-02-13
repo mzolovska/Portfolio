@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AboutController {
 
-    private AboutService aboutService;
+    private final AboutService aboutService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)

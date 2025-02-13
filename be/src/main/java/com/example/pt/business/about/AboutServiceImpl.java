@@ -20,7 +20,14 @@ import utils.exceptions.NotFoundException;
 @Slf4j
 public class AboutServiceImpl implements AboutService {
 
-    private AboutRepository aboutRepository;
+
+
+    private final AboutRepository aboutRepository;
+
+    public AboutServiceImpl(AboutRepository aboutRepository) {
+        this.aboutRepository = aboutRepository;
+    }
+
 
     @Override
     public Flux<AboutResponseModel> getAllAbouts() {
