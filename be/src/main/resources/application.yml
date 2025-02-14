@@ -24,6 +24,14 @@ logging:
     org.hibernate.SQL: DEBUG
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 
+
+auth0:
+  domain: dev-ajdxpcwew072qaio.us.auth0.com
+  clientId: ${AUTH0_CLIENT_ID}
+  clientSecret: ${AUTH0_CLIENT_SECRET}
+  audience: https://dev-ajdxpcwew072qaio.us.auth0.com/api/v2/
+
+
 de:
   flapdoodle:
     mongodb:

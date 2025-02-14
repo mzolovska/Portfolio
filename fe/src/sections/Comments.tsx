@@ -1,41 +1,96 @@
-import React from 'react';
-import Section from '../Section';
-import './Comments.css';
 import { useEffect, useState } from "react";
-import { useCommentApi, CommentResponseModel } from '../api/useCommentApi';
-
+import { useCommentApi, CommentResponseModel, CommentRequestModel } from "../api/useCommentApi";
+import { AdminControls } from "./AdminControls";
 
 const Comments = () => {
-  const { fetchAllComments } = useCommentApi();
-  const [commentData, setCommentData] = useState<CommentResponseModel[]>([]);
+  const { fetchAllComments, createComment, updateComment, deleteComment } = useCommentApi();
+  const [comments, setComments] = useState<CommentResponseModel[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchAllComments();
-        setCommentData(data);
+        setComments(data);
       } catch (error) {
-        console.error("Error fetching Comment data:", error);
+        console.error("Error fetching comments:", error);
       }
     };
 
     fetchData();
   }, []);
 
+  const handleAdd = async (newData: CommentRequestModel) => {
+    try {
+      const createdComment = await createComment(newData);
+      setComments((prev) => [...prev, createdComment]);
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    }
+  };
+
+  const handleModify = async (updatedData: CommentResponseModel) => {
+    try {
+      const updatedComment = await updateComment(updatedData.commentId, {
+        title: updatedData.title,
+        comment: updatedData.comment,
+      });
+
+      setComments((prev) =>
+        prev.map((c) => (c.commentId === updatedComment.commentId ? updatedComment : c))
+      );
+    } catch (error) {
+      console.error("Error updating comment:", error);
+    }
+  };
+
+  const handleDelete = async (commentId: string) => {
+    try {
+      await deleteComment(commentId);
+      setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+
   return (
-    <Section id="comments" title="Comments">
-      {commentData.length > 0 ? (
-        <ul>
-          {commentData.map((comment) => (
-            <li key={comment.commentId}>
-              <strong>{comment.title}:</strong> {comment.comment}
-            </li>
-          ))}
-        </ul>
+    <div>
+      <h2>Comments</h2>
+
+      {/* User Add Comment Form */}
+      <AdminControls
+        entityType="Comment"
+        fields={[
+          { key: "title", label: "Title" },
+          { key: "comment", label: "Comment" },
+        ]}
+        onAdd={handleAdd}
+        isSection={true} // This ensures the form is only for adding new comments
+      />
+
+      {/* List of Comments */}
+      {comments.length > 0 ? (
+        comments.map((commentData) => (
+          <div key={commentData.commentId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
+            <p><strong>{commentData.title}</strong></p>
+            <p>{commentData.comment}</p>
+
+            {/* Admin Controls for Modify/Delete */}
+            <AdminControls
+              entity={commentData}
+              entityType="Comment"
+              fields={[
+                { key: "title", label: "Title" },
+                { key: "comment", label: "Comment" },
+              ]}
+              onModify={handleModify}
+              onDelete={handleDelete}
+            />
+          </div>
+        ))
       ) : (
-        <p>Loading...</p>
+        <p>No comments available.</p>
       )}
-    </Section>
+    </div>
   );
 };
 
