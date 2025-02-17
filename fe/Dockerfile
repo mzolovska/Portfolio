@@ -35,3 +35,4 @@ EXPOSE 80
 
 # Command to run NGINX
 CMD ["nginx", "-g", "daemon off;"]
+
