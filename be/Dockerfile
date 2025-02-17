@@ -1,25 +1,31 @@
+# Build Stage
 FROM gradle:7.6 AS builder
 WORKDIR /usr/src/app
 
-# Copy source files and build.gradle
-COPY src ./src
+# Copy Gradle Wrapper & Build Files First
+COPY gradlew .
+COPY gradle gradle
 COPY build.gradle .
+COPY settings.gradle .
+
+# Copy source files
+COPY src src
+
+# Give execute permission to Gradle wrapper
+RUN chmod +x gradlew
 
 # Build the Spring Boot JAR file
-RUN ["gradle", "bootJar"]
+RUN ./gradlew bootJar
 
-EXPOSE 8080
-
-# Create a new image with OpenJDK 17
+# Production Stage
 FROM openjdk:17
-ARG JAR_FILE=build/libs/*.jar
+WORKDIR /app
 
 # Copy the built JAR file from the builder stage
-COPY --from=builder /usr/src/app/${JAR_FILE} app.jar
+COPY --from=builder /usr/src/app/build/libs/*.jar app.jar
 
-# Install curl and jq
-RUN microdnf update && \
-    microdnf install -y curl jq
+# Expose Port
+EXPOSE 8080
 
 # Set the default command to run the Spring Boot app
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
