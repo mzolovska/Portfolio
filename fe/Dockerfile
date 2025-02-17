@@ -4,13 +4,13 @@ FROM node:21 AS build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json first (better caching)
 COPY package*.json ./
 
 # Install project dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Copy the rest of the application code
 COPY . .
 
 # Build the React app (default is production mode)
@@ -20,8 +20,8 @@ RUN npm run build
 FROM nginx:alpine
 
 # Ensure required directories exist before setting permissions
-RUN mkdir -p /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx
+RUN mkdir -p /var/cache/nginx /var/run/nginx /var/log/nginx && \
+    chown -R nginx:nginx /var/cache/nginx /var/run/nginx /var/log/nginx
 
 # Adjust permissions for serving static files
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
@@ -33,8 +33,8 @@ COPY --from=build /app/build /usr/share/nginx/html
 # Copy the default Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port 80 for the Nginx web server
-EXPOSE 80
+# Expose both port 80 and 8080 for flexibility
+EXPOSE 80 8080
 
-# Command to run Nginx
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
