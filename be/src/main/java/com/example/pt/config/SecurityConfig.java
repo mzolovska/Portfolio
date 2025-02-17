@@ -17,6 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+
 @Configuration
 public class SecurityConfig {
 
@@ -33,11 +34,18 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()  // Allow GET requests for all users
-                        .requestMatchers(HttpMethod.POST, "/api/v1/**").permitAll()  // Admin-only actions
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll()
-                .anyRequest().authenticated()
+                        // 🌍 Allow frontend & static files
+                        .requestMatchers("/", "/index.html", "/static/**").permitAll()
+                        // 📢 Allow public GET requests (for frontend)
+                        .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                        // 🔒 Secure POST, PUT, DELETE with authentication
+                        .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").authenticated()
+                        // 🚀 Allow health check endpoint for deployment
+                        .requestMatchers("/health").permitAll()
+                        // 🔐 Secure everything else
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(
                         jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthenticationConverter())
@@ -46,7 +54,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -58,7 +65,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Allow frontend
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:3000",  // Allow local frontend
+                "https://your-deployed-frontend.com"  // Allow deployed frontend
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -67,7 +77,4 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
 }
-
-
