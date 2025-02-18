@@ -1,4 +1,4 @@
-import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 export interface AboutResponseModel {
   aboutId: string;
@@ -12,6 +12,8 @@ export interface AboutRequestModel {
 }
 
 export const useAboutApi = () => {
+  const axiosInstance = useAxiosInstance();
+
   const fetchAllAbouts = async (): Promise<AboutResponseModel[]> => {
     const abouts: AboutResponseModel[] = [];
 

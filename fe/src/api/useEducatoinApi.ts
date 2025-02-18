@@ -1,4 +1,4 @@
-import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 // Define types
 export interface EducationResponseModel {
@@ -20,6 +20,7 @@ export interface EducationRequestModel {
 
 // Custom hook for Education API calls
 export const useEducationApi = () => {
+  const axiosInstance = useAxiosInstance();
   // Fetch All Education Data (SSE Stream)
   const fetchAllEducation = async (): Promise<EducationResponseModel[]> => {
     const educationList: EducationResponseModel[] = [];
