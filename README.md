@@ -1,19 +1,34 @@
-This is a Next.js project bootstrapped with create-next-app.
-
-Getting Started
-First, run the development server:
-
-npm run dev
-
-Open http://localhost:3000 with your browser to see the result.
-
-You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
-
-This project uses next/font to automatically optimize and load Geist, a new font family for Vercel.
-
+🚀 Tech Stack
+Backend:
+Java + Spring Boot (REST API, Security, MongoDB)
+Frontend:
+TypeScript + React (with Axios for API calls)
+Deployment:
+DigitalOcean (Hosting both frontend & backend)
 ---
-Learn More
-To learn more about Next.js, take a look at the following resources:
+📂 Features
+✅ Smooth-scrolling React frontend
+✅ Admin authentication for modifying content (Spring Security + JWT)
+✅ MongoDB for data storage
+✅ Users can leave comments
+✅ Dynamic language switcher (English/French)
+---
+🛠️ How to Run Locally
+1️⃣ Clone the Repository
+git clone https://github.com/mzolovska/portfolio.git
+cd pt
 
-Next.js Documentation - learn about Next.js features and API.
-Learn Next.js - an interactive Next.js tutorial.
+2️⃣ Start the Backend
+cd backend
+./mvnw spring-boot:run
+
+3️⃣ Start the Frontend
+cd frontend
+npm install
+npm start
+---
+🌍 Live Demo
+👉 Visit Deployed Portfolio: https://seahorse-app-feyku.ondigitalocean.app/
+---
+🔧 Future Improvements
+Improve UI/UX with animations
