@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // 🌍 Allow frontend & static files
-                        .requestMatchers("/", "/index.html", "/static/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/static/**", "/home").permitAll()
                         // 📢 Allow public GET requests (for frontend)
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         // 🔒 Secure POST, PUT, DELETE with authentication
