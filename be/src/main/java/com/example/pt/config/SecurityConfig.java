@@ -1,5 +1,6 @@
 package com.example.pt.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,7 +23,8 @@ import java.util.List;
 public class SecurityConfig {
 
     private static final String ISSUER_URI = "https://dev-ajdxpcwew072qaio.us.auth0.com";
-
+    @Value("${FRONTEND_DOMAIN}") // Read from environment variable
+    private String frontendUrl;
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withJwkSetUri(ISSUER_URI + ".well-known/jwks.json").build();
@@ -65,7 +67,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of(frontendUrl));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
