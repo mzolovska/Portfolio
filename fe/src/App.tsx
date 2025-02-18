@@ -20,13 +20,13 @@ const App: React.FC = () => {
       <AboutMe />
       <Experience />
       <Education />
-      <Skills />
-      <Hobbies />
       <Projects />
       <Resume />
       <Contact />
       <Comments />
+      
     </div>
+    
   );
 };
 

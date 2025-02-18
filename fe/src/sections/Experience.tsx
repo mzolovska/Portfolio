@@ -48,6 +48,8 @@ const Experience = () => {
   };
 
   return (
+    <div className="experience-page">
+
     <Section id="experience" title="Experience">
       <AdminControls
         entityType="Experience"
@@ -90,6 +92,7 @@ const Experience = () => {
         <p>Loading...</p>
       )}
     </Section>
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useContactApi, ContactResponseModel } from "../api/useContactApi";
 import { AdminControls } from "./AdminControls";
 import "./Contact.css";
-
+import Section from "../Section";
 
 const Contact = () => {
   const { fetchAllContacts, updateContact, createContact, deleteContact } = useContactApi();
@@ -10,59 +10,94 @@ const Contact = () => {
 
   useEffect(() => {
     const fetchContacts = async () => {
-      const data = await fetchAllContacts();
-      setContacts(data);
+      try {
+        const data = await fetchAllContacts();
+        setContacts(data);
+      } catch (error) {
+        console.error("Error fetching contacts:", error);
+      }
     };
 
     fetchContacts();
   }, []);
 
   const handleModify = async (updatedContact: ContactResponseModel) => {
-    await updateContact(updatedContact.contactId, updatedContact);
-    setContacts((prev) => prev.map((c) => (c.contactId === updatedContact.contactId ? updatedContact : c)));
+    try {
+      const updated = await updateContact(updatedContact.contactId, updatedContact);
+      setContacts((prev) =>
+        prev.map((c) => (c.contactId === updated.contactId ? updated : c))
+      );
+    } catch (error) {
+      console.error("Error updating contact:", error);
+    }
   };
 
   const handleAdd = async (newContact: ContactResponseModel) => {
-    const addedContact = await createContact(newContact);
-    setContacts((prev) => [...prev, addedContact]);
+    try {
+      const addedContact = await createContact(newContact);
+      setContacts((prev) => [...prev, addedContact]);
+    } catch (error) {
+      console.error("Error adding contact:", error);
+    }
   };
 
   const handleDelete = async (id: string) => {
-    await deleteContact(id);
-    setContacts((prev) => prev.filter((c) => c.contactId !== id));
+    try {
+      await deleteContact(id);
+      setContacts((prev) => prev.filter((c) => c.contactId !== id));
+    } catch (error) {
+      console.error("Error deleting contact:", error);
+    }
   };
 
   return (
-    <div>
-      <h2>Contacts</h2>
+    <div className="contact-page">
+      <Section id="contact" title="Contact">
+
+      {/* Add Contact Form */}
       <AdminControls
         entityType="Contact"
-        fields={[{ key: "name", label: "Name" }, { key: "email", label: "Email" }, { key: "message", label: "Message" }]}
-        onModify={handleModify}
+        fields={[
+          { key: "name", label: "Name" },
+          { key: "email", label: "Email" },
+          { key: "message", label: "Message" },
+        ]}
         onAdd={handleAdd}
+
+        onModify={handleModify}
         onDelete={handleDelete}
-        isSection={true}
+                isSection
       />
-      {contacts.length > 0 ? (
-        <ul>
-          {contacts.map((contact) => (
-            <li key={contact.contactId}>
+
+      {/* Contact List */}
+      <div className="contact-container">
+        {contacts.length > 0 ? (
+          contacts.map((contact) => (
+            <div key={contact.contactId} className="contact-card">
               <strong>{contact.name}</strong> - {contact.email}
               <p>{contact.message}</p>
+
+              {/* Admin Controls for Modify/Delete */}
               <AdminControls
                 entity={contact}
                 entityType="Contact"
-                fields={[{ key: "name", label: "Name" }, { key: "email", label: "Email" }, { key: "message", label: "Message" }]}
-                onModify={handleModify}
+                fields={[
+                  { key: "name", label: "Name" },
+                  { key: "email", label: "Email" },
+                  { key: "message", label: "Message" },
+                ]}
                 onAdd={handleAdd}
+
+                onModify={handleModify}
                 onDelete={handleDelete}
               />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No contacts found.</p>
-      )}
+            </div>
+          ))
+        ) : (
+          <p>No contacts found.</p>
+        )}
+      </div>
+      </Section>
     </div>
   );
 };

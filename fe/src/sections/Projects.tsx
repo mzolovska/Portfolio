@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useProjectsApi, ProjectResponseModel, ProjectRequestModel } from "../api/useProjectsApi";
 import { AdminControls } from "./AdminControls";
 import "./Projects.css";
+import Section from "../Section";
 
 const Projects = () => {
   const { fetchAllProjects, createProject, updateProject, deleteProject } = useProjectsApi();
@@ -22,11 +23,10 @@ const Projects = () => {
   const handleModify = async (updatedProject: ProjectResponseModel) => {
     try {
       const updated = await updateProject(updatedProject.projectId, updatedProject);
-      console.log("Modified project:", updated); // Debugging
+      console.log("Modified project:", updated); // Debugging log
 
       setProjectList((prev) =>
-        prev.map((proj) => 
-          proj.projectId === updated.projectId ? { ...updated} : proj)
+        prev.map((proj) => (proj.projectId === updated.projectId ? updated : proj))
       );
     } catch (error) {
       console.error("Error updating project:", error);
@@ -36,7 +36,7 @@ const Projects = () => {
   const handleAdd = async (newData: ProjectRequestModel) => {
     try {
       const created = await createProject(newData);
-      setProjectList((prev) => [...prev, created]); // Add new project to the list
+      setProjectList((prev) => [...prev, created]);
     } catch (error) {
       console.error("Error adding project:", error);
     }
@@ -44,7 +44,7 @@ const Projects = () => {
 
   const handleDelete = async (projectId: string) => {
     try {
-      console.log("Deleting project ID:", projectId); // Debugging log
+      console.log("Deleting project ID:", projectId);
       await deleteProject(projectId);
       setProjectList((prev) => prev.filter((proj) => proj.projectId !== projectId));
     } catch (error) {
@@ -53,8 +53,8 @@ const Projects = () => {
   };
 
   return (
-    <div>
-      <h2>Projects</h2>
+    <div className="projects-page">
+      <Section id="projects" title="Projects">
 
       {/* Global Add Button for Projects section */}
       <AdminControls
@@ -66,39 +66,48 @@ const Projects = () => {
           { key: "link", label: "Link" },
         ]}
         onAdd={handleAdd}
-        onModify={handleModify}
-        onDelete={handleDelete}
-        isSection={true} // Ensures it's a general add button for projects
+                onModify={handleModify}
+                onDelete={handleDelete}
+        isSection
       />
 
       {/* List of Projects */}
-      {projectList.length > 0 ? (
-        projectList.map((projectData) => (
-          <div key={projectData.projectId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-            <p><strong>{projectData.title}</strong></p>
-            <p>{projectData.description}</p>
-            <p>{projectData.technologies}</p>
-            <p>{projectData.link}</p>
+      <div className="projects-container">
+        {projectList.length > 0 ? (
+          projectList.map((projectData) => (
+            <div key={projectData.projectId} className="project-card">
+              <p><strong>{projectData.title}</strong></p>
+              <p>{projectData.description}</p>
+              <p><strong>Tech:</strong> {projectData.technologies}</p>
+              {projectData.link && (
+                <p>
+                  <a href={projectData.link} target="_blank" rel="noopener noreferrer" className="project-link">
+                    View Project
+                  </a>
+                </p>
+              )}
 
-            <AdminControls
-              entity={projectData}
-              entityType="Project"
-              fields={[
-                { key: "title", label: "Project Name" },
-                { key: "description", label: "Description" },
-                { key: "technologies", label: "Technologies" },
-                { key: "link", label: "Link" },
-
-              ]}
-              onAdd={handleAdd}
-              onModify={handleModify}
-              onDelete={handleDelete}
-            />
-          </div>
-        ))
-      ) : (
-        <p>No projects available.</p>
-      )}
+              {/* Admin Controls for Modify/Delete */}
+              <AdminControls
+                entity={projectData}
+                entityType="Project"
+                fields={[
+                  { key: "title", label: "Project Name" },
+                  { key: "description", label: "Description" },
+                  { key: "technologies", label: "Technologies" },
+                  { key: "link", label: "Link" },
+                ]}
+                onAdd={handleAdd}
+                onModify={handleModify}
+                onDelete={handleDelete}
+              />
+            </div>
+          ))
+        ) : (
+          <p>No projects available.</p>
+        )}
+      </div>
+      </Section>
     </div>
   );
 };

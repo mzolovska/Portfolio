@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAboutApi, AboutResponseModel, AboutRequestModel } from "../api/useAboutApi";
 import { AdminControls } from "./AdminControls";
 import "./AboutMe.css";
-
+import Section from "../Section";
 
 const AboutMe = () => {
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
@@ -53,11 +53,10 @@ const AboutMe = () => {
       console.error("Error deleting About Me:", error);
     }
   };
-  ;
 
   return (
-    <div>
-      <h2>About Me</h2>
+    <div className="about-page">
+      <Section id="about" title="AboutMe">
 
       {/* Global Add Button for About Me section */}
       <AdminControls
@@ -68,34 +67,36 @@ const AboutMe = () => {
         ]}
         onAdd={handleAdd}
         onModify={handleModify}
-              onDelete={handleDelete}
-        isSection={true} // Ensure it's only for adding, not 
+        onDelete={handleDelete}
+        isSection={true}
       />
 
-      {/* List of About Me Entries */}
+      {/* List of About Me Entries - Displayed as Cards */}
       {aboutList.length > 0 ? (
-        aboutList.map((aboutData) => (
-          <div key={aboutData.aboutId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-            <p><strong>{aboutData.name}</strong></p>
-            <p>{aboutData.description}</p>
+        <ul className="about-list">
+          {aboutList.map((aboutData) => (
+            <li key={aboutData.aboutId} className="about-item">
+              <p><strong>{aboutData.name}</strong></p>
+              <p>{aboutData.description}</p>
 
-            <AdminControls
-              entity={aboutData}
-              entityType="About Me"
-              fields={[
-                { key: "name", label: "Name" },
-                { key: "description", label: "Description" },
-              ]}
-              onAdd={handleAdd}
-
-              onModify={handleModify}
-              onDelete={handleDelete}
-            />
-          </div>
-        ))
+              <AdminControls
+                entity={aboutData}
+                entityType="About Me"
+                fields={[
+                  { key: "name", label: "Name" },
+                  { key: "description", label: "Description" },
+                ]}
+                onAdd={handleAdd}
+                onModify={handleModify}
+                onDelete={handleDelete}
+              />
+            </li>
+          ))}
+        </ul>
       ) : (
         <p>No About Me data available.</p>
       )}
+      </Section>
     </div>
   );
 };
