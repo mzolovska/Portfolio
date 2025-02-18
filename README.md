@@ -15,7 +15,7 @@ DigitalOcean (Hosting both frontend & backend)
 ---
 🛠️ How to Run Locally
 1️⃣ Clone the Repository
-git clone https://github.com/mzolovska/portfolio.git
+git clone https://github.com/mzolovska/Portfolio.git
 cd pt
 
 2️⃣ Start the Backend
