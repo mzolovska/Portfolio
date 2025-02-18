@@ -1,6 +1,7 @@
 package com.example.pt.presentation.comments;
 
 import com.example.pt.business.comments.CommentService;
+import com.example.pt.data.comments.Comment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,10 @@ public class CommentController {
     @PutMapping(value = "/{commentId}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<CommentResponseModel>> updateComment(@PathVariable String commentId, @RequestBody CommentRequestModel commentRequestModel) {
         log.info("Updating comment with id: {}", commentId);
+
+        Comment updatedComment = EntityModelUtil.toCommentEntity(commentRequestModel);
+        updatedComment.setCommentId(commentId);
+
         return commentService.updateComment(commentId, Mono.just(commentRequestModel))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.status(HttpStatus.NOT_FOUND).build());

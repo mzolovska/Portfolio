@@ -4,16 +4,22 @@ import com.example.pt.data.comments.Comment;
 import com.example.pt.data.comments.CommentRepository;
 import com.example.pt.presentation.comments.CommentRequestModel;
 import com.example.pt.presentation.comments.CommentResponseModel;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import utils.EntityModelUtil;
+import utils.exceptions.NotFoundException;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+
+    public CommentServiceImpl(CommentRepository commentRepository) {
+        this.commentRepository = commentRepository;
+    }
 
     @Override
     public Mono<CommentResponseModel> createComment(Comment comment) {
@@ -29,20 +35,30 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Mono<CommentResponseModel> getCommentById(String commentId) {
-        return commentRepository.findById(commentId)
+        return commentRepository.findCommentByCommentId(commentId)
                 .map(EntityModelUtil::toCommentResponseModel);
     }
 
     @Override
-    public Mono<CommentResponseModel> updateComment(String commentId, Mono<CommentRequestModel> commentRequestModel) {
-        return commentRepository.findById(commentId)
-                .flatMap(existingComment -> commentRequestModel.map(EntityModelUtil::toCommentEntity))
-                .flatMap(commentRepository::save)
+    public Mono<CommentResponseModel> updateComment(@PathVariable String commentId, Mono<CommentRequestModel> commentRequestModel) {
+        return commentRepository.findCommentByCommentId(commentId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Comment Id not found: " + commentId))))
+                .flatMap(existingComment -> {
+                    return commentRequestModel.map(request -> {
+                        existingComment.setTitle(request.getTitle());
+                        existingComment.setComment(request.getComment());
+                        return existingComment;
+                    });
+                })
+                .doOnSuccess(updatedComment -> log.info("Updated Comment {}: ", updatedComment))
                 .map(EntityModelUtil::toCommentResponseModel);
     }
 
     @Override
     public Mono<Void> deleteComment(String commentId) {
-        return commentRepository.deleteById(commentId);
+        return commentRepository.findCommentByCommentId(commentId)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Comment Id not found: " + commentId))))
+                .flatMap(commentRepository::delete)
+                .doOnSuccess(deletedComment -> log.info("Deleted Comment {}: ", deletedComment));
     }
 }

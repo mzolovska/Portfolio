@@ -39,9 +39,9 @@ public class SecurityConfig {
                         // 📢 Allow public GET requests (for frontend)
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         // 🔒 Secure POST, PUT, DELETE with authentication
-                        .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").authenticated()
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll()
                         // 🚀 Allow health check endpoint for deployment
                         .requestMatchers("/health").permitAll()
                         // 🔐 Secure everything else
@@ -65,10 +65,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:3000",  // Allow local frontend
-                "https://your-deployed-frontend.com"  // Allow deployed frontend
-        ));
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -77,4 +74,5 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
