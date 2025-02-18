@@ -4,17 +4,17 @@ import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios inst
 export interface ExperienceResponseModel {
   experienceId: string;
   company: string;
-  position: string;
-  startDate: string;
-  endDate: string;
+  role: string;
+  startYear: number;
+  endYear: number;
   description: string;
 }
 
 export interface ExperienceRequestModel {
   company: string;
-  position: string;
-  startDate: string;
-  endDate: string;
+  role: string;
+  startYear: number;
+  endYear: number;
   description: string;
 }
 

@@ -6,18 +6,16 @@ export interface EducationResponseModel {
   institution: string;
   degree: string;
   fieldOfStudy: string;
-  startDate: string;
-  endDate: string;
-  description: string;
+  startYear: number;
+  endYear: number;
 }
 
 export interface EducationRequestModel {
   institution: string;
   degree: string;
   fieldOfStudy: string;
-  startDate: string;
-  endDate: string;
-  description: string;
+  startYear: number;
+  endYear: number;
 }
 
 // Custom hook for Education API calls

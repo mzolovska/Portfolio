@@ -27,9 +27,20 @@ const Experience = () => {
   };
 
   const handleModify = async (updatedExperience: ExperienceResponseModel) => {
+  try {
     const modifiedExperience = await updateExperience(updatedExperience.experienceId, updatedExperience);
-    setExperienceData((prev) => prev.map((exp) => (exp.experienceId === modifiedExperience.experienceId ? modifiedExperience : exp)));
-  };
+    console.log("Modified experience:", modifiedExperience); // Debugging
+
+    setExperienceData((prev) =>
+      prev.map((exp) =>
+        exp.experienceId === modifiedExperience.experienceId ? { ...modifiedExperience } : exp
+      )
+    );
+  } catch (error) {
+    console.error("Error updating experience:", error);
+  }
+};
+
 
   const handleDelete = async (id: string) => {
     await deleteExperience(id);
@@ -42,10 +53,10 @@ const Experience = () => {
         entityType="Experience"
         fields={[
           { key: "company", label: "Company" },
-          { key: "position", label: "Position" },
+          { key: "role", label: "Role" },
           { key: "description", label: "Description" },
-          { key: "startDate", label: "Start Date", type: "date" },
-          { key: "endDate", label: "End Date", type: "date" },
+          { key: "startYear", label: "Start Year", type: "number" },
+          { key: "startYear", label: "End Year", type: "number" },
         ]}
         onModify={handleModify}
         onAdd={handleAdd}
@@ -57,16 +68,16 @@ const Experience = () => {
         <ul>
           {experienceData.map((exp) => (
             <li key={exp.experienceId}>
-              {exp.company} - {exp.position} - {exp.description} ({exp.startDate} - {exp.endDate})
+              {exp.company} - {exp.role} - {exp.description} ({exp.startYear} - {exp.endYear})
               <AdminControls
                 entity={exp}
                 entityType="Experience"
                 fields={[
                   { key: "company", label: "Company" },
-                  { key: "position", label: "Position" },
+                  { key: "role", label: "Role" },
                   { key: "description", label: "Description" },
-                  { key: "startDate", label: "Start Date", type: "date" },
-                  { key: "endDate", label: "End Date", type: "date" },
+                  { key: "startYear", label: "Start Year", type: "number" },
+                  { key: "endYear", label: "End Year", type: "number" },
                 ]}
                 onModify={handleModify}
                 onAdd={handleAdd}

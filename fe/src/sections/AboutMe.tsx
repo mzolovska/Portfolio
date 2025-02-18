@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAboutApi, AboutResponseModel, AboutRequestModel } from "../api/useAboutApi";
 import { AdminControls } from "./AdminControls";
+import "./AboutMe.css";
+
 
 const AboutMe = () => {
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
@@ -65,6 +67,8 @@ const AboutMe = () => {
           { key: "description", label: "Description" },
         ]}
         onAdd={handleAdd}
+        onModify={handleModify}
+              onDelete={handleDelete}
         isSection={true} // Ensure it's only for adding, not 
       />
 
@@ -82,6 +86,8 @@ const AboutMe = () => {
                 { key: "name", label: "Name" },
                 { key: "description", label: "Description" },
               ]}
+              onAdd={handleAdd}
+
               onModify={handleModify}
               onDelete={handleDelete}
             />

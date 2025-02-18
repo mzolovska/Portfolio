@@ -3,23 +3,19 @@ import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios inst
 // Define types
 export interface ProjectResponseModel {
   projectId: string;
-  name: string;
+  title: string;
   description: string;
-  startDate: string;
-  endDate: string;
-  technologies: string[];
-  githubLink?: string;
-  liveDemoLink?: string;
+  technologies: string;
+  link: string;
+
 }
 
 export interface ProjectRequestModel {
-  name: string;
+  title: string;
   description: string;
-  startDate: string;
-  endDate: string;
-  technologies: string[];
-  githubLink?: string;
-  liveDemoLink?: string;
+  technologies: string;
+  link: string;
+
 }
 
 // Custom hook for Project API calls

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCommentApi, CommentResponseModel, CommentRequestModel } from "../api/useCommentApi";
 import { AdminControls } from "./AdminControls";
-
+import "./Comments.css";
 const Comments = () => {
   const { fetchAllComments, createComment, updateComment, deleteComment } = useCommentApi();
   const [comments, setComments] = useState<CommentResponseModel[]>([]);
@@ -15,6 +15,7 @@ const Comments = () => {
         console.error("Error fetching comments:", error);
       }
     };
+    
 
     fetchData();
   }, []);
@@ -29,12 +30,21 @@ const Comments = () => {
   };
 
   const handleModify = async (updatedData: CommentResponseModel) => {
+    console.log("Modifying comment:", updatedData);
+  
+    if (!updatedData.commentId) {
+      console.error("Error: Comment ID is missing");
+      return;
+    }
+  
     try {
       const updatedComment = await updateComment(updatedData.commentId, {
         title: updatedData.title,
         comment: updatedData.comment,
       });
-
+  
+      console.log("Updated comment response:", updatedComment);
+  
       setComments((prev) =>
         prev.map((c) => (c.commentId === updatedComment.commentId ? updatedComment : c))
       );
@@ -42,6 +52,7 @@ const Comments = () => {
       console.error("Error updating comment:", error);
     }
   };
+  
 
   const handleDelete = async (commentId: string) => {
     try {
@@ -64,24 +75,27 @@ const Comments = () => {
           { key: "comment", label: "Comment" },
         ]}
         onAdd={handleAdd}
-        isSection={true} // This ensures the form is only for adding new comments
+        onModify={handleModify}
+        onDelete={handleDelete}
+        isSection // This ensures the form is only for adding new comments
       />
 
       {/* List of Comments */}
       {comments.length > 0 ? (
-        comments.map((commentData) => (
-          <div key={commentData.commentId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-            <p><strong>{commentData.title}</strong></p>
-            <p>{commentData.comment}</p>
+        comments.map((comment) => (
+          <div key={comment.commentId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
+            <p><strong>{comment.title}</strong></p>
+            <p>{comment.comment}</p>
 
             {/* Admin Controls for Modify/Delete */}
             <AdminControls
-              entity={commentData}
+              entity={comment}
               entityType="Comment"
               fields={[
                 { key: "title", label: "Title" },
                 { key: "comment", label: "Comment" },
               ]}
+              onAdd={handleAdd}
               onModify={handleModify}
               onDelete={handleDelete}
             />

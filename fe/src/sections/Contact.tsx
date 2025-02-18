@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useContactApi, ContactResponseModel } from "../api/useContactApi";
 import { AdminControls } from "./AdminControls";
+import "./Contact.css";
+
 
 const Contact = () => {
   const { fetchAllContacts, updateContact, createContact, deleteContact } = useContactApi();

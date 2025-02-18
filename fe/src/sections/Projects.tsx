@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useProjectsApi, ProjectResponseModel, ProjectRequestModel } from "../api/useProjectsApi";
 import { AdminControls } from "./AdminControls";
+import "./Projects.css";
 
 const Projects = () => {
   const { fetchAllProjects, createProject, updateProject, deleteProject } = useProjectsApi();
@@ -18,18 +19,14 @@ const Projects = () => {
     fetchData();
   }, []);
 
-  const handleModify = async (updatedData: ProjectResponseModel) => {
+  const handleModify = async (updatedProject: ProjectResponseModel) => {
     try {
-      const updated = await updateProject(updatedData.projectId, {
-        name: updatedData.name,
-        description: updatedData.description,
-        startDate: "",
-        endDate: "",
-        technologies: []
-      });
+      const updated = await updateProject(updatedProject.projectId, updatedProject);
+      console.log("Modified project:", updated); // Debugging
 
       setProjectList((prev) =>
-        prev.map((proj) => (proj.projectId === updated.projectId ? updated : proj))
+        prev.map((proj) => 
+          proj.projectId === updated.projectId ? { ...updated} : proj)
       );
     } catch (error) {
       console.error("Error updating project:", error);
@@ -63,10 +60,14 @@ const Projects = () => {
       <AdminControls
         entityType="Project"
         fields={[
-          { key: "name", label: "Project Name" },
+          { key: "title", label: "Project Name" },
           { key: "description", label: "Description" },
+          { key: "technologies", label: "Technologies" },
+          { key: "link", label: "Link" },
         ]}
         onAdd={handleAdd}
+        onModify={handleModify}
+        onDelete={handleDelete}
         isSection={true} // Ensures it's a general add button for projects
       />
 
@@ -74,16 +75,22 @@ const Projects = () => {
       {projectList.length > 0 ? (
         projectList.map((projectData) => (
           <div key={projectData.projectId} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-            <p><strong>{projectData.name}</strong></p>
+            <p><strong>{projectData.title}</strong></p>
             <p>{projectData.description}</p>
+            <p>{projectData.technologies}</p>
+            <p>{projectData.link}</p>
 
             <AdminControls
               entity={projectData}
               entityType="Project"
               fields={[
-                { key: "name", label: "Project Name" },
+                { key: "title", label: "Project Name" },
                 { key: "description", label: "Description" },
+                { key: "technologies", label: "Technologies" },
+                { key: "link", label: "Link" },
+
               ]}
+              onAdd={handleAdd}
               onModify={handleModify}
               onDelete={handleDelete}
             />

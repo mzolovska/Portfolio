@@ -60,18 +60,20 @@ const Education = () => {
               { key: "institution", label: "Institution" },
               { key: "fieldOfStudy", label: "Field of Study" },
               { key: "degree", label: "Degree" },
-              { key: "startDate", label: "Start Date", type: "date" },
-              { key: "endDate", label: "End Date", type: "date" },
+              { key: "startYear", label: "Start Year", type: "number" },
+              { key: "endYear", label: "End Year", type: "number" },
             ]}
             onAdd={handleAdd}
-            isSection
-          />
+            onModify={handleModify}
+            onDelete={handleDelete}
+            isSection 
+             />
         )}
         {educationData.length > 0 ? (
           <ul>
             {educationData.map((edu) => (
               <li key={edu.educationId}>
-                {edu.institution} - {edu.fieldOfStudy} - {edu.degree} ({edu.startDate} - {edu.endDate})
+                {edu.institution} - {edu.fieldOfStudy} - {edu.degree} ({edu.startYear} - {edu.endYear})
                 {isAdmin && (
                   <AdminControls
                     entity={edu}
@@ -80,12 +82,13 @@ const Education = () => {
                       { key: "institution", label: "Institution" },
                       { key: "fieldOfStudy", label: "Field of Study" },
                       { key: "degree", label: "Degree" },
-                      { key: "startDate", label: "Start Date", type: "date" },
-                      { key: "endDate", label: "End Date", type: "date" },
+                      { key: "startYear", label: "Start Year", type: "number" },
+                      { key: "endYear", label: "End Year", type: "number" },
                     ]}
+                    onAdd={handleAdd}
                     onModify={handleModify}
-                    onDelete={handleDelete}
-                  />
+                    onDelete={handleDelete}     
+                                 />
                 )}
               </li>
             ))}

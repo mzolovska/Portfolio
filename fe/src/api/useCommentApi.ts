@@ -52,9 +52,12 @@ export const useCommentApi = () => {
 
   // Update Comment
   const updateComment = async (commentId: string, comment: CommentRequestModel): Promise<CommentResponseModel> => {
+    console.log(`Updating comment with ID: ${commentId}`, comment);
+  
     const response = await axiosInstance.put<CommentResponseModel>(`/comments/${commentId}`, comment);
     return response.data;
   };
+  
 
   // Delete Comment
   const deleteComment = async (commentId: string): Promise<void> => {
