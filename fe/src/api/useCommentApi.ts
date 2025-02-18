@@ -1,4 +1,4 @@
-import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 export interface CommentResponseModel {
   commentId: string;
@@ -12,6 +12,8 @@ export interface CommentRequestModel {
 }
 
 export const useCommentApi = () => {
+  const axiosInstance = useAxiosInstance();
+
   // Fetch All Comments (SSE Stream)
   const fetchAllComments = async (): Promise<CommentResponseModel[]> => {
     const comments: CommentResponseModel[] = [];

@@ -1,4 +1,4 @@
-import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 // Define types
 export interface ExperienceResponseModel {
@@ -20,6 +20,8 @@ export interface ExperienceRequestModel {
 
 // Custom hook for Experience API calls
 export const useExperienceApi = () => {
+  const axiosInstance = useAxiosInstance();
+
   // Fetch All Experience Data (SSE Stream)
   const fetchAllExperiences = async (): Promise<ExperienceResponseModel[]> => {
     const experiences: ExperienceResponseModel[] = [];
