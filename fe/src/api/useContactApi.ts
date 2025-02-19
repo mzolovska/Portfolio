@@ -1,4 +1,4 @@
-import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import {useAxiosInstance} from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 // Define types
 export interface ContactResponseModel {
@@ -17,7 +17,6 @@ export interface ContactRequestModel {
 // Custom hook for Contact API calls
 export const useContactApi = () => {
   const axiosInstance = useAxiosInstance();
-
   // Fetch All Contacts (SSE Stream)
   const fetchAllContacts = async (): Promise<ContactResponseModel[]> => {
     const contacts: ContactResponseModel[] = [];

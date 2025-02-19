@@ -1,4 +1,4 @@
-import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import {useAxiosInstance} from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 // Define types
 export interface EducationResponseModel {
