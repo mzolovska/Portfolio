@@ -15,16 +15,18 @@ export const useAxiosInstance = (): AxiosInstance => {
   instance.interceptors.request.use(async config => {
     try {
       const token = await getAccessTokenSilently();
+      console.log("🔑 JWT Token:", token); // Debugging
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {
-        console.warn("No JWT token found.");
+        console.warn("⚠️ No JWT token found.");
       }
     } catch (error) {
-      console.error("Error getting JWT token:", error);
+      console.error("❌ Error getting JWT token:", error);
     }
     return config;
   });
+  
 
 
   // Response Interceptor: Handle Errors
