@@ -1,104 +1,85 @@
-import { useEffect, useState } from "react";
-import { useContactApi, ContactResponseModel } from "../api/useContactApi";
-import { AdminControls } from "./AdminControls";
-import "./Contact.css";
-import Section from "../Section";
+import React, { useState } from "react";
+import { useContactApi } from "../api/useContactApi"; // ✅ Use API Hook
+import "./Contact.css"; // Styling for the form
+import { FaUser, FaEnvelope, FaPaperPlane } from "react-icons/fa"; // Icons
 
-const Contact = () => {
-  const { fetchAllContacts, updateContact, createContact, deleteContact } = useContactApi();
-  const [contacts, setContacts] = useState<ContactResponseModel[]>([]);
+const Contact: React.FC = () => {
+  const { sendMessage } = useContactApi(); // ✅ Use API function
+  const [formData, setFormData] = useState({
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("");
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const data = await fetchAllContacts();
-        setContacts(data);
-      } catch (error) {
-        console.error("Error fetching contacts:", error);
-      }
-    };
-
-    fetchContacts();
-  }, []);
-
-  const handleModify = async (updatedContact: ContactResponseModel) => {
-    try {
-      const updated = await updateContact(updatedContact.contactId, updatedContact);
-      setContacts((prev) =>
-        prev.map((c) => (c.contactId === updated.contactId ? updated : c))
-      );
-    } catch (error) {
-      console.error("Error updating contact:", error);
-    }
+  // Handle form input changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAdd = async (newContact: ContactResponseModel) => {
-    try {
-      const addedContact = await createContact(newContact);
-      setContacts((prev) => [...prev, addedContact]);
-    } catch (error) {
-      console.error("Error adding contact:", error);
-    }
-  };
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("Sending...");
 
-  const handleDelete = async (id: string) => {
     try {
-      await deleteContact(id);
-      setContacts((prev) => prev.filter((c) => c.contactId !== id));
+      await sendMessage(formData); // ✅ Use API function
+      setStatus("Email sent successfully! ✅");
+      setFormData({ email: "", subject: "", message: "" }); // Clear form
     } catch (error) {
-      console.error("Error deleting contact:", error);
+      setStatus("Error sending email ❌");
     }
   };
 
   return (
-    <div className="contact-page">
-      <Section id="contact" title="Contact">
-
-      {/* Add Contact Form */}
-      <AdminControls
-        entityType="Contact"
-        fields={[
-          { key: "name", label: "Name" },
-          { key: "email", label: "Email" },
-          { key: "message", label: "Message" },
-        ]}
-        onAdd={handleAdd}
-
-        onModify={handleModify}
-        onDelete={handleDelete}
-                isSection
-      />
-
-      {/* Contact List */}
+    <section id="contact" className="contact-section">
       <div className="contact-container">
-        {contacts.length > 0 ? (
-          contacts.map((contact) => (
-            <div key={contact.contactId} className="contact-card">
-              <strong>{contact.name}</strong> - {contact.email}
-              <p>{contact.message}</p>
+        <h2>Contact Me</h2>
+        <p>Have a question or just want to say hi? Send me a message! 📩</p>
 
-              {/* Admin Controls for Modify/Delete */}
-              <AdminControls
-                entity={contact}
-                entityType="Contact"
-                fields={[
-                  { key: "name", label: "Name" },
-                  { key: "email", label: "Email" },
-                  { key: "message", label: "Message" },
-                ]}
-                onAdd={handleAdd}
+        <form onSubmit={handleSubmit} className="contact-form">
+          <div className="input-group">
+            <FaEnvelope className="icon" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-                onModify={handleModify}
-                onDelete={handleDelete}
-              />
-            </div>
-          ))
-        ) : (
-          <p>No contacts found.</p>
-        )}
+          <div className="input-group">
+            <FaUser className="icon" />
+            <input
+              type="text"
+              name="subject"
+              placeholder="Subject"
+              value={formData.subject}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="input-group">
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              value={formData.message}
+              onChange={handleChange}
+              required
+            ></textarea>
+          </div>
+
+          <button type="submit" className="send-button">
+            <FaPaperPlane className="send-icon" /> Send Message
+          </button>
+        </form>
+
+        {status && <p className="status-message">{status}</p>}
       </div>
-      </Section>
-    </div>
+    </section>
   );
 };
 

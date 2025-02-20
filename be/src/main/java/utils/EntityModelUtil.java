@@ -58,7 +58,7 @@ public class EntityModelUtil {
     }
 
 
-    public static ContactResponseModel toContactResponseModel(Contact contact) {
+   /* public static ContactResponseModel toContactResponseModel(Contact contact) {
         ContactResponseModel contactResponseModel = new ContactResponseModel();
         BeanUtils.copyProperties(contact, contactResponseModel);
         return contactResponseModel;
@@ -72,7 +72,7 @@ public class EntityModelUtil {
                 .message(contactRequestModel.getMessage())
                 .build();
     }
-
+*/
     public static EducationResponseModel toEducationResponseModel(Education education) {
         EducationResponseModel educationResponseModel = new EducationResponseModel();
         BeanUtils.copyProperties(education, educationResponseModel);

@@ -1,6 +1,7 @@
 import React from 'react';
 import CoverPage from './sections/CoverPage';
 import Navbar from './NavBar';
+import Footer from './Footer';
 import AboutMe from './sections/AboutMe';
 import Experience from './sections/Experience';
 import Education from './sections/Education';
@@ -14,8 +15,12 @@ import './App.css';
 
 const App: React.FC = () => {
   return (
+    <div>
+    <Navbar />
+    
     <div className="app">
-      <Navbar />
+      
+      <main>
       <CoverPage />
       <AboutMe />
       <Experience />
@@ -24,9 +29,11 @@ const App: React.FC = () => {
       <Resume />
       <Contact />
       <Comments />
+      </main>
+      <Footer />
       
     </div>
-    
+    </div>
   );
 };
 

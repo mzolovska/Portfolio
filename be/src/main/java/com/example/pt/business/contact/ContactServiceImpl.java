@@ -19,53 +19,15 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ContactServiceImpl implements ContactService {
 
-    private final ContactRepository contactRepository;
+    private final EmailService emailService;
 
-    public ContactServiceImpl(ContactRepository contactRepository) {
-        this.contactRepository = contactRepository;
-    }
-
-
-    @Override
-    public Mono<ContactResponseModel> createContact(Contact contact) {
-        return contactRepository.save(contact)
-                .doOnSuccess(savedContact -> log.info("Added new contact: {}", savedContact))
-                .map(EntityModelUtil::toContactResponseModel);
+    public ContactServiceImpl(EmailService emailService) {
+        this.emailService = emailService;
     }
 
     @Override
-    public Flux<ContactResponseModel> getAllContacts() {
-        return contactRepository.findAll()
-                .map(EntityModelUtil::toContactResponseModel);
-    }
-
-    @Override
-    public Mono<ContactResponseModel> getContactByContactId(String contactId) {
-        return contactRepository.findContactByContactId(contactId)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
-                .map(EntityModelUtil::toContactResponseModel);
-    }
-
-    @Override
-    public Mono<ContactResponseModel> updateContact(@PathVariable String contactId, Mono<ContactRequestModel> contactRequestModel) {
-        return contactRepository.findContactByContactId(contactId)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
-                .flatMap(existingContact -> {
-                    return contactRequestModel.map(request -> {
-                        existingContact.setName(request.getName());
-                        existingContact.setMessage(request.getMessage());
-                        return existingContact;
-                    });
-                })
-                .doOnSuccess(updatedContact -> log.info("Updated Contact {}: ", updatedContact))
-                .map(EntityModelUtil::toContactResponseModel);
-    }
-
-    @Override
-    public Mono<Void> deleteContact(String contactId) {
-        return contactRepository.findContactByContactId(contactId)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("Contact Id not found: " + contactId))))
-                .flatMap(contactRepository::delete)
-                .doOnSuccess(deletedContact -> log.info("Deleted Contact {}: ", deletedContact));
+    public void sendEmail(String email, String subject, String message) {
+        String fullMessage = "From: " + email + "\n\n" + message;
+        emailService.sendEmail(email, subject, fullMessage);
     }
 }

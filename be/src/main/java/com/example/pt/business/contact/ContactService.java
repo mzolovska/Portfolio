@@ -9,9 +9,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 public interface ContactService {
-    Mono<ContactResponseModel> createContact(Contact contact);
-    Flux<ContactResponseModel> getAllContacts();
-    Mono<ContactResponseModel> getContactByContactId(String contactId);
-    Mono<ContactResponseModel> updateContact(String contactId, Mono<ContactRequestModel> contactRequestModel);
-    Mono<Void> deleteContact(String contactId);
+    void sendEmail(String email, String subject, String message);
+
 }

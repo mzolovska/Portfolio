@@ -1,99 +1,65 @@
-/* Base Navbar Styles */
 .navbar {
-  position: fixed;
+  position: fixed !important;
   top: 0;
-  left: 0;
   width: 100%;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-  transition: background-color 0.3s ease;
-}
-
-.navbar.scrolled {
-  background-color: rgba(255, 255, 255, 0.9); /* Solid background on scroll */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
-}
-
-/* Hamburger Menu */
-.hamburger {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 25px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 1001;
-}
-
-.hamburger span {
-  display: block;
-  width: 100%;
-  height: 3px;
-  background-color: #333;
-  transition: all 0.3s ease;
-}
-
-.hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger.open span:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Overlay Menu */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: #222;
+  color: white;
+  padding: 10px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 1000;
 }
 
-.overlay.open {
-  opacity: 1;
-  visibility: visible;
+.nav-container {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
 }
 
 .nav-links {
+  display: flex;
   list-style: none;
-  text-align: center;
-}
-
-.nav-links li {
-  margin: 2rem 0;
+  color: white;
+  gap: 20px;
 }
 
 .nav-links li a {
-  font-size: 1.5rem;
-  color: #333;
+  color: white;
   text-decoration: none;
-  transition: color 0.3s ease;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .nav-links li a:hover {
-  color: #007bff;
+  text-decoration: underline;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.nav-btn:hover {
+  color: #f4b400;
+}
+
+.content {
+  padding-top: 80px; /* ✅ Prevents content from hiding behind the navbar */
 }

@@ -7,6 +7,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { auth0Config } from "./auth/auth0-config";
 import { AppRoutes } from "./shared/models/app.routes";
+import { BrowserRouter } from "react-router-dom";
 
 
 const onRedirectCallback = () => {
@@ -31,9 +32,13 @@ root.render(
       onRedirectCallback={onRedirectCallback}
       cacheLocation="localstorage"
     >
-        <App />
-    </Auth0Provider>
+ <BrowserRouter>
+    <App />
+  </BrowserRouter>    
+  </Auth0Provider>
   </React.StrictMode>
 );
 
 reportWebVitals();
+
+

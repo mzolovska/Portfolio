@@ -1,32 +1,66 @@
-.about-page {
+.about-container {
   display: flex;
-  flex-direction: column; /* Ensures vertical stacking */
-  align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: #f8f9fa;
-  color: black;
-  text-align: center;
-  padding: 20px;
+  align-items: center;
+  width: 100%;
+  padding: 40px 20px;
 }
 
-/* Style for the list to be vertical */
-.about-list {
-  list-style: none;
-  padding: 0;
+.about-content {
   display: flex;
-  flex-direction: column; /* Stacks items vertically */
-  gap: 20px; /* Space between each card */
-  width: 80%;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  gap: 50px;
+}
+
+/* 📸 Image Container */
+.about-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.about-image img {
+  width: 250px; /* ✅ Small enough, not taking full screen */
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* 📝 About Text */
+.about-text {
+  flex: 2;
   max-width: 600px;
 }
 
-/* Style for each About Me card */
-.about-item {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  width: 100%;
+.about-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.about-text p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* 🎡 Skills Carousel */
+.skills-carousel {
+  margin-top: 20px;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-image {
+    margin-bottom: 20px;
+  }
+
+  .about-image img {
+    width: 200px;
+  }
 }

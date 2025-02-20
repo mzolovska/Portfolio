@@ -9,9 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContactResponseModel {
     private String contactId;
-    private String name;
     private String email;
+    private String subject;
     private String message;
+
 
     public ContactResponseModel() {
 

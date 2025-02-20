@@ -46,18 +46,7 @@ public class DatabaseLoader {
                 .doOnNext(about -> log.info("Preloaded about section: {}", about))
                 .then();
 
-        Mono<Void> contactMono = contactRepository.deleteAll()
-                .thenMany(contactRepository.saveAll(List.of(
-                        Contact.builder()
-                                .id(null)
-                                .contactId("91c940b1-24e8-463f-96ef-f54f7e4aaf2r")
-                                .name("Contact Me")
-                                .message("You can contact me at")
-                                .email("fesfferf@example.com")
-                                .build()
-                )))
-                .doOnNext(contact -> log.info("Preloaded contact section: {}", contact))
-                .then();
+
 
         Mono<Void> educationMono = educationRepository.deleteAll()
                 .thenMany(educationRepository.saveAll(List.of(
@@ -114,7 +103,7 @@ public class DatabaseLoader {
                 .then();
 
         // Combine all Monos and subscribe once
-        Mono.when(aboutMono, contactMono, educationMono, experienceMono, projectsMono)
+        Mono.when(aboutMono,  educationMono, experienceMono, projectsMono)
                 .subscribe(
                         success -> log.info("Database preload completed successfully"),
                         error -> log.error("Error preloading database: {}", error.getMessage())

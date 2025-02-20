@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { useAboutApi, AboutResponseModel, AboutRequestModel } from "../api/useAboutApi";
 import { AdminControls } from "./AdminControls";
-import "./AboutMe.css";
 import Section from "../Section";
+import "./AboutMe.css";
+import SkillsCarousel from "./SkillsCarousel"; 
+
+// 🖼️ Import image from assets (or use a public folder reference)
+import profileImage from "../assets/profile.jpg";
 
 const AboutMe = () => {
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
@@ -46,7 +50,6 @@ const AboutMe = () => {
 
   const handleDelete = async (aboutId: string) => {
     try {
-      console.log("Deleting About Me ID:", aboutId); // Debugging log
       await deleteAbout(aboutId);
       setAboutList((prev) => prev.filter((about) => about.aboutId !== aboutId));
     } catch (error) {
@@ -55,47 +58,43 @@ const AboutMe = () => {
   };
 
   return (
-    <div className="about-page">
-      <Section id="about" title="AboutMe">
+    <div className="about-container">
+      <Section id="about" title="">
+        <div className="about-content">
+          {/* 🖼️ Profile Image */}
+          <div className="about-image">
+            <img src={profileImage} alt="Profile" />
+          </div>
 
-      {/* Global Add Button for About Me section */}
-      <AdminControls
-        entityType="About Me"
-        fields={[
-          { key: "name", label: "Name" },
-          { key: "description", label: "Description" },
-        ]}
-        onAdd={handleAdd}
-        onModify={handleModify}
-        onDelete={handleDelete}
-        isSection={true}
-      />
+          {/* 📜 About Me Text */}
+          <div className="about-text">
+            {aboutList.length > 0 ? (
+              aboutList.map((aboutData) => (
+                <div key={aboutData.aboutId} className="about-details">
+                  <h2>{aboutData.name}</h2>
+                  <p>{aboutData.description}</p>
 
-      {/* List of About Me Entries - Displayed as Cards */}
-      {aboutList.length > 0 ? (
-        <ul className="about-list">
-          {aboutList.map((aboutData) => (
-            <li key={aboutData.aboutId} className="about-item">
-              <p><strong>{aboutData.name}</strong></p>
-              <p>{aboutData.description}</p>
-
-              <AdminControls
-                entity={aboutData}
-                entityType="About Me"
-                fields={[
-                  { key: "name", label: "Name" },
-                  { key: "description", label: "Description" },
-                ]}
-                onAdd={handleAdd}
-                onModify={handleModify}
-                onDelete={handleDelete}
-              />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No About Me data available.</p>
-      )}
+                  {/* 🔧 Admin Controls */}
+                  <AdminControls
+                    entity={aboutData}
+                    entityType="About Me"
+                    fields={[
+                      { key: "name", label: "Name" },
+                      { key: "description", label: "Description" },
+                    ]}
+                    onAdd={handleAdd}
+                    onModify={handleModify}
+                    onDelete={handleDelete}
+                  />
+                </div>
+              ))
+            ) : (
+              <p>No About Me data available.</p>
+            )}
+            <h2>Skills</h2>
+            <SkillsCarousel />
+          </div>
+        </div>
       </Section>
     </div>
   );

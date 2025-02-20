@@ -16,7 +16,7 @@ public class Contact {
     private String id;
 
     private String contactId;
-    private String name;
     private String email;
+    private String subject;
     private String message;
 }
