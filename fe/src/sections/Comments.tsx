@@ -1,17 +1,24 @@
-import { useEffect, useState } from "react";
-import { useCommentApi, CommentResponseModel, CommentRequestModel } from "../api/useCommentApi";
-import { AdminControls } from "./AdminControls";
+import React, { useEffect, useState } from "react";
+import { useCommentApi, CommentRequestModel } from "../api/useCommentApi";
 import "./Comments.css";
 import Section from "../Section";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+
 
 const Comments = () => {
-  const { fetchAllComments, createComment, updateComment, deleteComment } = useCommentApi();
-  const [comments, setComments] = useState<CommentResponseModel[]>([]);
+  const { fetchAllComments, createComment } = useCommentApi();
+  const [comments, setComments] = useState<CommentRequestModel[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newComment, setNewComment] = useState({ title: "", comment: "" });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchAllComments();
+        console.log("Fetched comments:", data); // Debugging
         setComments(data);
       } catch (error) {
         console.error("Error fetching comments:", error);
@@ -20,95 +27,121 @@ const Comments = () => {
     fetchData();
   }, []);
 
-  const handleAdd = async (newData: CommentRequestModel) => {
+  const handleAddComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newComment.title.trim() || !newComment.comment.trim()) return; // Prevent empty submission
+
     try {
-      const createdComment = await createComment(newData);
+      const createdComment = await createComment(newComment);
+      console.log("Created comment:", createdComment); // Debugging
       setComments((prev) => [...prev, createdComment]);
+      setShowModal(false);
+      setNewComment({ title: "", comment: "" }); // Reset form
     } catch (error) {
       console.error("Error adding comment:", error);
     }
   };
 
-  const handleModify = async (updatedData: CommentResponseModel) => {
-    console.log("Modifying comment:", updatedData);
 
-    if (!updatedData.commentId) {
-      console.error("Error: Comment ID is missing");
-      return;
-    }
-
-    try {
-      const updatedComment = await updateComment(updatedData.commentId, {
-        title: updatedData.title,
-        comment: updatedData.comment,
-      });
-
-      console.log("Updated comment response:", updatedComment);
-
-      setComments((prev) =>
-        prev.map((c) => (c.commentId === updatedComment.commentId ? updatedComment : c))
-      );
-    } catch (error) {
-      console.error("Error updating comment:", error);
-    }
-  };
-
-  const handleDelete = async (commentId: string) => {
-    try {
-      await deleteComment(commentId);
-      setComments((prev) => prev.filter((c) => c.commentId !== commentId));
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-    }
-  };
-
-  return (
-    <div className="comments-page">
-      <Section id="comments" title="Comments">
-
-      {/* Add Comment Form */}
-      <AdminControls
-        entityType="Comment"
-        fields={[
-          { key: "title", label: "Title" },
-          { key: "comment", label: "Comment" },
-        ]}
-        onAdd={handleAdd}
-
-        onModify={handleModify}
-        onDelete={handleDelete}
-                isSection // Ensures this is only for adding new comments
+  const PrevArrow = (props: any) => {
+    const { className, style, onClick } = props;
+    return (
+      <FaArrowLeft 
+        className={className} 
+        style={{ ...style, display: "block", color: "black", fontSize: "28px", left: "-55px" }} 
+        onClick={onClick} 
       />
+    );
+  };
+  
+  const NextArrow = (props: any) => {
+    const { className, style, onClick } = props;
+    return (
+      <FaArrowRight 
+        className={className} 
+        style={{ ...style, display: "block", color: "black", fontSize: "28px", right: "-55px" }} 
+        onClick={onClick} 
+      />
+    );
+  };
 
-      {/* List of Comments */}
-      <div className="comments-container">
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Show 3 comments at a time on large screens
+    slidesToScroll: 1, // Scroll one comment at a time
+    autoplay: true,
+    autoplaySpeed: 3000,
+    initialSlide: 0, // Start at the first comment
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2, // Show 2 comments at a time on medium screens
+          slidesToScroll: 1, // Scroll one at a time
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1, // Show 1 comment at a time on small screens
+          slidesToScroll: 1, // Scroll one at a time
+        },
+      },
+    ],
+  };
+  
+  return (
+    <div className="comments-section">
+      <Section id="comments" title="Comments">
+          <button className="add-comment-btn" onClick={() => setShowModal(true)}>+</button>
+
+        {/* Comments Carousel */}
         {comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment.commentId} className="comment-card">
-              <p><strong>{comment.title}</strong></p>
-              <p>{comment.comment}</p>
-
-              {/* Admin Controls for Modify/Delete */}
-              <AdminControls
-                entity={comment}
-                entityType="Comment"
-                fields={[
-                  { key: "title", label: "Title" },
-                  { key: "comment", label: "Comment" },
-                ]}
-                onAdd={handleAdd}
-
-                onModify={handleModify}
-                onDelete={handleDelete}
-              />
-            </div>
-          ))
+          <Slider {...settings} className="comments-carousel">
+            {comments.map((comment, index) => (
+              <div key={index} className="comment-card">
+                <h3>{comment.title}</h3>
+                <p>{comment.comment}</p>
+              </div>
+            ))}
+          </Slider>
         ) : (
-          <p>No comments available.</p>
+          <p className="no-comments">No comments yet.</p>
         )}
-        
-      </div>
       </Section>
+
+      {/* Add Comment Modal */}
+      {showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Add a Comment</h2>
+            <form onSubmit={handleAddComment}>
+              <input
+                type="text"
+                placeholder="Title"
+                value={newComment.title}
+                onChange={(e) => setNewComment({ ...newComment, title: e.target.value })}
+                required
+              />
+              <textarea
+                placeholder="Your comment..."
+                value={newComment.comment}
+                onChange={(e) => setNewComment({ ...newComment, comment: e.target.value })}
+                required
+              />
+              <div className="modal-buttons">
+                <button type="submit">Submit</button>
+                <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
