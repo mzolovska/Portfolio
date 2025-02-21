@@ -6,6 +6,10 @@
   margin: auto;
 }
 
+.comments-section {
+  background: #effffb; 
+
+}
 /* 🎡 Carousel Container */
 .comments-carousel {
   max-width: 900px;
@@ -66,7 +70,7 @@
 
 /* Add Comment Button */
 .add-comment-btn {
-  background: white;
+  background: #effffb; 
   color: black;
   font-size: 24px;
   font-weight: bold;
@@ -150,7 +154,7 @@
 }
 
 .modal-buttons button {
-  background: black;
+  background: #3baea0; 
   color: white;
   padding: 10px;
   border: none;

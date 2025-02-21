@@ -2,7 +2,7 @@
   position: fixed !important;
   top: 0;
   width: 100%;
-  background-color: #222;
+	background: #118a7e; 
   color: white;
   padding: 10px 20px;
   display: flex;
