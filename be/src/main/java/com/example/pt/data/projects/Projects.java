@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,6 +20,7 @@ public class Projects {
     private String projectId;
     private String title;
     private String description;
-    private String technologies;
-    private String link;
+    private String imageUrl; // Store the image URL
+    private List<String> technologies; // Change from String to List<String>
+    private String githubLink;
 }

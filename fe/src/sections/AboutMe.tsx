@@ -7,6 +7,7 @@ import SkillsCarousel from "./SkillsCarousel";
 
 // 🖼️ Import image from assets (or use a public folder reference)
 import profileImage from "../assets/profile.jpg";
+import Resume from "./Resume";
 
 const AboutMe = () => {
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
@@ -91,6 +92,7 @@ const AboutMe = () => {
             ) : (
               <p>No About Me data available.</p>
             )}
+            <Resume />
             <h2>Skills</h2>
             <SkillsCarousel />
           </div>

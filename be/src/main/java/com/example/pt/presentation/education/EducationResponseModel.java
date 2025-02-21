@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,8 +14,8 @@ public class EducationResponseModel {
     private String institution;
     private String degree;
     private String fieldOfStudy;
-    private int startYear;
-    private int endYear;
+    private LocalDate startDate;  // Change from int to LocalDate
+    private LocalDate endDate;
 
     public EducationResponseModel() {
 

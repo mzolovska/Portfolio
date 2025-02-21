@@ -20,13 +20,8 @@ const Navbar = () => {
             </ScrollLink>
           </li>
           <li>
-            <ScrollLink to="experience" smooth={true} duration={500}>
-              Experience
-            </ScrollLink>
-          </li>
-          <li>
-            <ScrollLink to="education" smooth={true} duration={500}>
-              Education
+            <ScrollLink to="education-experience" smooth={true} duration={500}>
+              Education & Experience
             </ScrollLink>
           </li>
           <li>

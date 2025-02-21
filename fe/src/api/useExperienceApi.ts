@@ -5,16 +5,16 @@ export interface ExperienceResponseModel {
   experienceId: string;
   company: string;
   role: string;
-  startYear: number;
-  endYear: number;
+  startDate: string; // LocalDate format (YYYY-MM-DD)
+  endDate: string;
   description: string;
 }
 
 export interface ExperienceRequestModel {
   company: string;
   role: string;
-  startYear: number;
-  endYear: number;
+  startDate: string; // LocalDate format (YYYY-MM-DD)
+  endDate: string;
   description: string;
 }
 

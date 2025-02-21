@@ -6,16 +6,16 @@ export interface EducationResponseModel {
   institution: string;
   degree: string;
   fieldOfStudy: string;
-  startYear: number;
-  endYear: number;
+  startDate: string; // LocalDate format (YYYY-MM-DD)
+  endDate: string;
 }
 
 export interface EducationRequestModel {
   institution: string;
   degree: string;
   fieldOfStudy: string;
-  startYear: number;
-  endYear: number;
+  startDate: string; // LocalDate format (YYYY-MM-DD)
+  endDate: string;
 }
 
 // Custom hook for Education API calls

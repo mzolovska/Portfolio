@@ -12,6 +12,7 @@ import Resume from './sections/Resume';
 import Contact from './sections/Contact';
 import Comments from './sections/Comments';
 import './App.css';
+import EducationExperience from './sections/EducationExperience';
 
 const App: React.FC = () => {
   return (
@@ -23,10 +24,8 @@ const App: React.FC = () => {
       <main>
       <CoverPage />
       <AboutMe />
-      <Experience />
-      <Education />
+      <EducationExperience />
       <Projects />
-      <Resume />
       <Contact />
       <Comments />
       </main>

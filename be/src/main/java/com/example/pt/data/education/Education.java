@@ -4,6 +4,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +21,6 @@ public class Education {
     private String institution;
     private String degree;
     private String fieldOfStudy;
-    private int startYear;
-    private int endYear;
+    private LocalDate startDate;  // Change from int to LocalDate
+    private LocalDate endDate;
 }

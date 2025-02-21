@@ -1,13 +1,12 @@
 import React from 'react';
 import Section from '../Section';
-import './Resume.css';
 
 const Resume: React.FC = () => {
   return (
-    <div className="resume-page">
-      <Section id="resume" title="Resume">
+    <div>
         <ul>
           <li>
+            <h2>Resume</h2>
             You can download my resume by clicking{" "}
             <a href="/ResumeMariyaZolovska.pdf" download="My_Resume.pdf">
               here
@@ -15,7 +14,6 @@ const Resume: React.FC = () => {
             !
           </li>
         </ul>
-      </Section>
     </div>
   );
 };

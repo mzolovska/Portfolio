@@ -6,17 +6,19 @@ export interface ProjectResponseModel {
   title: string;
   description: string;
   technologies: string;
-  link: string;
-
+  githubLink: string;
+  imageUrl: string; // ✅ Added field
 }
 
 export interface ProjectRequestModel {
   title: string;
   description: string;
   technologies: string;
-  link: string;
-
+  githubLink: string;
+  imageUrl: string; // ✅ Added field
 }
+
+
 
 // Custom hook for Project API calls
 export const useProjectsApi = () => {

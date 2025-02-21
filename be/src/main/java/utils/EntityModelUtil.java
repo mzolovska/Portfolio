@@ -84,8 +84,8 @@ public class EntityModelUtil {
                 .educationId(generateUUIDString())
                 .institution(educationRequestModel.getInstitution())
                 .fieldOfStudy(educationRequestModel.getFieldOfStudy())
-                .startYear(educationRequestModel.getStartYear())
-                .endYear(educationRequestModel.getEndYear())
+                .startDate(educationRequestModel.getStartDate())
+                .endDate(educationRequestModel.getEndDate())
                 .build();
     }
 
@@ -101,8 +101,8 @@ public class EntityModelUtil {
                 .company(experienceRequestModel.getCompany())
                 .role(experienceRequestModel.getRole())
                 .description(experienceRequestModel.getDescription())
-                .startYear(experienceRequestModel.getStartYear())
-                .endYear(experienceRequestModel.getEndYear())
+                .startDate(experienceRequestModel.getStartDate())
+                .endDate(experienceRequestModel.getEndDate())
                 .build();
     }
 
@@ -118,7 +118,8 @@ public class EntityModelUtil {
                 .title(projectsRequestModel.getTitle())
                 .description(projectsRequestModel.getDescription())
                 .technologies(projectsRequestModel.getTechnologies())
-                .link(projectsRequestModel.getLink())
+                .imageUrl(projectsRequestModel.getImageUrl())
+                .githubLink(projectsRequestModel.getGithubLink())
                 .build();
     }
 }

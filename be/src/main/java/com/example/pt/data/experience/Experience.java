@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,6 +22,6 @@ public class Experience {
     private String company;
     private String role;
     private String description;
-    private int startYear;
-    private int endYear;
+    private LocalDate startDate;  // Change from int to LocalDate
+    private LocalDate endDate;
 }

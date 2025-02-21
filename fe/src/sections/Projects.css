@@ -1,37 +1,12 @@
-.projects-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f8f9fa;
-  color: black;
+.projects-section {
   text-align: center;
-  padding: 20px;
+  padding: 40px 0;
+  background: #effffb; 
 }
 
-/* Projects container with grid layout */
-.projects-container {
+.projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
-  width: 90%;
-  max-width: 1000px;
-}
-
-/* Project card design */
-.project-card {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: left;
-  width: 100%;
-}
-
-/* Project links */
-.project-link {
-  display: inline-block;
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
+  padding: 20px;
 }

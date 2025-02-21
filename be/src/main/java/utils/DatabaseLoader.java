@@ -48,7 +48,7 @@ public class DatabaseLoader {
 
 
 
-        Mono<Void> educationMono = educationRepository.deleteAll()
+       /* Mono<Void> educationMono = educationRepository.deleteAll()
                 .thenMany(educationRepository.saveAll(List.of(
                         Education.builder()
                                 .id(null)
@@ -61,7 +61,7 @@ public class DatabaseLoader {
                                 .build()
                 )))
                 .doOnNext(education -> log.info("Preloaded education section: {}", education))
-                .then();
+                .then();*/
 
         Mono<Void> commentMono = commentRepository.deleteAll()
                 .thenMany(commentRepository.saveAll(List.of(
@@ -76,7 +76,7 @@ public class DatabaseLoader {
                 .then();
 
 
-        Mono<Void> experienceMono = experienceRepository.deleteAll()
+        /*Mono<Void> experienceMono = experienceRepository.deleteAll()
                 .thenMany(experienceRepository.saveAll(List.of(
                         Experience.builder()
                                 .id(null)
@@ -88,9 +88,9 @@ public class DatabaseLoader {
                                 .build()
                 )))
                 .doOnNext(experience -> log.info("Preloaded experience section: {}", experience))
-                .then();
+                .then();*/
 
-        Mono<Void> projectsMono = projectsRepository.deleteAll()
+       /* Mono<Void> projectsMono = projectsRepository.deleteAll()
                 .thenMany(projectsRepository.saveAll(List.of(
                         Projects.builder()
                                 .id(null)
@@ -100,10 +100,10 @@ public class DatabaseLoader {
                                 .build()
                 )))
                 .doOnNext(projects -> log.info("Preloaded projects section: {}", projects))
-                .then();
+                .then();*/
 
         // Combine all Monos and subscribe once
-        Mono.when(aboutMono,  educationMono, experienceMono, projectsMono)
+        Mono.when(aboutMono)
                 .subscribe(
                         success -> log.info("Database preload completed successfully"),
                         error -> log.error("Error preloading database: {}", error.getMessage())

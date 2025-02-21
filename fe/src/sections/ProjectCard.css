@@ -1,0 +1,69 @@
+.project-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .project-card:hover {
+    transform: scale(1.03);
+  }
+  
+  .project-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .project-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  .project-description {
+    margin: 12px 0;
+    font-size: 1rem;
+    color: #444;
+  }
+  
+  .project-carousel {
+    margin-top: 12px;
+  }
+  
+  .tech-carousel-container {
+    width: 100%; /* Keep the carousel inside the card */
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .tech-item {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+  
+  .slick-prev, .slick-next {
+    z-index: 10; /* Make sure arrows stay inside */
+    width: 30px;
+    height: 30px;
+  }
+  
+  
+  .github-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+    text-decoration: none;
+    color: #000;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .github-icon {
+    font-size: 24px;
+    margin-right: 8px;
+  }
+  
