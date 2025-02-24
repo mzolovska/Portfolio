@@ -13,6 +13,10 @@ import Contact from './sections/Contact';
 import Comments from './sections/Comments';
 import './App.css';
 import EducationExperience from './sections/EducationExperience';
+import "./i18n"; // ✅ Import the i18n config
+import ReactDOM from "react-dom";
+
+
 
 const App: React.FC = () => {
   return (

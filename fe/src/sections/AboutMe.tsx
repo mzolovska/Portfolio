@@ -8,8 +8,12 @@ import SkillsCarousel from "./SkillsCarousel";
 // 🖼️ Import image from assets (or use a public folder reference)
 import profileImage from "../assets/profile.jpg";
 import Resume from "./Resume";
+import { useTranslation } from "react-i18next";
+
 
 const AboutMe = () => {
+  const { t } = useTranslation();
+
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
   const [aboutList, setAboutList] = useState<AboutResponseModel[]>([]);
 
@@ -60,8 +64,8 @@ const AboutMe = () => {
 
   return (
     <div className="about-container">
-      <Section id="about" title="">
-        <div className="about-content">
+    <Section id="about" title={t("aboutMe.title")}>
+      <div className="about-content">
           {/* 🖼️ Profile Image */}
           <div className="about-image">
             <img src={profileImage} alt="Profile" />
@@ -78,10 +82,10 @@ const AboutMe = () => {
                   {/* 🔧 Admin Controls */}
                   <AdminControls
                     entity={aboutData}
-                    entityType="About Me"
+                    entityType={t("aboutMe.title")}
                     fields={[
-                      { key: "name", label: "Name" },
-                      { key: "description", label: "Description" },
+                      { key: "name", label: t("aboutMe.adminControls.name") },
+                      { key: "description", label: t("aboutMe.adminControls.description") },
                     ]}
                     onAdd={handleAdd}
                     onModify={handleModify}
@@ -90,10 +94,10 @@ const AboutMe = () => {
                 </div>
               ))
             ) : (
-              <p>No About Me data available.</p>
+              <p>{t("aboutMe.noData")}</p>
             )}
             <Resume />
-            <h2>Skills</h2>
+            <h2>{t("aboutMe.skills")}</h2>
             <SkillsCarousel />
           </div>
         </div>

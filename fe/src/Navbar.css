@@ -2,7 +2,7 @@
   position: fixed !important;
   top: 0;
   width: 100%;
-	background: #118a7e; 
+  background: #118a7e; 
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -18,6 +18,7 @@
   align-items: center;
 }
 
+/* Logo */
 .nav-logo a {
   font-size: 1.5rem;
   font-weight: bold;
@@ -25,11 +26,12 @@
   text-decoration: none;
 }
 
+/* Navigation Links */
 .nav-links {
   display: flex;
   list-style: none;
-  color: white;
   gap: 20px;
+  transition: all 0.3s ease-in-out;
 }
 
 .nav-links li a {
@@ -43,6 +45,7 @@
   text-decoration: underline;
 }
 
+/* Icons */
 .nav-icons {
   display: flex;
   gap: 15px;
@@ -60,6 +63,36 @@
   color: #f4b400;
 }
 
-.content {
-  padding-top: 80px; /* ✅ Prevents content from hiding behind the navbar */
+/* Hamburger Menu Button */
+.nav-toggle {
+  display: none; /* Hidden on large screens */
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.8rem;
+}
+
+/* ✅ Mobile Responsiveness */
+@media (max-width: 768px) {
+  .nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #118a7e;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    display: none; /* Hide by default */
+  }
+
+  .nav-links.active {
+    display: flex; /* Show when active */
+  }
+
+  .nav-toggle {
+    display: block; /* Show the hamburger icon */
+  }
 }
