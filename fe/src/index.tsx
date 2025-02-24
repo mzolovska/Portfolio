@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { auth0Config } from "./auth/auth0-config";
 import { AppRoutes } from "./shared/models/app.routes";
 import { BrowserRouter } from "react-router-dom";
+import "./i18n"; // ✅ Import the i18n config
 
 
 const onRedirectCallback = () => {

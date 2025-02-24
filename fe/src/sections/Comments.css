@@ -4,31 +4,63 @@
   padding: 50px 20px;
   max-width: 1000px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ✅ Centers content */
+  justify-content: center;
+  min-height: 100vh; /* ✅ Centers vertically */
 }
 
 .comments-section {
   background: #effffb; 
-
+  width: 100%;
 }
+
 /* 🎡 Carousel Container */
 .comments-carousel {
   max-width: 900px;
+  width: 100%;
   margin: auto;
   padding: 20px 0;
+  display: flex;
+  justify-content: center; /* ✅ Centers the carousel */
 }
 
 /* 💬 Comment Card */
 .comment-card {
-  background: rgba(0, 0, 0, 0.8); /* Transparent black */
+  background: rgba(0, 0, 0, 0.8);
   padding: 30px;
   border-radius: 12px;
   color: white;
   text-align: center;
-  width: 100%; /* Make all cards fill the space */
-  max-width: 400px; /* Set a bigger max width */
-  min-height: 180px; /* Ensure all cards are the same height */
-  margin: 15px; /* Add spacing between cards */
+  width: 100%;
+  max-width: 400px;
+  min-height: 180px;
+  margin: 15px;
   transition: transform 0.3s;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .comments-carousel {
+    max-width: 100%; /* ✅ Full width on small screens */
+    padding: 10px; /* ✅ Reduce padding */
+  }
+
+  .comment-card {
+    max-width: 80%; /* ✅ Reduce card width for small screens */
+    margin: auto; /* ✅ Ensures it's centered */
+  }
+
+  /* 🎡 Display one comment per slide */
+  .slick-slide {
+    display: flex;
+    justify-content: center; /* ✅ Centers the slide */
+  }
+
+  .slick-list {
+    overflow: hidden;
+  }
 }
 
 

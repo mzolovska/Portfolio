@@ -6,9 +6,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 
 const Comments = () => {
+  const { t } = useTranslation();
+
   const { fetchAllComments, createComment } = useCommentApi();
   const [comments, setComments] = useState<CommentRequestModel[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -97,8 +100,8 @@ const Comments = () => {
   
   return (
     <div className="comments-section">
-      <Section id="comments" title="Comments">
-          <button className="add-comment-btn" onClick={() => setShowModal(true)}>+</button>
+    <Section id="comments" title={t("comments.title")}>
+    <button className="add-comment-btn" onClick={() => setShowModal(true)}>+</button>
 
         {/* Comments Carousel */}
         {comments.length > 0 ? (
@@ -111,7 +114,7 @@ const Comments = () => {
             ))}
           </Slider>
         ) : (
-          <p className="no-comments">No comments yet.</p>
+          <p className="no-comments">{t("comments.noComments")}</p>
         )}
       </Section>
 
@@ -123,19 +126,19 @@ const Comments = () => {
             <form onSubmit={handleAddComment}>
               <input
                 type="text"
-                placeholder="Title"
+                placeholder={t("comments.placeholderTitle")}
                 value={newComment.title}
                 onChange={(e) => setNewComment({ ...newComment, title: e.target.value })}
                 required
               />
               <textarea
-                placeholder="Your comment..."
-                value={newComment.comment}
+              placeholder={t("comments.placeholderComment")}
+              value={newComment.comment}
                 onChange={(e) => setNewComment({ ...newComment, comment: e.target.value })}
                 required
               />
               <div className="modal-buttons">
-                <button type="submit">Submit</button>
+              <button type="submit">{t("comments.submit")}</button>
                 <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
               </div>
             </form>

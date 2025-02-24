@@ -1,18 +1,49 @@
+/* 🛠 Skills Carousel Container */
 .skills-carousel {
-    max-width: 600px; /* Adjust based on layout */
-    margin: 0 auto;
-    padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+
+/* 📌 Skill Item */
+.skill-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px; /* ✅ Adjust width */
+  height: 100px; /* ✅ Adjust height */
+  margin: 5px; /* ✅ Reduce margin for small screens */
+}
+
+/* 📱 Responsive Fix */
+@media (max-width: 768px) {
+  .skills-carousel {
+    gap: 5px; /* ✅ Reduce gap for small screens */
+    max-width: 100%;
   }
-  
+
   .skill-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 20px;
-    color: #fff;
+    width: 80px; /* ✅ Make icons smaller */
+    height: 80px;
+    margin: 2px;
   }
+}
+
+@media (max-width: 480px) {
+  .skills-carousel {
+    gap: 2px;
+  }
+
+  .skill-item {
+    width: 60px;
+    height: 60px;
+  }
+}
+
   
   .slick-prev,
   .slick-next {

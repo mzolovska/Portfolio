@@ -1,7 +1,11 @@
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 import "./Footer.css";
+import { useTranslation } from "react-i18next";
+
 
 const Footer = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <footer className="footer">
       <div className="social-icons">
@@ -12,7 +16,8 @@ const Footer = () => {
           <FaGithub size={30} />
         </a>
       </div>
-      <p>© {new Date().getFullYear()} Mariya Zolovska. All Rights Reserved.</p>
+      <p>{t("navbar.copyright")}</p>
+
     </footer>
   );
 };

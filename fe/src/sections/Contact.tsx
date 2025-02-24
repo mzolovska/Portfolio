@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useContactApi } from "../api/useContactApi"; // ✅ Use API Hook
 import "./Contact.css"; // Styling for the form
 import { FaUser, FaEnvelope, FaPaperPlane } from "react-icons/fa"; // Icons
+import { useTranslation } from "react-i18next";
+
 
 const Contact: React.FC = () => {
+  const { t } = useTranslation();
+
   const { sendMessage } = useContactApi(); // ✅ Use API function
   const [formData, setFormData] = useState({
     email: "",
@@ -34,8 +38,8 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="contact-section">
       <div className="contact-container">
-        <h2>Contact Me</h2>
-        <p>Have a question or just want to say hi? Send me a message! 📩</p>
+      <h2>{t("contact.title")}</h2>
+      <p>{t("contact.description")}</p>
 
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="input-group">
@@ -43,7 +47,7 @@ const Contact: React.FC = () => {
             <input
               type="email"
               name="email"
-              placeholder="Your Email"
+              placeholder={t("contact.emailPlaceholder")}
               value={formData.email}
               onChange={handleChange}
               required
@@ -55,7 +59,7 @@ const Contact: React.FC = () => {
             <input
               type="text"
               name="subject"
-              placeholder="Subject"
+              placeholder={t("contact.subjectPlaceholder")}
               value={formData.subject}
               onChange={handleChange}
               required
@@ -65,7 +69,7 @@ const Contact: React.FC = () => {
           <div className="input-group">
             <textarea
               name="message"
-              placeholder="Your Message"
+              placeholder={t("contact.messagePlaceholder")}
               value={formData.message}
               onChange={handleChange}
               required
@@ -73,12 +77,12 @@ const Contact: React.FC = () => {
           </div>
 
           <button type="submit" className="send-button">
-            <FaPaperPlane className="send-icon" /> Send Message
+          <FaPaperPlane className="send-icon" /> {t("contact.sendButton")}
           </button>
         </form>
 
-        {status && <p className="status-message">{status}</p>}
-      </div>
+        {status && <p className="status-message">{t(status)}</p>}
+        </div>
     </section>
   );
 };

@@ -11,6 +11,8 @@ import {
   SiNodedotjs, SiDocker, SiTypescript, SiAuth0, 
   SiDigitalocean, SiBootstrap, SiHtml5, SiCss3, SiPostman 
 } from "react-icons/si";
+import { useTranslation } from "react-i18next";
+
 
 // 🎯 Skill List
 const skills = [
@@ -57,6 +59,8 @@ const NextArrow = (props: any) => {
 
 // 🎡 Skills Carousel Component
 const SkillsCarousel = () => {
+  const { t } = useTranslation();
+
   const settings = {
     dots: false,
     infinite: true,
