@@ -9,6 +9,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { AdminControls } from "./AdminControls";
 import { useAuth0 } from "@auth0/auth0-react";
+import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 const Comments = () => {
   const { t } = useTranslation();
@@ -23,13 +24,20 @@ const Comments = () => {
     const fetchData = async () => {
       try {
         const data = await fetchAllComments();
-        setComments(data);
+        console.log("Fetched comments from API:", data); // Debugging log
+        if (Array.isArray(data)) {
+          setComments(data); // Ensure only valid data updates state
+        } else {
+          console.error("Invalid data format:", data);
+        }
       } catch (error) {
         console.error("Error fetching comments:", error);
       }
     };
+  
     fetchData();
-  }, []);
+  }, []); // No dependency array change needed
+  
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,12 +69,19 @@ const Comments = () => {
   };
 
   const handleDelete = async (commentId: string) => {
-    console.log("Deleting comment with ID:", commentId); // Debugging log
     try {
-      await deleteComment(commentId);
-      setComments((prev) => prev.filter((comment) => comment.commentId !== commentId));
+      console.log("Deleting comment with ID:", commentId);
+      
+      await axiosInstance.delete(`/comments/${commentId}`);
+      
+      // ✅ Only remove the deleted comment
+      setComments((prevComments) => 
+        prevComments.filter(comment => comment.commentId !== commentId)
+      );
+  
+      console.log("✅ Comment deleted successfully");
     } catch (error) {
-      console.error("Error deleting comment:", error);
+      console.error("❌ Error deleting comment:", error);
     }
   };
   
@@ -98,7 +113,7 @@ const Comments = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 1,  // 👈 This should be 1 for smooth scrolling
     autoplay: true,
     autoplaySpeed: 3000,
     initialSlide: 0,
@@ -109,18 +124,19 @@ const Comments = () => {
         breakpoint: 1024,
         settings: {
           slidesToShow: 2,
-          slidesToScroll: 1,
+          slidesToScroll: 1, // 👈 This should be 1
         },
       },
       {
         breakpoint: 768,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1,
+          slidesToScroll: 1, // 👈 This ensures one comment per scroll
         },
       },
     ],
   };
+  
 
   return (
     <div className="comments-section">
@@ -144,8 +160,8 @@ const Comments = () => {
                     entity={comment}
                     entityType={t("comments.title")}
                     fields={[
-                      { key: "title", label: t("comments.adminControls.title") },
-                      { key: "comment", label: t("comments.adminControls.comment") },
+                      { key: "title", label: t("comments.placeholderTitle") },
+                      { key: "comment", label: t("comments.title") },
                     ]}
                     onModify={handleModify}
                     onDelete={() => handleDelete(comment.commentId)}
@@ -163,24 +179,24 @@ const Comments = () => {
       {!isAdmin && showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{t("comments.addCommentTitle")}</h2>
+            <h2>{t("comments.title")}</h2>
             <form onSubmit={handleAddComment}>
               <input
                 type="text"
-                placeholder={t("comments.placeholderTitle")}
+                placeholder={t("comments.title")}
                 value={newComment.title}
                 onChange={(e) => setNewComment({ ...newComment, title: e.target.value })}
                 required
               />
               <textarea
-                placeholder={t("comments.placeholderComment")}
+                placeholder={t("comments.comment")}
                 value={newComment.comment}
                 onChange={(e) => setNewComment({ ...newComment, comment: e.target.value })}
                 required
               />
               <div className="modal-buttons">
                 <button type="submit">{t("comments.submit")}</button>
-                <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+                <button type="button" onClick={() => setShowModal(false)}>{t("comments.cancel")}</button>
               </div>
             </form>
           </div>

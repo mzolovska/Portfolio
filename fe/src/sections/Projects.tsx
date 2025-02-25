@@ -8,7 +8,7 @@ import "./Projects.css";
 
 const Projects: React.FC = () => {
   const { t } = useTranslation();
-  const { fetchAllProjects, createProject, updateProject, deleteProject } = useProjectsApi();
+  const { fetchAllProjects, addProject, updateProject, deleteProject } = useProjectsApi();
   const [projects, setProjects] = useState<ProjectResponseModel[]>([]);
 
   useEffect(() => {
@@ -24,22 +24,27 @@ const Projects: React.FC = () => {
   }, []);
 
   const handleAddProject = async (newProject: ProjectRequestModel) => {
-    console.log("Adding new project:", newProject);
+    console.log(t("projects.addingProject"), newProject);
+    
+    const formattedProject = {
+      ...newProject,
+      technologies: newProject.technologies,
+    };
+  
     try {
-      const addedProject = await createProject(newProject);
-      console.log("Project successfully added:", addedProject);
+      const addedProject = await addProject(formattedProject);
+      console.log(t("projects.addSuccess"), addedProject);
       
       if (!addedProject) {
-        console.error("No project returned from API!");
+        console.error(t("projects.addError"));
         return;
       }
   
       setProjects((prevProjects) => [...prevProjects, addedProject]); 
     } catch (error) {
-      console.error("Error adding project:", error);
+      console.error(t("projects.addError"), error);
     }
   };
-  
 
   const handleModifyProject = async (updatedProject: ProjectResponseModel) => {
     try {
@@ -48,7 +53,7 @@ const Projects: React.FC = () => {
         prev.map((p) => (p.projectId === updatedProject.projectId ? updatedProject : p))
       );
     } catch (error) {
-      console.error("Error modifying project:", error);
+      console.error(t("projects.modifyError"), error);
     }
   };
 
@@ -57,7 +62,7 @@ const Projects: React.FC = () => {
       await deleteProject(projectId);
       setProjects((prev) => prev.filter((p) => p.projectId !== projectId));
     } catch (error) {
-      console.error("Error deleting project:", error);
+      console.error(t("projects.deleteError"), error);
     }
   };
 
@@ -66,18 +71,17 @@ const Projects: React.FC = () => {
       <Section id="projects" title={t("projects.title")}>
         {/* Admin Add Button */}
         <AdminControls
-          entityType="Project"
+          entityType={t("projects.entity")}
           fields={[
-            { key: "title", label: "Title" },
-            { key: "description", label: "Description" },
-            { key: "technologies", label: "Technologies (comma-separated)" },
-            { key: "githubLink", label: "GitHub Link" },
-            { key: "imageUrl", label: "Image URL" }
+            { key: "title", label: t("projects.titleLabel") },
+            { key: "description", label: t("projects.descriptionLabel") },
+            { key: "githubLink", label: t("projects.githubLabel") },
+            { key: "imageUrl", label: t("projects.imageLabel") }
           ]}
           onAdd={handleAddProject}
           onModify={handleModifyProject}
           onDelete={handleDeleteProject}
-          isSection = {true}
+          isSection={true}
         />
 
         <div className="projects-grid">
@@ -88,13 +92,13 @@ const Projects: React.FC = () => {
                 {/* Admin Modify & Delete Controls */}
                 <AdminControls
                   entity={project}
-                  entityType="Project"
+                  entityType={t("projects.entity")}
                   fields={[
-                    { key: "title", label: "Title" },
-                    { key: "description", label: "Description" },
-                    { key: "technologies", label: "Technologies (comma-separated)" },
-                    { key: "githubLink", label: "GitHub Link" },
-                    { key: "imageUrl", label: "Image URL" }
+                    { key: "title", label: t("projects.titleLabel") },
+                    { key: "description", label: t("projects.descriptionLabel") },
+                    { key: "technologies", label: t("projects.technologiesLabel") },
+                    { key: "githubLink", label: t("projects.githubLabel") },
+                    { key: "imageUrl", label: t("projects.imageLabel") }
                   ]}
                   onAdd={handleAddProject}
                   onModify={handleModifyProject}

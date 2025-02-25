@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/**").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/v1/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/**").permitAll()
+
                         // 🚀 Allow health check endpoint for deployment
                         .requestMatchers("/health").permitAll()
                         // 🔐 Secure everything else

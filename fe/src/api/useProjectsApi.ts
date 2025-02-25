@@ -5,7 +5,7 @@ export interface ProjectResponseModel {
   projectId: string;
   title: string;
   description: string;
-  technologies: string;
+  technologies: string[]; // ✅ Change from string to string[]
   githubLink: string;
   imageUrl: string; // ✅ Added field
 }
@@ -13,7 +13,7 @@ export interface ProjectResponseModel {
 export interface ProjectRequestModel {
   title: string;
   description: string;
-  technologies: string;
+  technologies: string[]; // ✅ Change from string to string[]
   githubLink: string;
   imageUrl: string; // ✅ Added field
 }
@@ -57,7 +57,7 @@ export const useProjectsApi = () => {
   };
 
   // Create Project
-  const createProject = async (project: ProjectRequestModel): Promise<ProjectResponseModel> => {
+  const addProject = async (project: ProjectRequestModel): Promise<ProjectResponseModel> => {
     const response = await axiosInstance.post<ProjectResponseModel>("/projects", project);
     return response.data;
   };
@@ -77,7 +77,7 @@ export const useProjectsApi = () => {
   return {
     fetchAllProjects,
     fetchProjectById,
-    createProject,
+    addProject,
     updateProject,
     deleteProject,
   };

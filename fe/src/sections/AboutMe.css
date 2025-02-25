@@ -52,6 +52,7 @@
   .about-content {
     flex-direction: column;
     text-align: center;
+    width: 240px; /* ✅ Adjusted size */
     gap: 20px; /* ✅ Reduce spacing */
   }
 

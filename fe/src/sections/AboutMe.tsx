@@ -93,8 +93,8 @@ const AboutMe = () => {
                     entity={aboutData}
                     entityType={t("aboutMe.title")}
                     fields={[
-                      { key: "name", label: t("aboutMe.adminControls.name") },
-                      { key: "description", label: t("aboutMe.adminControls.description") },
+                      { key: "name", label: t("aboutMe.name") },
+                      { key: "description", label: t("aboutMe.description") },
                     ]}
                     onAdd={handleAdd}
                     onModify={handleModify}

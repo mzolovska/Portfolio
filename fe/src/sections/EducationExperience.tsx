@@ -115,11 +115,11 @@ const EducationExperience = () => {
             <AdminControls
               entityType={t("educationExperience.education")}
               fields={[
-                { key: "degree", label: t("educationExperience.adminControls.degree") },
-                { key: "fieldOfStudy", label: t("educationExperience.adminControls.fieldOfStudy") },
-                { key: "institution", label: t("educationExperience.adminControls.institution") },
-                { key: "startDate", label: t("educationExperience.adminControls.startDate"), type: "date" },
-                { key: "endDate", label: t("educationExperience.adminControls.endDate"), type: "date" },
+                { key: "degree", label: t("educationExperience.degree") },
+                { key: "fieldOfStudy", label: t("educationExperience.fieldOfStudy") },
+                { key: "institution", label: t("educationExperience.institution") },
+                { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
+                { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
               ]}
               onAdd={handleAddEducation}
               onModify={handleModifyEducation}
@@ -139,11 +139,11 @@ const EducationExperience = () => {
                     entity={edu}
                     entityType={t("educationExperience.education")}
                     fields={[
-                      { key: "degree", label: t("educationExperience.adminControls.degree") },
-                      { key: "fieldOfStudy", label: t("educationExperience.adminControls.fieldOfStudy") },
-                      { key: "institution", label: t("educationExperience.adminControls.institution") },
-                      { key: "startDate", label: t("educationExperience.adminControls.startDate"), type: "date" },
-                      { key: "endDate", label: t("educationExperience.adminControls.endDate"), type: "date" },
+                      { key: "degree", label: t("educationExperience.degree") },
+                      { key: "fieldOfStudy", label: t("educationExperience.fieldOfStudy") },
+                      { key: "institution", label: t("educationExperience.institution") },
+                      { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
+                      { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
                     ]}
                     onAdd={handleAddEducation}
                     onModify={handleModifyEducation}
@@ -163,11 +163,11 @@ const EducationExperience = () => {
             <AdminControls
               entityType={t("educationExperience.experience")}
               fields={[
-                { key: "role", label: t("educationExperience.adminControls.role") },
-                { key: "company", label: t("educationExperience.adminControls.company") },
-                { key: "description", label: t("educationExperience.adminControls.description") },
-                { key: "startDate", label: t("educationExperience.adminControls.startDate"), type: "date" },
-                { key: "endDate", label: t("educationExperience.adminControls.endDate"), type: "date" },
+                { key: "role", label: t("educationExperience.role") },
+                { key: "company", label: t("educationExperience.company") },
+                { key: "description", label: t("educationExperience.description") },
+                { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
+                { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
               ]}
               onAdd={handleAddExperience}
               onModify={handleModifyExperience}
@@ -187,11 +187,11 @@ const EducationExperience = () => {
                     entity={exp}
                     entityType={t("educationExperience.experience")}
                     fields={[
-                      { key: "role", label: t("educationExperience.adminControls.role") },
-                      { key: "company", label: t("educationExperience.adminControls.company") },
-                      { key: "description", label: t("educationExperience.adminControls.description") },
-                      { key: "startDate", label: t("educationExperience.adminControls.startDate"), type: "date" },
-                      { key: "endDate", label: t("educationExperience.adminControls.endDate"), type: "date" },
+                      { key: "role", label: t("educationExperience.role") },
+                      { key: "company", label: t("educationExperience.company") },
+                      { key: "description", label: t("educationExperience.description") },
+                      { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
+                      { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
                     ]}
                     onAdd={handleAddExperience}
                     onModify={handleModifyExperience}
