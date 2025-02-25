@@ -49,7 +49,10 @@
 
   .comment-card {
     max-width: 80%; /* ✅ Reduce card width for small screens */
-    margin: auto; /* ✅ Ensures it's centered */
+    margin: auto; 
+      display: block !important;
+      visibility: visible !important;
+    /* ✅ Ensures it's centered */
   }
 
   /* 🎡 Display one comment per slide */

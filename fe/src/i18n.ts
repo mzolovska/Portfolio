@@ -22,12 +22,17 @@ const resources = {
       },
       aboutMe: {
         title: "About Me",
-        noData: "No About Me data available.",
-        skills: "Skills",
+        name: "Name",
+        description: "Description",
+        noData: "No information available.",
+        skills: "Skills & Technologies",
         adminControls: {
-          name: "Name",
-          description: "Description"
-        }
+          add: "Add About Me Section",
+          edit: "Edit About Me",
+          delete: "Delete About Me",
+          name: "Enter Name",
+          description: "Enter Description",
+        },
       },
       comments: {
         title: "Comments",
@@ -53,18 +58,51 @@ const resources = {
         title: "Education & Experience",
         education: "Education",
         experience: "Experience",
-        noEducation: "No education data available.",
-        noExperience: "No experience data available."
+        degree: "Degree",
+        fieldOfStudy: "Field of Study",
+        institution: "Institution",
+        startDate: "Start Date",
+        endDate: "End Date",
+        role: "Role",
+        company: "Company",
+        description: "Description",
+        noEducation: "No education records available.",
+        noExperience: "No experience records available."
       },
       projects: {
         title: "Projects",
-        noProjects: "No projects available."
+        entity: "Project",
+        titleLabel: "Title",
+        descriptionLabel: "Description",
+        technologiesLabel: "Technologies",
+        githubLabel: "GitHub Link",
+        imageLabel: "Image URL",
+        noProjects: "No projects available.",
+        addingProject: "Adding new project:",
+        addSuccess: "Project successfully added:",
+        addError: "Error adding project!",
+        modifyError: "Error modifying project!",
+        deleteError: "Error deleting project!"
       },
       resume: {
         title: "Resume",
         download: "You can download my resume by clicking",
         here: "here"
-      }
+      },
+      adminControls: {
+        add: "Add {{entity}}",
+        edit: "Edit {{entity}}",
+        delete: "Delete {{entity}}",
+        addTitle: "Add New {{entity}}",
+        modifyTitle: "Modify {{entity}}",
+        confirmDeleteTitle: "Confirm Delete",
+        confirmDeleteMessage: "Are you sure you want to delete this {{entity}}?",
+        addButton: "Add",
+        saveButton: "Save",
+        deleteButton: "Delete",
+        cancel: "Cancel"
+      },
+      
     }
   },
   fr: {
@@ -88,12 +126,17 @@ const resources = {
       },
       aboutMe: {
         title: "À propos de moi",
-        noData: "Aucune donnée disponible.",
-        skills: "Compétences",
+        name: "Nom",
+        description: "Description",
+        noData: "Aucune information disponible.",
+        skills: "Compétences et Technologies",
         adminControls: {
-          name: "Nom",
-          description: "Description"
-        }
+          add: "Ajouter une section À propos de moi",
+          edit: "Modifier À propos de moi",
+          delete: "Supprimer À propos de moi",
+          name: "Entrez le nom",
+          description: "Entrez la description",
+        },
       },
       comments: {
         title: "Commentaires",
@@ -119,17 +162,49 @@ const resources = {
         title: "Éducation & Expérience",
         education: "Éducation",
         experience: "Expérience",
-        noEducation: "Aucune donnée sur l'éducation disponible.",
-        noExperience: "Aucune donnée sur l'expérience disponible."
+        degree: "Diplôme",
+        fieldOfStudy: "Domaine d'étude",
+        institution: "Établissement",
+        startDate: "Date de début",
+        endDate: "Date de fin",
+        role: "Poste",
+        company: "Entreprise",
+        description: "Description",
+        noEducation: "Aucun enregistrement d'éducation disponible.",
+        noExperience: "Aucune expérience disponible."
       },
       projects: {
         title: "Projets",
-        noProjects: "Aucun projet disponible."
+        entity: "Projet",
+        titleLabel: "Titre",
+        descriptionLabel: "Description",
+        technologiesLabel: "Technologies",
+        githubLabel: "Lien GitHub",
+        imageLabel: "URL de l'image",
+        noProjects: "Aucun projet disponible.",
+        addingProject: "Ajout d'un nouveau projet :",
+        addSuccess: "Projet ajouté avec succès :",
+        addError: "Erreur lors de l'ajout du projet !",
+        modifyError: "Erreur lors de la modification du projet !",
+        deleteError: "Erreur lors de la suppression du projet !"
       },
       resume: {
         title: "CV",
         download: "Vous pouvez télécharger mon CV en cliquant",
         here: "ici"
+      },
+      adminControls: {
+        add: "Ajouter {{entity}}",
+        edit: "Modifier {{entity}}",
+        delete: "Supprimer {{entity}}",
+        addTitle: "Ajouter un(e) nouveau(elle) {{entity}}",
+        modifyTitle: "Modifier {{entity}}",
+        confirmDeleteTitle: "Confirmer la suppression",
+        confirmDeleteMessage: "Êtes-vous sûr de vouloir supprimer ce(tte) {{entity}} ?",
+        addButton: "Ajouter",
+        saveButton: "Enregistrer",
+        deleteButton: "Supprimer",
+        cancel: "Annuler"
       }
     }
   }
