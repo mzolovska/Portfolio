@@ -3,10 +3,7 @@ import CoverPage from './sections/CoverPage';
 import Navbar from './NavBar';
 import Footer from './Footer';
 import AboutMe from './sections/AboutMe';
-import Experience from './sections/Experience';
-import Education from './sections/Education';
-import Skills from './sections/Skills';
-import Hobbies from './sections/Hobbies';
+
 import Projects from './sections/Projects';
 import Resume from './sections/Resume';
 import Contact from './sections/Contact';

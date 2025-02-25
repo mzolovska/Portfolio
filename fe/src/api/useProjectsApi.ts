@@ -1,4 +1,4 @@
-import {useAxiosInstance} from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
+import axiosInstance from "../shared/useAxiosInstance"; // ✅ Import axios instance correctly
 
 // Define types
 export interface ProjectResponseModel {
@@ -22,7 +22,6 @@ export interface ProjectRequestModel {
 
 // Custom hook for Project API calls
 export const useProjectsApi = () => {
-  const axiosInstance = useAxiosInstance();
   // Fetch All Projects (SSE Stream)
   const fetchAllProjects = async (): Promise<ProjectResponseModel[]> => {
     const projects: ProjectResponseModel[] = [];
@@ -62,6 +61,7 @@ export const useProjectsApi = () => {
     const response = await axiosInstance.post<ProjectResponseModel>("/projects", project);
     return response.data;
   };
+  
 
   // Update Project
   const updateProject = async (projectId: string, project: ProjectRequestModel): Promise<ProjectResponseModel> => {

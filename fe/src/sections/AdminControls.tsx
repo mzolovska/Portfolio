@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface AdminControlsProps<T> {
   entity?: T; // Optional for "Add" at section level
@@ -34,8 +37,7 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
     <div>
       {/* Add Button (Appears Once Per Section) */}
       {isSection && (
-        <Button
-          variant="contained"
+        <IconButton
           color="success"
           onClick={() => {
             setIsAdding(true);
@@ -43,16 +45,15 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
             setOpenModal(true);
           }}
         >
-          Add {entityType}
-        </Button>
+          <AddIcon fontSize="large" />
+        </IconButton>
       )}
 
       {/* Modify & Delete Buttons (Appear Per Entity) */}
       {entity && (
         <>
           {/* Modify Button */}
-          <Button
-            variant="contained"
+          <IconButton
             color="primary"
             onClick={() => {
               setIsAdding(false);
@@ -60,32 +61,24 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
               setOpenModal(true);
             }}
           >
-            Modify
-          </Button>
+            <EditIcon />
+          </IconButton>
 
-          {/* Delete Button (Now Fully Clickable) */}
-          <Button
-            variant="contained"
+          {/* Delete Button */}
+          <IconButton
             color="error"
-            disabled={!entity?.id && !entity?.aboutId && !entity?.contactId && !entity?.projectId && !entity?.educationId && !entity?.experienceId} // Ensure button is clickable when ID exists
+            disabled={!entity?.id && !entity?.aboutId && !entity?.contactId && !entity?.projectId && !entity?.educationId && !entity?.experienceId}
             onClick={() => {
-              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId; // Handle different possible keys
+              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId;
               if (entityId) {
-                console.log("Attempting to delete ID:", entityId); // Debugging log
                 setOpenConfirm(true);
-              } else {
-                console.error("Delete failed: No valid ID found.");
               }
             }}
           >
-            Delete
-          </Button>
+            <DeleteIcon />
+          </IconButton>
         </>
       )}
-
-
-
-
 
       {/* Modify & Add Modal */}
       <Dialog open={openModal} onClose={() => setOpenModal(false)}>
@@ -104,8 +97,8 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
-          <Button
+          <IconButton onClick={() => setOpenModal(false)} color="secondary">Cancel</IconButton>
+          <IconButton
             onClick={() => {
               if (isAdding) {
                 const newEntity = { ...formData };
@@ -118,8 +111,8 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
             }}
             color="primary"
           >
-            {isAdding ? "Add" : "Save"}
-          </Button>
+            {isAdding ? <AddIcon /> : <EditIcon />}
+          </IconButton>
         </DialogActions>
       </Dialog>
 
@@ -128,22 +121,19 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
         <DialogTitle>Confirm Delete</DialogTitle>
         <DialogContent>Are you sure you want to delete this {entityType}?</DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
-          <Button
+          <IconButton onClick={() => setOpenConfirm(false)} color="secondary">Cancel</IconButton>
+          <IconButton
             onClick={() => {
-              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId; // Handle different entity IDs
+              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId;
               if (entityId) {
-                console.log("Confirming delete:", entityId); // Debugging
-                onDelete(entityId); // Ensure correct ID is passed
+                onDelete(entityId);
                 setOpenConfirm(false);
-              } else {
-                console.error("No ID to delete"); // Debugging
               }
             }}
             color="error"
           >
-            Delete
-          </Button>
+            <DeleteIcon />
+          </IconButton>
         </DialogActions>
       </Dialog>
     </div>

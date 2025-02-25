@@ -96,3 +96,9 @@
     display: block; /* Show the hamburger icon */
   }
 }
+
+.user-name {
+  color: white;
+  margin-right: 10px;
+}
+

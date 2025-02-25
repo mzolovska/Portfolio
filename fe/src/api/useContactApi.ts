@@ -1,4 +1,4 @@
-import { useAxiosInstance } from "../shared/useAxiosInstance";
+import axiosInstance  from "../shared/useAxiosInstance";
 
 export interface ContactRequestModel {
   email: string;
@@ -8,7 +8,6 @@ export interface ContactRequestModel {
 
 // Custom hook for Contact API calls
 export const useContactApi = () => {
-  const axiosInstance = useAxiosInstance();
 
   // Send Contact Message
   const sendMessage = async (contact: ContactRequestModel): Promise<string> => {

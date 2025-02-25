@@ -3,17 +3,13 @@ import { useAboutApi, AboutResponseModel, AboutRequestModel } from "../api/useAb
 import { AdminControls } from "./AdminControls";
 import Section from "../Section";
 import "./AboutMe.css";
-import SkillsCarousel from "./SkillsCarousel"; 
-
-// 🖼️ Import image from assets (or use a public folder reference)
+import SkillsCarousel from "./SkillsCarousel";
 import profileImage from "../assets/profile.jpg";
 import Resume from "./Resume";
 import { useTranslation } from "react-i18next";
 
-
 const AboutMe = () => {
   const { t } = useTranslation();
-
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
   const [aboutList, setAboutList] = useState<AboutResponseModel[]>([]);
 
@@ -47,7 +43,7 @@ const AboutMe = () => {
   const handleAdd = async (newData: AboutRequestModel) => {
     try {
       const created = await createAbout(newData);
-      setAboutList((prev) => [...prev, created]); // Add to the list instead of replacing
+      setAboutList((prev) => [...prev, created]);
     } catch (error) {
       console.error("Error adding About Me:", error);
     }
@@ -64,8 +60,21 @@ const AboutMe = () => {
 
   return (
     <div className="about-container">
-    <Section id="about" title={t("aboutMe.title")}>
-      <div className="about-content">
+      <Section id="about" title={t("aboutMe.title")}>
+        {/* 🔧 Admin Controls for Adding a New About Section */}
+        <AdminControls
+          entityType={t("aboutMe.title")}
+          fields={[
+            { key: "name", label: t("aboutMe.adminControls.name") },
+            { key: "description", label: t("aboutMe.adminControls.description") },
+          ]}
+          onAdd={handleAdd}
+          onModify={handleModify}
+          onDelete={handleDelete}
+          isSection={true} // Enables the "+ Add" button
+        />
+
+        <div className="about-content">
           {/* 🖼️ Profile Image */}
           <div className="about-image">
             <img src={profileImage} alt="Profile" />
@@ -79,7 +88,7 @@ const AboutMe = () => {
                   <h2>{aboutData.name}</h2>
                   <p>{aboutData.description}</p>
 
-                  {/* 🔧 Admin Controls */}
+                  {/* 🔧 Admin Controls for Editing/Deleting */}
                   <AdminControls
                     entity={aboutData}
                     entityType={t("aboutMe.title")}
@@ -89,13 +98,14 @@ const AboutMe = () => {
                     ]}
                     onAdd={handleAdd}
                     onModify={handleModify}
-                    onDelete={handleDelete}
+                    onDelete={() => handleDelete(aboutData.aboutId)}
                   />
                 </div>
               ))
             ) : (
               <p>{t("aboutMe.noData")}</p>
             )}
+
             <Resume />
             <h2>{t("aboutMe.skills")}</h2>
             <SkillsCarousel />

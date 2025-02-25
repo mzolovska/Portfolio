@@ -1,8 +1,7 @@
-import { useAxiosInstance } from "../shared/useAxiosInstance"; // ✅ Import axios instance
+import axiosInstance  from "../shared/useAxiosInstance"; // ✅ Import axios instance
 import { useTranslation } from "../../src/sections/TranslationContext";
 
 export const useTranslateApi = () => {
-  const axiosInstance = useAxiosInstance();
   const { language } = useTranslation();
 
   // 📌 Function to translate text
