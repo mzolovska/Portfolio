@@ -9,10 +9,10 @@ const Resume: React.FC = () => {
     <div>
         <ul>
         <li>
-          <h2>{t("resume.title")}</h2>
-          {t("resume.download")}{" "}
+          <h2>Resume</h2>
+          {"You can download my resume by clicking"}{" "}
           <a href="/ResumeMariyaZolovska.pdf" download="My_Resume.pdf">
-            {t("resume.here")}
+            {"here"}
           </a>
           !
         </li>

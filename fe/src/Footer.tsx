@@ -16,7 +16,7 @@ const Footer = () => {
           <FaGithub size={30} />
         </a>
       </div>
-      <p>{t("navbar.copyright")}</p>
+      <p>© 2025 Mariya Zolovska. All Rights Reserved.</p>
 
     </footer>
   );

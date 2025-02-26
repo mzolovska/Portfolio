@@ -3,7 +3,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { useTranslation } from "react-i18next";
 import { useSkillApi, SkillsResponseModel, SkillsRequestModel } from "../api/useSkillApi";
 import { AdminControls } from "./AdminControls";
 import * as FaIcons from "react-icons/fa"; // Import all FontAwesome icons
@@ -45,7 +44,6 @@ const NextArrow = (props: any) => {
 
 // 🎡 Skills Carousel Component
 const SkillsCarousel = () => {
-  const { t } = useTranslation();
   const { fetchAllSkills, createSkill, updateSkill, deleteSkill } = useSkillApi();
   const [skills, setSkills] = useState<SkillsResponseModel[]>([]);
 
@@ -135,10 +133,10 @@ const SkillsCarousel = () => {
   return (
     <div className="skills-carousel">
       <AdminControls
-        entityType={t("skills.title")}
+        entityType={"Skills"}
         fields={[
-          { key: "name", label: t("skills.adminControls.name") },
-          { key: "icon", label: t("skills.adminControls.icon") },
+          { key: "name", label: "Name" },
+          { key: "icon", label: "Icon" },
         ]}
         onAdd={handleAdd}
         onModify={handleModify}
@@ -157,10 +155,10 @@ const SkillsCarousel = () => {
               {/* 🔧 Admin Controls for Each Skill */}
               <AdminControls
                 entity={skill}
-                entityType={t("skills.title")}
+                entityType={"Skills"}
                 fields={[
-                  { key: "name", label: t("skills.adminControls.name") },
-                  { key: "icon", label: t("skills.adminControls.icon") },
+                  { key: "name", label: "Name" },
+                  { key: "icon", label: "Icon" },
                 ]}
                 onAdd={handleAdd}
                 onModify={handleModify}

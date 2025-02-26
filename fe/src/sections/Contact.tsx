@@ -38,8 +38,8 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="contact-section">
       <div className="contact-container">
-      <h2>{t("contact.title")}</h2>
-      <p>{t("contact.description")}</p>
+      <h2>Contact Me</h2>
+      <p>Have a question or just want to say hi? Send me a message! 📩</p>
 
         <form onSubmit={handleSubmit} className="contact-form">
           <div className="input-group">
@@ -47,7 +47,7 @@ const Contact: React.FC = () => {
             <input
               type="email"
               name="email"
-              placeholder={t("contact.emailPlaceholder")}
+              placeholder={"Your Email"}
               value={formData.email}
               onChange={handleChange}
               required
@@ -59,7 +59,7 @@ const Contact: React.FC = () => {
             <input
               type="text"
               name="subject"
-              placeholder={t("contact.subjectPlaceholder")}
+              placeholder={"Subject"}
               value={formData.subject}
               onChange={handleChange}
               required
@@ -69,7 +69,7 @@ const Contact: React.FC = () => {
           <div className="input-group">
             <textarea
               name="message"
-              placeholder={t("contact.messagePlaceholder")}
+              placeholder={"Your Message"}
               value={formData.message}
               onChange={handleChange}
               required
@@ -77,7 +77,7 @@ const Contact: React.FC = () => {
           </div>
 
           <button type="submit" className="send-button">
-          <FaPaperPlane className="send-icon" /> {t("contact.sendButton")}
+          <FaPaperPlane className="send-icon" /> Send Message
           </button>
         </form>
 

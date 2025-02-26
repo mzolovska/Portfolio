@@ -4,10 +4,8 @@ import { useEducationApi, EducationResponseModel, EducationRequestModel } from "
 import { AdminControls } from "./AdminControls"; // ✅ Import Admin Controls
 import "./EducationExperience.css";
 import Section from "../Section";
-import { useTranslation } from "react-i18next";
 
 const EducationExperience = () => {
-  const { t } = useTranslation();
 
   const { fetchAllExperiences, createExperience, updateExperience, deleteExperience } = useExperienceApi();
   const { fetchAllEducation, createEducation, updateEducation, deleteEducation } = useEducationApi();
@@ -137,21 +135,21 @@ const EducationExperience = () => {
 
   return (
     <div className="sect">
-      <Section id="education-experience" title={t("educationExperience.title")}>
+      <Section id="education-experience" title={"Education & Experience"}>
         <div className="edu-exp-container">
           
           {/* 🎓 Education */}
           <div className="education">
-            <h2>{t("educationExperience.education")}</h2>
+            <h2>Education</h2>
             {/* Admin Add Button for Education */}
             <AdminControls
-              entityType={t("educationExperience.education")}
+              entityType={"Education"}
               fields={[
-                { key: "degree", label: t("educationExperience.degree") },
-                { key: "fieldOfStudy", label: t("educationExperience.fieldOfStudy") },
-                { key: "institution", label: t("educationExperience.institution") },
-                { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
-                { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
+                { key: "degree", label: "Degree"},
+                { key: "fieldOfStudy", label: "Field of Study" },
+                { key: "institution", label: "Institution" },
+                { key: "startDate", label: "Start Date", type: "date" },
+                { key: "endDate", label: "End Date", type: "date" },
               ]}
               
               onAdd={handleAddEducation}
@@ -170,13 +168,13 @@ const EducationExperience = () => {
                   {/* Admin Controls for Each Education Item */}
                   <AdminControls
                     entity={edu}
-                    entityType={t("educationExperience.education")}
+                    entityType={"Education"}
                     fields={[
-                      { key: "degree", label: t("educationExperience.degree") },
-                      { key: "fieldOfStudy", label: t("educationExperience.fieldOfStudy") },
-                      { key: "institution", label: t("educationExperience.institution") },
-                      { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
-                      { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
+                      { key: "degree", label: "Degree" },
+                      { key: "fieldOfStudy", label: "Field of Study" },
+                      { key: "institution", label: "Institution" },
+                      { key: "startDate", label: "Start Date", type: "date" },
+                      { key: "endDate", label: "End Date", type: "date" },
                     ]}
                     onAdd={handleAddEducation}
                     onModify={handleModifyEducation}
@@ -185,22 +183,22 @@ const EducationExperience = () => {
                 </div>
               ))
             ) : (
-              <p>{t("educationExperience.noEducation")}</p>
+              <p>No education records available.</p>
             )}
           </div>
 
           {/* 💼 Experience */}
           <div className="experience">
-            <h2>{t("educationExperience.experience")}</h2>
+            <h2>Experience</h2>
             {/* Admin Add Button for Experience */}
             <AdminControls
-              entityType={t("educationExperience.experience")}
+              entityType={"Experience"}
               fields={[
-                { key: "role", label: t("educationExperience.role") },
-                { key: "company", label: t("educationExperience.company") },
-                { key: "description", label: t("educationExperience.description") },
-                { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
-                { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
+                { key: "role", label:"Role" },
+                { key: "company", label: "Company"},
+                { key: "description", label: "Description" },
+                { key: "startDate", label: "Start Date", type: "date" },
+                { key: "endDate", label: "End Date", type: "date" },
               ]}
               onAdd={handleAddExperience}
               onModify={handleModifyExperience}
@@ -218,13 +216,13 @@ const EducationExperience = () => {
                   {/* Admin Controls for Each Experience Item */}
                   <AdminControls
                     entity={exp}
-                    entityType={t("educationExperience.experience")}
+                    entityType={"Experience"}
                     fields={[
-                      { key: "role", label: t("educationExperience.role") },
-                      { key: "company", label: t("educationExperience.company") },
-                      { key: "description", label: t("educationExperience.description") },
-                      { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
-                      { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
+                      { key: "role", label:"Role" },
+                      { key: "company", label: "Company"},
+                      { key: "description", label: "Description" },
+                      { key: "startDate", label: "Start Date", type: "date" },
+                      { key: "endDate", label: "End Date", type: "date" },
                     ]}
                     onAdd={handleAddExperience}
                     onModify={handleModifyExperience}
@@ -233,7 +231,7 @@ const EducationExperience = () => {
                 </div>
               ))
             ) : (
-              <p>{t("educationExperience.noExperience")}</p>
+              <p>No experience records available.</p>
             )}
           </div>
 

@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useProjectsApi, ProjectResponseModel, ProjectRequestModel } from "../api/useProjectsApi";
 import ProjectCard from "./ProjectCard";
 import Section from "../Section";
-import { useTranslation } from "react-i18next";
 import { AdminControls } from "./AdminControls";
 import "./Projects.css";
 
 const Projects: React.FC = () => {
-  const { t } = useTranslation();
   const { fetchAllProjects, addProject, updateProject, deleteProject } = useProjectsApi();
   const [projects, setProjects] = useState<ProjectResponseModel[]>([]);
 
@@ -24,7 +22,7 @@ const Projects: React.FC = () => {
   }, []);
 
   const handleAddProject = async (newProject: ProjectRequestModel) => {
-    console.log(t("projects.addingProject"), newProject);
+    console.log("Adding new project:", newProject);
     
     const formattedProject = {
       ...newProject,
@@ -33,16 +31,16 @@ const Projects: React.FC = () => {
   
     try {
       const addedProject = await addProject(formattedProject);
-      console.log(t("projects.addSuccess"), addedProject);
+      console.log("Project successfully added:", addedProject);
       
       if (!addedProject) {
-        console.error(t("projects.addError"));
+        console.error("Error adding project!");
         return;
       }
   
       setProjects((prevProjects) => [...prevProjects, addedProject]); 
     } catch (error) {
-      console.error(t("projects.addError"), error);
+      console.error("Error adding project!", error);
     }
   };
 
@@ -53,7 +51,7 @@ const Projects: React.FC = () => {
         prev.map((p) => (p.projectId === updatedProject.projectId ? updatedProject : p))
       );
     } catch (error) {
-      console.error(t("projects.modifyError"), error);
+      console.error("Error modifying project!", error);
     }
   };
 
@@ -62,22 +60,22 @@ const Projects: React.FC = () => {
       await deleteProject(projectId);
       setProjects((prev) => prev.filter((p) => p.projectId !== projectId));
     } catch (error) {
-      console.error(t("projects.deleteError"), error);
+      console.error("Error deleting project!", error);
     }
   };
 
   return (
     <section className="projects-section">
-      <Section id="projects" title={t("projects.title")}>
+      <Section id="projects" title={"Projects"}>
         {/* Admin Add Button */}
         <AdminControls
-          entityType={t("projects.entity")}
+          entityType={"Project"}
           fields={[
-            { key: "title", label: t("projects.titleLabel") },
-            { key: "description", label: t("projects.descriptionLabel") },
-            { key: "githubLink", label: t("projects.githubLabel") },
-            { key: "imageUrl", label: t("projects.imageLabel") },
-            { key: "projectLink", label: t("projects.projectLinkLabel") }
+            { key: "title", label: "Projects" },
+            { key: "description", label: "Description" },
+            { key: "githubLink", label: "GitHub Link" },
+            { key: "imageUrl", label: "Image URL" },
+            { key: "projectLink", label: "Project Link" }
           ]}
           onAdd={handleAddProject}
           onModify={handleModifyProject}
@@ -93,15 +91,13 @@ const Projects: React.FC = () => {
                 {/* Admin Modify & Delete Controls */}
                 <AdminControls
                   entity={project}
-                  entityType={t("projects.entity")}
+                  entityType={"Project"}
                   fields={[
-                    { key: "title", label: t("projects.titleLabel") },
-                    { key: "description", label: t("projects.descriptionLabel") },
-                    { key: "technologies", label: t("projects.technologiesLabel") },
-                    { key: "githubLink", label: t("projects.githubLabel") },
-                    { key: "imageUrl", label: t("projects.imageLabel") },
-                    { key: "projectLink", label: t("projects.projectLinkLabel") }
-
+                    { key: "title", label: "Projects" },
+                    { key: "description", label: "Description" },
+                    { key: "githubLink", label: "GitHub Link" },
+                    { key: "imageUrl", label: "Image URL" },
+                    { key: "projectLink", label: "Project Link" }
                   ]}
                   onAdd={handleAddProject}
                   onModify={handleModifyProject}
@@ -110,7 +106,7 @@ const Projects: React.FC = () => {
               </div>
             ))
           ) : (
-            <p>{t("projects.noProjects")}</p>
+            <p>No projects available.</p>
           )}
         </div>
       </Section>

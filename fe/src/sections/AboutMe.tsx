@@ -6,10 +6,8 @@ import "./AboutMe.css";
 import SkillsCarousel from "./SkillsCarousel";
 import profileImage from "../assets/profile.jpg";
 import Resume from "./Resume";
-import { useTranslation } from "react-i18next";
 
 const AboutMe = () => {
-  const { t } = useTranslation();
   const { fetchAllAbouts, createAbout, updateAbout, deleteAbout } = useAboutApi();
   const [aboutList, setAboutList] = useState<AboutResponseModel[]>([]);
 
@@ -60,13 +58,13 @@ const AboutMe = () => {
 
   return (
     <div className="about-container">
-      <Section id="about" title={t("aboutMe.title")}>
+      <Section id="about" title="About Me">
         {/* 🔧 Admin Controls for Adding a New About Section */}
         <AdminControls
-          entityType={t("aboutMe.title")}
+          entityType="About Me"
           fields={[
-            { key: "name", label: t("aboutMe.adminControls.name") },
-            { key: "description", label: t("aboutMe.adminControls.description") },
+            { key: "name", label: "Name" },
+            { key: "description", label: "Description" },
           ]}
           onAdd={handleAdd}
           onModify={handleModify}
@@ -91,10 +89,10 @@ const AboutMe = () => {
                   {/* 🔧 Admin Controls for Editing/Deleting */}
                   <AdminControls
                     entity={aboutData}
-                    entityType={t("aboutMe.title")}
+                    entityType="About Me"
                     fields={[
-                      { key: "name", label: t("aboutMe.name") },
-                      { key: "description", label: t("aboutMe.description") },
+                      { key: "name", label: "Name"},
+                      { key: "description", label: "Description" },
                     ]}
                     onAdd={handleAdd}
                     onModify={handleModify}
@@ -103,11 +101,11 @@ const AboutMe = () => {
                 </div>
               ))
             ) : (
-              <p>{t("aboutMe.noData")}</p>
+              <p>No information available</p>
             )}
 
             <Resume />
-            <h2>{t("aboutMe.skills")}</h2>
+            <h2>Skills</h2>
             <SkillsCarousel />
           </div>
         </div>

@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Hide Google Translate banner */
+/* Hide Google Translate top banner */
+.goog-te-banner-frame {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide the Google Translate iframe */
+iframe.skiptranslate {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide Google Translate toolbar */
+.goog-te-gadget {
+  display: none !important;
+}
+
+/* Ensure the body doesn't shift down when the popup appears */
+body {
+  top: 0px !important;
+  position: static !important;
+}

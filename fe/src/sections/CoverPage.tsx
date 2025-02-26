@@ -12,13 +12,13 @@ const CoverPage: React.FC = () => {
       <div className="cover-content">
         <h1>
           <ReactTyped
-            strings={[t("coverPage.greeting")]}
+            strings={["Hey there, my name is Mariya, and I am a developer."]}
             typeSpeed={50}
             backSpeed={30}
             showCursor={false}
           />
         </h1>
-        <p>{t("coverPage.scroll")}</p>
+        <p>Scroll down to learn more about me!</p>
         <div className="scroll-indicator">↓</div>
       </div>
     </section>

@@ -4,7 +4,6 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, 
 import AddIcon from "@mui/icons-material/Add"; // ➕ Add
 import EditIcon from "@mui/icons-material/Edit"; // 🖊️ Modify
 import DeleteIcon from "@mui/icons-material/Delete"; // 🗑️ Delete
-import { useTranslation } from "react-i18next";
 
 interface AdminControlsProps<T> {
   entity?: T;
@@ -20,7 +19,6 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
   { entity, entityType, fields, onModify, onAdd, onDelete, isSection = false }: AdminControlsProps<T>
 ) => {
   const { user } = useAuth0();
-  const { t } = useTranslation();
   const isAdmin = user?.email === "admin@pt.com";
 
   const [openModal, setOpenModal] = useState(false);
@@ -44,8 +42,8 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
       const endDate = name === "endDate" ? new Date(value) : new Date(formData.endDate);
 
       if (startDate && endDate && startDate > endDate) {
-        (errors as any)["startDate"] = t("adminControls.dateRangeError"); // Start date must be before end date
-        (errors as any)["endDate"] = t("adminControls.dateRangeError"); // End date must be after start date
+        errors["startDate"] = "End date must be after start date";
+        errors["endDate"] = "End date must be after start date";
       } else {
         delete errors["startDate"];
         delete errors["endDate"];
@@ -60,19 +58,18 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
   const validateForm = () => {
     const errors: { [key in keyof T]?: string } = {};
 
-    // Check if start date is after end date
     if (formData.startDate && formData.endDate && new Date(formData.startDate) > new Date(formData.endDate)) {
-      (errors as any)["startDate"] = t("adminControls.dateRangeError");
-      (errors as any)["endDate"] = t("adminControls.dateRangeError");
+      errors["startDate"] = "End date must be after start date";
+      errors["endDate"] = "End date must be after start date";
     }
 
     setValidationErrors(errors);
-    return Object.keys(errors).length === 0; // Return true if no errors
+    return Object.keys(errors).length === 0;
   };
 
   // Handle form submission
   const handleSubmit = async () => {
-    if (!validateForm()) return; // Prevent submission if validation fails
+    if (!validateForm()) return;
 
     if (isAdding) {
       const newEntity = { ...formData };
@@ -86,9 +83,9 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
 
   return (
     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-      {/* ➕ Add Button (Appears Once Per Section) */}
+      {/* ➕ Add Button */}
       {isSection && (
-        <Tooltip title={t("adminControls.add", { entity: t(entityType) })}>
+        <Tooltip title={`Add ${entityType}`}>
           <IconButton
             color="success"
             onClick={() => {
@@ -102,11 +99,10 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
         </Tooltip>
       )}
 
-      {/* 🖊️ Modify & 🗑️ Delete Buttons (Appear Per Entity) */}
+      {/* 🖊️ Modify & 🗑️ Delete Buttons */}
       {entity && (
         <>
-          {/* 🖊️ Modify Button */}
-          <Tooltip title={t("adminControls.edit", { entity: t(entityType) })}>
+          <Tooltip title={`Edit ${entityType}`}>
             <IconButton
               color="primary"
               onClick={() => {
@@ -119,8 +115,7 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
             </IconButton>
           </Tooltip>
 
-          {/* 🗑️ Delete Button */}
-          <Tooltip title={t("adminControls.delete", { entity: t(entityType) })}>
+          <Tooltip title={`Delete ${entityType}`}>
             <IconButton
               color="error"
               disabled={!entity?.id && !entity?.aboutId && !entity?.contactId && !entity?.projectId && !entity?.educationId && !entity?.experienceId && !entity?.commentId && !entity?.skillsId}
@@ -142,11 +137,11 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
 
       {/* 🖊️ Modify & ➕ Add Modal */}
       <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>{isAdding ? t("adminControls.addTitle", { entity: t(entityType) }) : t("adminControls.modifyTitle", { entity: t(entityType) })}</DialogTitle>
+        <DialogTitle>{isAdding ? `Add New ${entityType}` : `Modify ${entityType}`}</DialogTitle>
         <DialogContent>
           {fields.map(({ key, label, type }) => (
             <div key={key as string} style={{ marginBottom: "10px" }}>
-              <label>{t(label)}</label>
+              <label>{label}</label>
               <input
                 type={type || "text"}
                 name={key as string}
@@ -168,19 +163,19 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenModal(false)}>{t("adminControls.cancel")}</Button>
+          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
           <Button onClick={handleSubmit} color="primary">
-            {isAdding ? t("adminControls.addButton") : t("adminControls.saveButton")}
+            {isAdding ? "Add" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* 🗑️ Delete Confirmation Dialog */}
       <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
-        <DialogTitle>{t("adminControls.confirmDeleteTitle")}</DialogTitle>
-        <DialogContent>{t("adminControls.confirmDeleteMessage", { entity: t(entityType) })}</DialogContent>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>Are you sure you want to delete this {entityType}?</DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpenConfirm(false)}>{t("adminControls.cancel")}</Button>
+          <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
           <Button
             onClick={() => {
               const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId || entity?.commentId || entity?.skillsId;
@@ -194,7 +189,7 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
             }}
             color="error"
           >
-            {t("adminControls.deleteButton")}
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
