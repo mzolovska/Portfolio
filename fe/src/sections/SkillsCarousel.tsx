@@ -1,47 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-import { 
-  FaJava, FaAws 
-} from "react-icons/fa";
-import { 
-  SiReact, SiFigma, SiJira, SiJavascript, SiSpringboot, 
-  SiNodedotjs, SiDocker, SiTypescript, SiAuth0, 
-  SiDigitalocean, SiBootstrap, SiHtml5, SiCss3, SiPostman 
-} from "react-icons/si";
 import { useTranslation } from "react-i18next";
+import { useSkillApi, SkillsResponseModel, SkillsRequestModel } from "../api/useSkillApi";
+import { AdminControls } from "./AdminControls";
+import * as FaIcons from "react-icons/fa"; // Import all FontAwesome icons
+import * as SiIcons from "react-icons/si"; // ✅ Import Simple Icons
 
 
-// 🎯 Skill List
-const skills = [
-  { name: "Java", icon: <FaJava /> }, 
-  { name: "React", icon: <SiReact /> },
-  { name: "Figma", icon: <SiFigma /> },
-  { name: "Jira", icon: <SiJira /> },
-  { name: "JavaScript", icon: <SiJavascript /> },
-  { name: "Spring Boot", icon: <SiSpringboot /> },
-  { name: "Node.js", icon: <SiNodedotjs /> },
-  { name: "Docker", icon: <SiDocker /> },
-  { name: "TypeScript", icon: <SiTypescript /> },
-  { name: "Auth0", icon: <SiAuth0 /> },
-  { name: "AWS", icon: <FaAws /> }, 
-  { name: "DigitalOcean", icon: <SiDigitalocean /> },
-  { name: "Bootstrap", icon: <SiBootstrap /> },
-  { name: "HTML", icon: <SiHtml5 /> },
-  { name: "CSS", icon: <SiCss3 /> },
-  { name: "Postman", icon: <SiPostman /> },
-];
+const getIconComponent = (iconName: string) => {
+  return (
+    FaIcons[iconName as keyof typeof FaIcons] || // First check FontAwesome
+    SiIcons[iconName as keyof typeof SiIcons] || // Then check Simple Icons
+    FaIcons.FaQuestionCircle // Default if not found
+  );
+};
+
+
 
 // 🏹 Custom Arrow Components
 const PrevArrow = (props: any) => {
   const { className, style, onClick } = props;
   return (
-    <FaArrowLeft 
-      className={className} 
-      style={{ ...style, display: "block", color: "black", fontSize: "24px" }} 
-      onClick={onClick} 
+    <FaArrowLeft
+      className={className}
+      style={{ ...style, display: "block", color: "black", fontSize: "24px" }}
+      onClick={onClick}
     />
   );
 };
@@ -49,10 +35,10 @@ const PrevArrow = (props: any) => {
 const NextArrow = (props: any) => {
   const { className, style, onClick } = props;
   return (
-    <FaArrowRight 
-      className={className} 
-      style={{ ...style, display: "block", color: "black", fontSize: "24px" }} 
-      onClick={onClick} 
+    <FaArrowRight
+      className={className}
+      style={{ ...style, display: "block", color: "black", fontSize: "24px" }}
+      onClick={onClick}
     />
   );
 };
@@ -60,17 +46,70 @@ const NextArrow = (props: any) => {
 // 🎡 Skills Carousel Component
 const SkillsCarousel = () => {
   const { t } = useTranslation();
+  const { fetchAllSkills, createSkill, updateSkill, deleteSkill } = useSkillApi();
+  const [skills, setSkills] = useState<SkillsResponseModel[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedSkills = await fetchAllSkills();
+        setSkills(fetchedSkills);
+        
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // 🆕 Add Skill
+  const handleAdd = async (newData: SkillsRequestModel) => {
+    try {
+      const created = await createSkill(newData);
+      setSkills((prev) => [...prev, created]);
+    } catch (error) {
+      console.error("Error adding skill:", error);
+    }
+  };
+
+  // ✏️ Modify Skill
+  const handleModify = async (updatedData: SkillsResponseModel) => {
+    try {
+      const updated = await updateSkill(updatedData.skillsId, {
+        name: updatedData.name,
+        icon: updatedData.icon,
+      });
+
+      setSkills((prev) =>
+        prev.map((skill) => (skill.skillsId === updated.skillsId ? updated : skill))
+      );
+    } catch (error) {
+      console.error("Error updating skill:", error);
+    }
+  };
+
+  // 🗑️ Delete Skill
+  const handleDelete = async (skillsId: string) => {
+  console.log("Delete button clicked for skill ID:", skillsId); // ✅ Debug log
+  try {
+    await deleteSkill(skillsId);
+    setSkills((prev) => prev.filter((skill) => skill.skillsId !== skillsId));
+  } catch (error) {
+    console.error("Error deleting skill:", error);
+  }
+};
+
 
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 4,  // Adjust number of visible items
+    slidesToShow: 4, // Adjust number of visible items
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
-    nextArrow: <NextArrow />,  // Use custom arrow
-    prevArrow: <PrevArrow />,  // Use custom arrow
+    nextArrow: <NextArrow />, // Use custom arrow
+    prevArrow: <PrevArrow />, // Use custom arrow
     responsive: [
       {
         breakpoint: 1024,
@@ -95,14 +134,43 @@ const SkillsCarousel = () => {
 
   return (
     <div className="skills-carousel">
+      <AdminControls
+        entityType={t("skills.title")}
+        fields={[
+          { key: "name", label: t("skills.adminControls.name") },
+          { key: "icon", label: t("skills.adminControls.icon") },
+        ]}
+        onAdd={handleAdd}
+        onModify={handleModify}
+        onDelete={handleDelete}
+        isSection={true} // Enables the "+ Add" button
+      />
+
       <Slider {...settings}>
-        {skills.map((skill, index) => (
-          <div key={index} className="skill-item">
-            {skill.icon}
-            <p>{skill.name}</p>
-          </div>
-        ))}
+        {skills.map((skill) => {
+          const IconComponent = getIconComponent(skill.icon); // Get the correct icon
+          return (
+            <div key={skill.skillsId} className="skill-item">
+              <IconComponent size={40} className="skill-icon" /> {/* ✅ Dynamically render the icon */}
+              <p>{skill.name}</p>
+
+              {/* 🔧 Admin Controls for Each Skill */}
+              <AdminControls
+                entity={skill}
+                entityType={t("skills.title")}
+                fields={[
+                  { key: "name", label: t("skills.adminControls.name") },
+                  { key: "icon", label: t("skills.adminControls.icon") },
+                ]}
+                onAdd={handleAdd}
+                onModify={handleModify}
+                onDelete={() => handleDelete(skill.skillsId)}
+              />
+            </div>
+          );
+        })}
       </Slider>
+
     </div>
   );
 };
