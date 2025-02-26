@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import { FaGithub, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { FaGithub, FaArrowLeft, FaArrowRight, FaExternalLinkAlt } from "react-icons/fa";
 import { techIcons } from "./techIcons"; // Import the mapping
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -35,7 +35,7 @@ const NextArrow = (props: any) => {
 };
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const { title, description, technologies, githubLink, imageUrl } = project;
+  const { title, description, technologies, githubLink, imageUrl, projectLink } = project;
   const techArray = Array.isArray(technologies) ? technologies : [];
 
   // 🔧 Slick carousel settings
@@ -72,10 +72,17 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       </Slider>
     </div>
 
+      {projectLink && projectLink.trim() !== "" && (
+        <a href={projectLink} target="_blank" rel="noopener noreferrer" className="project-link">
+          <FaExternalLinkAlt className="deployed-icon" /> 
+        </a>
+      )}
+
 
       {/* 🔗 GitHub Link */}
       <a href={githubLink} target="_blank" rel="noopener noreferrer" className="github-link">
         <FaGithub className="github-icon" /> View on GitHub
+        
       </a>
     </div>
   );

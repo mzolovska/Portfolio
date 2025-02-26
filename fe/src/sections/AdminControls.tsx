@@ -16,7 +16,7 @@ interface AdminControlsProps<T> {
   isSection?: boolean;
 }
 
-export const AdminControls = <T extends { [key: string]: any; id?: string; aboutId?: string; contactId?: string; projectId?: string; educationId?: string; experienceId?: string; commentId?: string }>(
+export const AdminControls = <T extends { [key: string]: any; id?: string; aboutId?: string; contactId?: string; projectId?: string; educationId?: string; experienceId?: string; commentId?: string; skillsId: string }>(
   { entity, entityType, fields, onModify, onAdd, onDelete, isSection = false }: AdminControlsProps<T>
 ) => {
   const { user } = useAuth0();
@@ -27,12 +27,61 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
   const [openConfirm, setOpenConfirm] = useState(false);
   const [formData, setFormData] = useState<T>({} as T);
   const [isAdding, setIsAdding] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{ [key in keyof T]?: string }>({});
 
   if (!isAdmin) return null; // Hide for non-admin users
 
+  // Handle input change and validate date fields
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    const newFormData = { ...formData, [name]: value };
+
+    let errors = { ...validationErrors };
+
+    // Date validation: Ensure start date is before end date
+    if (name === "startDate" || name === "endDate") {
+      const startDate = name === "startDate" ? new Date(value) : new Date(formData.startDate);
+      const endDate = name === "endDate" ? new Date(value) : new Date(formData.endDate);
+
+      if (startDate && endDate && startDate > endDate) {
+        (errors as any)["startDate"] = t("adminControls.dateRangeError"); // Start date must be before end date
+        (errors as any)["endDate"] = t("adminControls.dateRangeError"); // End date must be after start date
+      } else {
+        delete errors["startDate"];
+        delete errors["endDate"];
+      }
+    }
+
+    setFormData(newFormData);
+    setValidationErrors(errors);
+  };
+
+  // Validate form before submission
+  const validateForm = () => {
+    const errors: { [key in keyof T]?: string } = {};
+
+    // Check if start date is after end date
+    if (formData.startDate && formData.endDate && new Date(formData.startDate) > new Date(formData.endDate)) {
+      (errors as any)["startDate"] = t("adminControls.dateRangeError");
+      (errors as any)["endDate"] = t("adminControls.dateRangeError");
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0; // Return true if no errors
+  };
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    if (!validateForm()) return; // Prevent submission if validation fails
+
+    if (isAdding) {
+      const newEntity = { ...formData };
+      delete newEntity.id;
+      onAdd(newEntity);
+    } else {
+      await onModify(formData);
+    }
+    setOpenModal(false);
   };
 
   return (
@@ -74,9 +123,9 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
           <Tooltip title={t("adminControls.delete", { entity: t(entityType) })}>
             <IconButton
               color="error"
-              disabled={!entity?.id && !entity?.aboutId && !entity?.contactId && !entity?.projectId && !entity?.educationId && !entity?.experienceId && !entity?.commentId}
+              disabled={!entity?.id && !entity?.aboutId && !entity?.contactId && !entity?.projectId && !entity?.educationId && !entity?.experienceId && !entity?.commentId && !entity?.skillsId}
               onClick={() => {
-                const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId || entity?.commentId;
+                const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId || entity?.commentId || entity?.skillsId;
                 if (entityId) {
                   console.log("Attempting to delete ID:", entityId);
                   setOpenConfirm(true);
@@ -103,26 +152,24 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
                 name={key as string}
                 value={formData[key] || ""}
                 onChange={handleInputChange}
-                style={{ width: "100%", padding: "5px", marginTop: "5px" }}
+                style={{
+                  width: "100%",
+                  padding: "5px",
+                  marginTop: "5px",
+                  border: validationErrors[key] ? "1px solid red" : "1px solid #ccc",
+                }}
               />
+              {validationErrors[key] && (
+                <div style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors[key]}
+                </div>
+              )}
             </div>
           ))}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenModal(false)}>{t("adminControls.cancel")}</Button>
-          <Button
-            onClick={() => {
-              if (isAdding) {
-                const newEntity = { ...formData };
-                delete newEntity.id;
-                onAdd(newEntity);
-              } else {
-                onModify(formData);
-              }
-              setOpenModal(false);
-            }}
-            color="primary"
-          >
+          <Button onClick={handleSubmit} color="primary">
             {isAdding ? t("adminControls.addButton") : t("adminControls.saveButton")}
           </Button>
         </DialogActions>
@@ -136,7 +183,7 @@ export const AdminControls = <T extends { [key: string]: any; id?: string; about
           <Button onClick={() => setOpenConfirm(false)}>{t("adminControls.cancel")}</Button>
           <Button
             onClick={() => {
-              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId || entity?.commentId;
+              const entityId = entity?.id || entity?.aboutId || entity?.contactId || entity?.projectId || entity?.educationId || entity?.experienceId || entity?.commentId || entity?.skillsId;
               if (entityId) {
                 console.log("Confirming delete:", entityId);
                 onDelete(entityId);

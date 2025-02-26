@@ -6,6 +6,7 @@ import com.example.pt.data.contact.Contact;
 import com.example.pt.data.education.Education;
 import com.example.pt.data.experience.Experience;
 import com.example.pt.data.projects.Projects;
+import com.example.pt.data.skills.Skills;
 import com.example.pt.presentation.about.AboutRequestModel;
 import com.example.pt.presentation.about.AboutResponseModel;
 import com.example.pt.presentation.comments.CommentRequestModel;
@@ -18,6 +19,8 @@ import com.example.pt.presentation.experience.ExperienceRequestModel;
 import com.example.pt.presentation.experience.ExperienceResponseModel;
 import com.example.pt.presentation.projects.ProjectsRequestModel;
 import com.example.pt.presentation.projects.ProjectsResponseModel;
+import com.example.pt.presentation.skills.SkillsRequestModel;
+import com.example.pt.presentation.skills.SkillsResponseModel;
 import org.springframework.beans.BeanUtils;
 
 import java.util.UUID;
@@ -52,8 +55,9 @@ public class EntityModelUtil {
     public static Comment toCommentEntity(CommentRequestModel commentRequestModel) {
         return Comment.builder()
                 .commentId(generateUUIDString())
-                .title(commentRequestModel.getTitle())
                 .comment(commentRequestModel.getComment())
+                .title(commentRequestModel.getTitle())
+                .isApproved(commentRequestModel.isApproved())
                 .build();
     }
 
@@ -120,6 +124,21 @@ public class EntityModelUtil {
                 .technologies(projectsRequestModel.getTechnologies())
                 .imageUrl(projectsRequestModel.getImageUrl())
                 .githubLink(projectsRequestModel.getGithubLink())
+                .projectLink(projectsRequestModel.getProjectLink())
+                .build();
+    }
+
+    public static SkillsResponseModel toSkillsResponseModel(Skills skills) {
+        SkillsResponseModel skillsResponseModel = new SkillsResponseModel();
+        BeanUtils.copyProperties(skills, skillsResponseModel);
+        return skillsResponseModel;
+    }
+
+    public static Skills toSkillsEntity(SkillsRequestModel skillsRequestModel) {
+        return Skills.builder()
+                .skillsId(generateUUIDString())
+                .name(skillsRequestModel.getName())
+                .icon(skillsRequestModel.getIcon())
                 .build();
     }
 }

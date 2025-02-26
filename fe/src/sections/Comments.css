@@ -144,7 +144,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white; /* Light dimming effect */
+  background: #effffb; /* Light dimming effect */
   padding: 20px;
   border-radius: 12px;
   z-index: 1000;
@@ -200,4 +200,51 @@
 
 .modal-buttons button:hover {
   opacity: 0.8;
+}
+
+
+.status-message {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.status-message.success {
+  color: green;
+}
+
+.status-message.error {
+  color: red;
+}
+
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.approve-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.approve-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.delete-btn:hover {
+  color: #c0392b;
 }

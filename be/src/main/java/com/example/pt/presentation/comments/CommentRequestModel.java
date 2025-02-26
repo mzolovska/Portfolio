@@ -8,4 +8,6 @@ import lombok.Setter;
 public class CommentRequestModel {
     private String title;
     private String comment;
+    private boolean isApproved;
 }
+

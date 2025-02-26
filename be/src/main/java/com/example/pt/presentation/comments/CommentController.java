@@ -57,5 +57,16 @@ public class CommentController {
         log.info("Deleting comment with id: {}", commentId);
         return commentService.deleteComment(commentId);
     }
+
+    @PatchMapping("/{commentId}/approve")
+    public Mono<ResponseEntity<CommentResponseModel>> approveComment(@PathVariable String commentId) {
+        return commentService.approveComment(commentId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    // Get approved comments for normal users
+
+
 }
 

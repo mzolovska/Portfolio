@@ -12,6 +12,7 @@ import './App.css';
 import EducationExperience from './sections/EducationExperience';
 import "./i18n"; // ✅ Import the i18n config
 import ReactDOM from "react-dom";
+import { ToastContainer } from "react-toastify";
 
 
 
@@ -21,7 +22,8 @@ const App: React.FC = () => {
     <Navbar />
     
     <div className="app">
-      
+    <ToastContainer position="top-center" autoClose={3000} />
+
       <main>
       <CoverPage />
       <AboutMe />

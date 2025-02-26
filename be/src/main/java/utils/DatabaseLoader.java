@@ -63,7 +63,7 @@ public class DatabaseLoader {
                 .doOnNext(education -> log.info("Preloaded education section: {}", education))
                 .then();*/
 
-        Mono<Void> commentMono = commentRepository.deleteAll()
+        /*Mono<Void> commentMono = commentRepository.deleteAll()
                 .thenMany(commentRepository.saveAll(List.of(
                         Comment.builder()
                                 .id(null)
@@ -74,7 +74,7 @@ public class DatabaseLoader {
                 )))
                 .doOnNext(comment -> log.info("Preloaded comment section: {}", comment))
                 .then();
-
+*/
 
         /*Mono<Void> experienceMono = experienceRepository.deleteAll()
                 .thenMany(experienceRepository.saveAll(List.of(

@@ -61,4 +61,27 @@ public class CommentServiceImpl implements CommentService {
                 .flatMap(commentRepository::delete)
                 .doOnSuccess(deletedComment -> log.info("Deleted Comment {}: ", deletedComment));
     }
+
+
+    @Override
+    public Mono<CommentResponseModel> approveComment(String commentId) {
+        return commentRepository.findCommentByCommentId(commentId) // ✅ Make sure we fetch by commentId
+                .switchIfEmpty(Mono.error(new NotFoundException("Comment not found: " + commentId))) // 🔴 Return 404 if not found
+                .flatMap(comment -> {
+                    comment.setApproved(true); // ✅ Approve the comment
+
+                    System.out.println("Before Save - isApproved: " + comment.isApproved()); // 🔍 Debugging
+
+                    return commentRepository.save(comment)
+                            .doOnSuccess(savedComment ->
+                                    System.out.println("After Save - isApproved: " + savedComment.isApproved())); // 🔍 Debugging
+                })
+                .map(EntityModelUtil::toCommentResponseModel);
+    }
+
+
+
+
+
+
 }

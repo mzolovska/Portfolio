@@ -4,6 +4,7 @@ export interface CommentResponseModel {
   commentId: string;
   title: string;
   comment: string;
+  isApproved: boolean; // ✅ Add approval field
 }
 
 export interface CommentRequestModel {
@@ -64,11 +65,29 @@ export const useCommentApi = () => {
     await axiosInstance.delete(`/comments/${commentId}`);
   };
 
+
+  const approveComment = async (commentId: string) => {
+    console.log(`Sending API request to approve comment ${commentId}`); // ✅ Debug log
+    try {
+      const response = await axiosInstance.patch(`/comments/${commentId}/approve`);
+      console.log("API Response:", response.data); // ✅ Check response
+      return response.data;
+    } catch (error) {
+      console.error("API Error approving comment:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+  
+
+
   return {
     fetchAllComments,
     fetchCommentById,
     createComment,
     updateComment,
     deleteComment,
+    approveComment, // ✅ Add approval function
   };
 };
+
+

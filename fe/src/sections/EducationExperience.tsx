@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useExperienceApi, ExperienceResponseModel, ExperienceRequestModel } from "../api/useExperienceApi";
-import { useEducationApi, EducationResponseModel, EducationRequestModel } from "../api/useEducatoinApi";
+import { useEducationApi, EducationResponseModel, EducationRequestModel } from "../api/useEducationApi";
 import { AdminControls } from "./AdminControls"; // ✅ Import Admin Controls
 import "./EducationExperience.css";
 import Section from "../Section";
@@ -29,26 +29,42 @@ const EducationExperience = () => {
     fetchData();
   }, []);
 
+
+  
   // ✅ Handlers for Experience
   const handleModifyExperience = async (updatedData: ExperienceResponseModel) => {
+    if (new Date(updatedData.startDate) > new Date(updatedData.endDate)) {
+      alert("End date must be after start date.");
+      return; // ⛔ Stop execution
+    }
+  
     try {
-      const updated = await updateExperience(updatedData.experienceId, {
-        role: updatedData.role,
-        company: updatedData.company,
-        description: updatedData.description,
-        startDate: updatedData.startDate,
-        endDate: updatedData.endDate,
-      });
-
+      await updateExperience(updatedData.experienceId, { ...updatedData });
       setExperiences((prev) =>
-        prev.map((exp) => (exp.experienceId === updated.experienceId ? updated : exp))
+        prev.map((exp) =>
+          exp.experienceId === updatedData.experienceId ? updatedData : exp
+        )
+      );
+
+  
+      setExperiences((prev) =>
+        prev.map((exp) =>
+          exp.experienceId === updatedData.experienceId ? updatedData : exp
+        )
       );
     } catch (error) {
       console.error("Error updating Experience:", error);
     }
   };
+  
+  
 
   const handleAddExperience = async (newData: ExperienceRequestModel) => {
+    if (new Date(newData.startDate) > new Date(newData.endDate)) {
+      alert("End date must be after start date.");
+      return; // ⛔ Stop execution
+    }
+  
     try {
       const created = await createExperience(newData);
       setExperiences((prev) => [...prev, created]);
@@ -56,6 +72,7 @@ const EducationExperience = () => {
       console.error("Error adding Experience:", error);
     }
   };
+  
 
   const handleDeleteExperience = async (experienceId: string) => {
     try {
@@ -68,24 +85,38 @@ const EducationExperience = () => {
 
   // ✅ Handlers for Education
   const handleModifyEducation = async (updatedData: EducationResponseModel) => {
+    if (new Date(updatedData.startDate) > new Date(updatedData.endDate)) {
+      alert("End date must be after start date.");
+      return; // ⛔ Stop execution
+    }
+  
     try {
-      const updated = await updateEducation(updatedData.educationId, {
-        degree: updatedData.degree,
-        fieldOfStudy: updatedData.fieldOfStudy,
-        institution: updatedData.institution,
-        startDate: updatedData.startDate,
-        endDate: updatedData.endDate,
-      });
+      await updateEducation(updatedData.educationId, { ...updatedData });
+        setEducation((prev) =>
+          prev.map((edu) =>
+            edu.educationId === updatedData.educationId ? updatedData : edu
+          )
+        );
 
+  
       setEducation((prev) =>
-        prev.map((edu) => (edu.educationId === updated.educationId ? updated : edu))
+        prev.map((edu) =>
+          edu.educationId === updatedData.educationId ? updatedData : edu
+        )
       );
     } catch (error) {
       console.error("Error updating Education:", error);
     }
   };
+  
 
+  
   const handleAddEducation = async (newData: EducationRequestModel) => {
+    if (new Date(newData.startDate) > new Date(newData.endDate)) {
+      alert("End date must be after start date.");
+      return; // ⛔ Stop execution
+    }
+  
     try {
       const created = await createEducation(newData);
       setEducation((prev) => [...prev, created]);
@@ -93,6 +124,7 @@ const EducationExperience = () => {
       console.error("Error adding Education:", error);
     }
   };
+  
 
   const handleDeleteEducation = async (educationId: string) => {
     try {
@@ -121,6 +153,7 @@ const EducationExperience = () => {
                 { key: "startDate", label: t("educationExperience.startDate"), type: "date" },
                 { key: "endDate", label: t("educationExperience.endDate"), type: "date" },
               ]}
+              
               onAdd={handleAddEducation}
               onModify={handleModifyEducation}
               onDelete={handleDeleteEducation}

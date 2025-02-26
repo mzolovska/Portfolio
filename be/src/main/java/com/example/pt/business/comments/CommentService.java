@@ -12,5 +12,7 @@ public interface CommentService {
     Mono<CommentResponseModel> getCommentById(String commentId);
     Mono<CommentResponseModel> updateComment(String commentId, Mono<CommentRequestModel> commentRequestModel);
     Mono<Void> deleteComment(String commentId);
+    Mono<CommentResponseModel> approveComment(String commentId);
+
 }
 

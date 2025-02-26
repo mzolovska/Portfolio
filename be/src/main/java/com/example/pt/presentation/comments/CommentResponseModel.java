@@ -11,8 +11,9 @@ public class CommentResponseModel {
     private String commentId;
     private String title;
     private String comment;
-
+    private boolean isApproved;
     public CommentResponseModel() {
 
     }
+
 }

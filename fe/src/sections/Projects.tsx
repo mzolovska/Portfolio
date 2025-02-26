@@ -76,7 +76,8 @@ const Projects: React.FC = () => {
             { key: "title", label: t("projects.titleLabel") },
             { key: "description", label: t("projects.descriptionLabel") },
             { key: "githubLink", label: t("projects.githubLabel") },
-            { key: "imageUrl", label: t("projects.imageLabel") }
+            { key: "imageUrl", label: t("projects.imageLabel") },
+            { key: "projectLink", label: t("projects.projectLinkLabel") }
           ]}
           onAdd={handleAddProject}
           onModify={handleModifyProject}
@@ -98,7 +99,9 @@ const Projects: React.FC = () => {
                     { key: "description", label: t("projects.descriptionLabel") },
                     { key: "technologies", label: t("projects.technologiesLabel") },
                     { key: "githubLink", label: t("projects.githubLabel") },
-                    { key: "imageUrl", label: t("projects.imageLabel") }
+                    { key: "imageUrl", label: t("projects.imageLabel") },
+                    { key: "projectLink", label: t("projects.projectLinkLabel") }
+
                   ]}
                   onAdd={handleAddProject}
                   onModify={handleModifyProject}

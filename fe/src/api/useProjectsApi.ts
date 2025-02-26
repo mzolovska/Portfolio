@@ -8,6 +8,7 @@ export interface ProjectResponseModel {
   technologies: string[]; // ✅ Change from string to string[]
   githubLink: string;
   imageUrl: string; // ✅ Added field
+  projectLink: string; // ✅ Added field
 }
 
 export interface ProjectRequestModel {
@@ -16,6 +17,7 @@ export interface ProjectRequestModel {
   technologies: string[]; // ✅ Change from string to string[]
   githubLink: string;
   imageUrl: string; // ✅ Added field
+  projectLink: string; // ✅ Added field
 }
 
 

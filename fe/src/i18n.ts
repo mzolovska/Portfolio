@@ -82,7 +82,8 @@ const resources = {
         addSuccess: "Project successfully added:",
         addError: "Error adding project!",
         modifyError: "Error modifying project!",
-        deleteError: "Error deleting project!"
+        deleteError: "Error deleting project!",
+        projectLinkLabel: "Project Link"
       },
       resume: {
         title: "Resume",
@@ -100,7 +101,8 @@ const resources = {
         addButton: "Add",
         saveButton: "Save",
         deleteButton: "Delete",
-        cancel: "Cancel"
+        cancel: "Cancel",
+        dateRangeError: "End date must be after start date"
       },
       
     }
@@ -186,7 +188,8 @@ const resources = {
         addSuccess: "Projet ajouté avec succès :",
         addError: "Erreur lors de l'ajout du projet !",
         modifyError: "Erreur lors de la modification du projet !",
-        deleteError: "Erreur lors de la suppression du projet !"
+        deleteError: "Erreur lors de la suppression du projet !",
+        projectLinkLabel: "Lien du projet"
       },
       resume: {
         title: "CV",
@@ -204,7 +207,8 @@ const resources = {
         addButton: "Ajouter",
         saveButton: "Enregistrer",
         deleteButton: "Supprimer",
-        cancel: "Annuler"
+        cancel: "Annuler",
+        dateRangeError: "La date de fin doit être postérieure à la date de début."
       }
     }
   }

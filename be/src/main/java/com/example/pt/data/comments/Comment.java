@@ -17,4 +17,6 @@ public class Comment {
     private String commentId;
     private String title;
     private String comment;
+    private boolean isApproved = false; // Default to false (not approved)
+
 }
