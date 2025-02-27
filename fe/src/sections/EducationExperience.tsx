@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useExperienceApi, ExperienceResponseModel, ExperienceRequestModel } from "../api/useExperienceApi";
-import { useEducationApi, EducationResponseModel, EducationRequestModel } from "../api/useEducationApi";
-import { AdminControls } from "./AdminControls"; // ✅ Import Admin Controls
+import { 
+  useExperienceApi, ExperienceResponseModel, ExperienceRequestModel 
+} from "../api/useExperienceApi";
+import { 
+  useEducationApi, EducationResponseModel, EducationRequestModel 
+} from "../api/useEducationApi";
+import { AdminControls } from "./AdminControls"; 
 import "./EducationExperience.css";
 import Section from "../Section";
 
 const EducationExperience = () => {
-
   const { fetchAllExperiences, createExperience, updateExperience, deleteExperience } = useExperienceApi();
   const { fetchAllEducation, createEducation, updateEducation, deleteEducation } = useEducationApi();
 
@@ -16,53 +19,40 @@ const EducationExperience = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const expData = await fetchAllExperiences();
-        const eduData = await fetchAllEducation();
-        setExperiences(expData);
-        setEducation(eduData);
+        const educationData = await fetchAllEducation();
+        const experienceData = await fetchAllExperiences();
+        setEducation(educationData);
+        setExperiences(experienceData);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching Education & Experience:", error);
       }
     };
-    fetchData();
-  }, []);
-
-
   
+    fetchData();
+  }, []); // Add dependencies
+  
+
   // ✅ Handlers for Experience
   const handleModifyExperience = async (updatedData: ExperienceResponseModel) => {
     if (new Date(updatedData.startDate) > new Date(updatedData.endDate)) {
       alert("End date must be after start date.");
-      return; // ⛔ Stop execution
+      return;
     }
-  
     try {
-      await updateExperience(updatedData.experienceId, { ...updatedData });
+      await updateExperience(updatedData.experienceId, updatedData);
       setExperiences((prev) =>
-        prev.map((exp) =>
-          exp.experienceId === updatedData.experienceId ? updatedData : exp
-        )
-      );
-
-  
-      setExperiences((prev) =>
-        prev.map((exp) =>
-          exp.experienceId === updatedData.experienceId ? updatedData : exp
-        )
+        prev.map((exp) => (exp.experienceId === updatedData.experienceId ? updatedData : exp))
       );
     } catch (error) {
       console.error("Error updating Experience:", error);
     }
   };
-  
-  
 
   const handleAddExperience = async (newData: ExperienceRequestModel) => {
     if (new Date(newData.startDate) > new Date(newData.endDate)) {
       alert("End date must be after start date.");
-      return; // ⛔ Stop execution
+      return;
     }
-  
     try {
       const created = await createExperience(newData);
       setExperiences((prev) => [...prev, created]);
@@ -70,7 +60,6 @@ const EducationExperience = () => {
       console.error("Error adding Experience:", error);
     }
   };
-  
 
   const handleDeleteExperience = async (experienceId: string) => {
     try {
@@ -85,36 +74,23 @@ const EducationExperience = () => {
   const handleModifyEducation = async (updatedData: EducationResponseModel) => {
     if (new Date(updatedData.startDate) > new Date(updatedData.endDate)) {
       alert("End date must be after start date.");
-      return; // ⛔ Stop execution
+      return;
     }
-  
     try {
-      await updateEducation(updatedData.educationId, { ...updatedData });
-        setEducation((prev) =>
-          prev.map((edu) =>
-            edu.educationId === updatedData.educationId ? updatedData : edu
-          )
-        );
-
-  
+      await updateEducation(updatedData.educationId, updatedData);
       setEducation((prev) =>
-        prev.map((edu) =>
-          edu.educationId === updatedData.educationId ? updatedData : edu
-        )
+        prev.map((edu) => (edu.educationId === updatedData.educationId ? updatedData : edu))
       );
     } catch (error) {
       console.error("Error updating Education:", error);
     }
   };
-  
 
-  
   const handleAddEducation = async (newData: EducationRequestModel) => {
     if (new Date(newData.startDate) > new Date(newData.endDate)) {
       alert("End date must be after start date.");
-      return; // ⛔ Stop execution
+      return;
     }
-  
     try {
       const created = await createEducation(newData);
       setEducation((prev) => [...prev, created]);
@@ -122,7 +98,6 @@ const EducationExperience = () => {
       console.error("Error adding Education:", error);
     }
   };
-  
 
   const handleDeleteEducation = async (educationId: string) => {
     try {
@@ -134,111 +109,96 @@ const EducationExperience = () => {
   };
 
   return (
-    <div className="sect">
-      <Section id="education-experience" title={"Education & Experience"}>
-        <div className="edu-exp-container">
-          
-          {/* 🎓 Education */}
-          <div className="education">
-            <h2>Education</h2>
-            {/* Admin Add Button for Education */}
-            <AdminControls
-              entityType={"Education"}
-              fields={[
-                { key: "degree", label: "Degree"},
-                { key: "fieldOfStudy", label: "Field of Study" },
-                { key: "institution", label: "Institution" },
-                { key: "startDate", label: "Start Date", type: "date" },
-                { key: "endDate", label: "End Date", type: "date" },
-              ]}
-              
-              onAdd={handleAddEducation}
-              onModify={handleModifyEducation}
-              onDelete={handleDeleteEducation}
-              isSection
-            />
-
-            {education.length > 0 ? (
-              education.map((edu) => (
-                <div key={edu.educationId} className="edu-exp-card">
-                  <h3>{edu.degree} {edu.fieldOfStudy}</h3>
-                  <p>{edu.institution}</p>
-                  <p>{edu.startDate} - {edu.endDate}</p>
-                  
-                  {/* Admin Controls for Each Education Item */}
-                  <AdminControls
-                    entity={edu}
-                    entityType={"Education"}
-                    fields={[
-                      { key: "degree", label: "Degree" },
-                      { key: "fieldOfStudy", label: "Field of Study" },
-                      { key: "institution", label: "Institution" },
-                      { key: "startDate", label: "Start Date", type: "date" },
-                      { key: "endDate", label: "End Date", type: "date" },
-                    ]}
-                    onAdd={handleAddEducation}
-                    onModify={handleModifyEducation}
-                    onDelete={handleDeleteEducation}
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No education records available.</p>
-            )}
-          </div>
-
-          {/* 💼 Experience */}
-          <div className="experience">
-            <h2>Experience</h2>
-            {/* Admin Add Button for Experience */}
-            <AdminControls
-              entityType={"Experience"}
-              fields={[
-                { key: "role", label:"Role" },
-                { key: "company", label: "Company"},
-                { key: "description", label: "Description" },
-                { key: "startDate", label: "Start Date", type: "date" },
-                { key: "endDate", label: "End Date", type: "date" },
-              ]}
-              onAdd={handleAddExperience}
-              onModify={handleModifyExperience}
-              onDelete={handleDeleteExperience}
-              isSection
-            />
-
-            {experiences.length > 0 ? (
-              experiences.map((exp) => (
-                <div key={exp.experienceId} className="edu-exp-card">
-                  <h3>{exp.role} at {exp.company}</h3>
-                  <p>{exp.description}</p>
-                  <p>{exp.startDate} - {exp.endDate}</p>
-
-                  {/* Admin Controls for Each Experience Item */}
-                  <AdminControls
-                    entity={exp}
-                    entityType={"Experience"}
-                    fields={[
-                      { key: "role", label:"Role" },
-                      { key: "company", label: "Company"},
-                      { key: "description", label: "Description" },
-                      { key: "startDate", label: "Start Date", type: "date" },
-                      { key: "endDate", label: "End Date", type: "date" },
-                    ]}
-                    onAdd={handleAddExperience}
-                    onModify={handleModifyExperience}
-                    onDelete={handleDeleteExperience}
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No experience records available.</p>
-            )}
-          </div>
-
+    <div className="education-experience-section">
+      <Section id="education-experience" title="">
+        
+        {/* 🎓 Education Section */}
+        <h2>Education</h2>
+        <AdminControls
+          entityType="Education"
+          fields={[
+            { key: "degree", label: "Degree" },
+            { key: "fieldOfStudy", label: "Field of Study" },
+            { key: "institution", label: "Institution" },
+            { key: "startDate", label: "Start Date", type: "date" },
+            { key: "endDate", label: "End Date", type: "date" },
+          ]}
+          onAdd={handleAddEducation}  // ✅ Add New Education Entry
+          onModify={handleModifyEducation}
+          onDelete={handleDeleteEducation}
+          isSection={true} // Enables the "+ Add" button
+        />
+        <div className="timeline">
+          {education.map((edu, index) => (
+            <div key={edu.educationId} className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}>
+              <div className="timeline-content">
+                <h3>{edu.degree} in {edu.fieldOfStudy}</h3>
+                <p>{edu.institution}</p>
+                <span>{edu.startDate} - {edu.endDate}</span>
+                <AdminControls
+                  entity={edu}
+                  entityType="Education"
+                  fields={[
+                    { key: "degree", label: "Degree" },
+                    { key: "fieldOfStudy", label: "Field of Study" },
+                    { key: "institution", label: "Institution" },
+                    { key: "startDate", label: "Start Date", type: "date" },
+                    { key: "endDate", label: "End Date", type: "date" },
+                  ]}
+                  onAdd={handleAddEducation}
+                  onModify={handleModifyEducation}
+                  onDelete={handleDeleteEducation}
+                />
+              </div>
+            </div>
+          ))}
         </div>
+  
+        {/* 💼 Experience Section */}
+        <h2>Experience</h2>
+        <AdminControls
+          entityType="Experience"
+          fields={[
+            { key: "role", label: "Role" },
+            { key: "company", label: "Company" },
+            { key: "description", label: "Description" },
+            { key: "startDate", label: "Start Date", type: "date" },
+            { key: "endDate", label: "End Date", type: "date" },
+          ]}
+          onAdd={handleAddExperience}  // ✅ Add New Experience Entry
+          onModify={handleModifyExperience}
+          onDelete={handleDeleteExperience}
+          isSection={true} // Enables the "+ Add" button
+        />
+        <div className="timeline">
+          {experiences.map((exp, index) => (
+            <div key={exp.experienceId} className={`timeline-item ${index % 2 === 0 ? "left" : "right"}`}>
+              <div className="timeline-content">
+                <h3>{exp.role} at {exp.company}</h3>
+                <p>{exp.description}</p>
+                <span>{exp.startDate} - {exp.endDate}</span>
+                <AdminControls
+                  entity={exp}
+                  entityType="Experience"
+                  fields={[
+                    { key: "role", label: "Role" },
+                    { key: "company", label: "Company" },
+                    { key: "description", label: "Description" },
+                    { key: "startDate", label: "Start Date", type: "date" },
+                    { key: "endDate", label: "End Date", type: "date" },
+                  ]}
+                  onAdd={handleAddExperience}
+                  onModify={handleModifyExperience}
+                  onDelete={handleDeleteExperience}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+  
       </Section>
     </div>
   );
-};
+}  
 
 export default EducationExperience;

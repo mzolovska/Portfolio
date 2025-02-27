@@ -1,70 +1,128 @@
 .about-container {
   display: flex;
-  background: #effffb; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: black;
   width: 100%;
   padding: 40px 20px;
+  background: #effffb;
 }
 
+/* ✅ About Me + Resume Side by Side */
 .about-content {
-  display: flex;
-  align-items: center;
-  max-width: 1200px;
-  width: 100%;
-  gap: 50px;
-}
-
-/* 📸 Image Container */
-.about-image {
-  flex: 1;
+  color: black;
   display: flex;
   justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  width: 90%;
+  max-width: 1100px;
+  flex-wrap: wrap;
 }
 
-.about-image img {
-  width: 250px; /* ✅ Small enough, not taking full screen */
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
+/* ✅ Individual About Me and Resume Box */
+.about-box {
+  flex: 1;
+  padding: 20px;
+  background: #beebe9; 
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 250px;
 }
 
-/* 📝 About Text */
-.about-text {
-  flex: 2;
-  max-width: 600px;
-  word-wrap: break-word; /* ✅ Prevents text from overflowing */
+/* ✅ Resume Box - Same Style as About Me */
+/* ✅ Resume Box - Make it Align Properly */
+.resume-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #beebe9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 250px;
+  max-width: 400px;
 }
 
-.about-text h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+/* ✅ Fix Resume Heading Alignment */
+.resume-box h2 {
+  margin: 0; /* Removes default spacing */
+  padding-top: 0px; /* Adjust for better alignment */
 }
 
-.about-text p {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  max-width: 100%; /* ✅ Prevents text from exceeding container */
+/* ✅ Remove Any Unexpected Dots */
+.resume-box ul {
+  list-style: none;
+  padding-left: 0;
 }
+
+
+/* ✅ Skills Section - Wide but Thin */
+.skills-box {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  background: #beebe9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  text-align: center;
+}
+
+.skills-carousel-wrapper {
+  display: flex;
+  justify-content: center; /* ✅ Keeps it centered */
+  align-items: center;
+  width: 100%;
+}
+
 
 /* 📱 Responsive Design */
 @media (max-width: 768px) {
   .about-content {
     flex-direction: column;
-    text-align: center;
-    width: 240px; /* ✅ Adjusted size */
-    gap: 20px; /* ✅ Reduce spacing */
+    align-items: center;
+    width: 100%;
   }
 
-  .about-image {
-    margin-bottom: 10px;
+  .about-box {
+    width: 90%;
+    max-width: 350px; /* ✅ Make it smaller on small screens */
   }
 
-  .about-image img {
-    width: 220px; /* ✅ Adjusted size */
+   .skills-section {
+    width: 95%; /* Slightly reduce width */
+     max-width: 500px; /* Prevent from stretching too much */
+    padding: 15px;
+  }  
+
+  .skills-box {
+    width: 75%; /* ✅ Slightly reduce width */
+    max-width: 500px; /* ✅ Prevent from stretching too much */
+    padding: 15px; /* ✅ Reduce padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .about-box {
+    width: 95%;
+    max-width: 320px; /* ✅ Slightly smaller for phones */
   }
 
-  .about-text {
-    max-width: 90%; /* ✅ Prevents text from being too wide */
-  }
+    .skills-section {
+      width: 80%;
+      max-width: 300px; 
+      padding: 10px;
+    } 
+
+    .skills-box {
+      width: 60%; /* ✅ Reduce width even more */
+      max-width: 300px; /* ✅ Prevent it from getting too large */
+      padding: 10px; /* ✅ Reduce padding for smaller screens */
+      margin: 0 auto; /* ✅ Make sure it's centered */
+    }
 }

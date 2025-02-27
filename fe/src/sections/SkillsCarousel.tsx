@@ -98,37 +98,39 @@ const SkillsCarousel = () => {
 };
 
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4, // Adjust number of visible items
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-    nextArrow: <NextArrow />, // Use custom arrow
-    prevArrow: <PrevArrow />, // Use custom arrow
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 3,
-        },
+const settings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 4, // Default for large screens
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3, // Show 3 skills on tablets
       },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 2,
-        },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 2, // Show 2 skills on small tablets
       },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-        },
+    },
+    {
+      breakpoint: 500,
+      settings: {
+        slidesToShow: 1, // Show 1 skill at a time on phones
       },
-    ],
-  };
+    },
+  ],
+};
+
+
 
   return (
     <div className="skills-carousel">

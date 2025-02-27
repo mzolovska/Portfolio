@@ -4,7 +4,6 @@ import { AdminControls } from "./AdminControls";
 import Section from "../Section";
 import "./AboutMe.css";
 import SkillsCarousel from "./SkillsCarousel";
-import profileImage from "../assets/profile.jpg";
 import Resume from "./Resume";
 
 const AboutMe = () => {
@@ -72,42 +71,42 @@ const AboutMe = () => {
           isSection={true} // Enables the "+ Add" button
         />
 
+        {/* ✅ About Me + Resume Sections (Side by Side) */}
         <div className="about-content">
-          {/* 🖼️ Profile Image */}
-          <div className="about-image">
-            <img src={profileImage} alt="Profile" />
-          </div>
+          {aboutList.length > 0 ? (
+            aboutList.map((aboutData) => (
+              <div key={aboutData.aboutId} className="about-box">
+                <h2>{aboutData.name}</h2>
+                <p>{aboutData.description}</p>
 
-          {/* 📜 About Me Text */}
-          <div className="about-text">
-            {aboutList.length > 0 ? (
-              aboutList.map((aboutData) => (
-                <div key={aboutData.aboutId} className="about-details">
-                  <h2>{aboutData.name}</h2>
-                  <p>{aboutData.description}</p>
+                {/* 🔧 Admin Controls for Editing/Deleting */}
+                <AdminControls
+                  entity={aboutData}
+                  entityType="About Me"
+                  fields={[
+                    { key: "name", label: "Name" },
+                    { key: "description", label: "Description" },
+                  ]}
+                  onAdd={handleAdd}
+                  onModify={handleModify}
+                  onDelete={() => handleDelete(aboutData.aboutId)}
+                />
+              </div>
+            ))
+          ) : (
+            <p>No information available</p>
+          )}
 
-                  {/* 🔧 Admin Controls for Editing/Deleting */}
-                  <AdminControls
-                    entity={aboutData}
-                    entityType="About Me"
-                    fields={[
-                      { key: "name", label: "Name"},
-                      { key: "description", label: "Description" },
-                    ]}
-                    onAdd={handleAdd}
-                    onModify={handleModify}
-                    onDelete={() => handleDelete(aboutData.aboutId)}
-                  />
-                </div>
-              ))
-            ) : (
-              <p>No information available</p>
-            )}
-
+          {/* ✅ Resume Section (Side by Side with About Me) */}
+          <div className="about-box resume-box">
             <Resume />
-            <h2>Skills</h2>
-            <SkillsCarousel />
           </div>
+        </div>
+
+        {/* ✅ Skills Section - Wide but Thin Box */}
+        <div className="skills-box">
+          <h2>Skills</h2>
+          <SkillsCarousel />
         </div>
       </Section>
     </div>

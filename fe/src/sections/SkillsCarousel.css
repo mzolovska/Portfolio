@@ -1,60 +1,105 @@
 /* 🛠 Skills Carousel Container */
 .skills-carousel {
+  width: fit-content; /* ✅ Shrinks to fit the content */
+  max-width: 100%; /* ✅ Prevents stretching */
+  margin: 0 auto; /* ✅ Centers within the wrapper */
+  padding: 10px;
+  border: 3px solid #5585b5;
+  border-radius: 15px;
+  background: white;
+  height: 120px; /* ✅ Adjust based on content */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 100%;
-  max-width: 900px;
-  margin: auto;
+  align-items: center; /* ✅ Keep items aligned properly */
+  overflow: hidden; /* ✅ Prevents content from breaking the layout */
 }
+
+.skills-carousel-wrapper {
+  display: flex;
+  justify-content: center; /* ✅ Keeps the carousel centered */
+  align-items: center;
+  width: 100%;
+  max-width: 600px; /* ✅ Limits max width */
+  margin: 0 auto; /* ✅ Ensures it's centered */
+}
+
+
 
 /* 📌 Skill Item */
 .skill-item {
+  flex: 0 0 auto; /* ✅ Keeps items from stretching */
+  width: 80px; /* ✅ Adjust size */
+  height: 80px; /* ✅ Ensures consistency */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* 🎯 Fix Arrows Inside */
+.slick-prev,
+.slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px; /* ✅ Ensure a good size */
+  height: 40px;
+  background-color: rgba(85, 133, 181, 0.8); /* ✅ Match border color */
+  border-radius: 50%; /* ✅ Circular arrows */
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100px; /* ✅ Adjust width */
-  height: 100px; /* ✅ Adjust height */
-  margin: 5px; /* ✅ Reduce margin for small screens */
+  color: white;
+  font-size: 20px;
+}
+
+/* 🡠 Left Arrow */
+.slick-prev {
+  left: 10px; /* ✅ Keep inside border */
+}
+
+/* 🡢 Right Arrow */
+.slick-next {
+  right: 10px; /* ✅ Keep inside border */
 }
 
 /* 📱 Responsive Fix */
 @media (max-width: 768px) {
   .skills-carousel {
-    gap: 5px; /* ✅ Reduce gap for small screens */
-    max-width: 100%;
+    width: 90%;
+    max-width: 350px; /* ✅ Match other boxes */
   }
 
+
   .skill-item {
-    width: 80px; /* ✅ Make icons smaller */
+    width: 80px;
     height: 80px;
     margin: 2px;
+  }
+
+  .slick-prev,
+  .slick-next {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .skills-carousel {
-    gap: 2px;
-  }
-
+    .skills-carousel {
+      width: 85%;
+      max-width: 320px; /* ✅ Adjust for smaller screens */
+    }
+    
   .skill-item {
     width: 60px;
     height: 60px;
   }
-}
 
-  
   .slick-prev,
   .slick-next {
-    z-index: 10;
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
   }
-  
-  .slick-prev {
-    left: -40px; /* Adjust positioning */
-  }
-  
-  .slick-next {
-    right: -40px;
-  }
-  
+}

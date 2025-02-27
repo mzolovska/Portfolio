@@ -156,6 +156,35 @@ const Comments = () => {
         )}
       </Section>
 
+
+      {!isAdmin && showModal && (
+        <div className="modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Comment</h2>
+            <form onSubmit={handleAddComment}>
+              <input
+                type="text"
+                placeholder={"Name"}
+                value={newComment.title}
+                onChange={(e) => setNewComment({ ...newComment, title: e.target.value })}
+                required
+              />
+              <textarea
+                placeholder={"Comment"}
+                value={newComment.comment}
+                onChange={(e) => setNewComment({ ...newComment, comment: e.target.value })}
+                required
+              />
+              <div className="modal-buttons">
+                <button type="submit">Submit</button>
+                <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
       {/* 🛑 Delete Confirmation Modal */}
       {deleteConfirm.show && (
         <div className="modal-overlay" onClick={() => setDeleteConfirm({ show: false, commentId: null })}>
@@ -174,3 +203,4 @@ const Comments = () => {
 };
 
 export default Comments;
+

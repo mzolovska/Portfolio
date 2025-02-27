@@ -1,40 +1,71 @@
-.edu-exp-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    background: #effffb; 
-  }
-  
-  .education,
-  .experience {
-    flex: 1;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  .edu-exp-card {
-    background: white; 
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  @media (max-width: 768px) {
-    .edu-exp-container {
-      flex-direction: column;
-      gap: 20px;
-    }
+.education-experience-section {
+  background: #effffb;
+  padding: 50px 0;
+}
+
+.timeline {
+  position: relative;
+  max-width: 900px;
+  margin: auto;
+}
+
+.timeline::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  background: #8ac6d1; 
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 20px;
+}
+
+.timeline-item.left {
+  left: 0;
+}
+
+.timeline-item.right {
+  left: 50%;
+}
+
+.timeline-content {
+  background: #beebe9;
+  padding: 15px 20px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #8ac6d1; 
+  border-radius: 50%;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 768px) {
+  .timeline::after {
+    left: 10px;
   }
 
-  .sect{
-    background: #effffb; 
+  .timeline-item {
+    width: 100%;
+    left: 0 !important;
+    padding-left: 40px;
   }
-  
+
+  .timeline-item::after {
+    left: 10px;
+  }
+}
