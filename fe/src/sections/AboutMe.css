@@ -123,6 +123,5 @@
       width: 70%; /* ✅ Reduce width even more */
       max-width: 300px; /* ✅ Prevent it from getting too large */
       padding: 10px; /* ✅ Reduce padding for smaller screens */
-      margin: 0 auto; /* ✅ Make sure it's centered */
     }
 }
