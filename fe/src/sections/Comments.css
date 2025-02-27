@@ -64,6 +64,8 @@
   .slick-list {
     overflow: hidden;
   }
+
+  
 }
 
 @media (max-width: 480px) {
@@ -73,13 +75,15 @@
   }
 
   .modal-buttons {
-    flex-direction: column; /* ✅ Stack buttons */
+    flex-direction: row; /* ✅ Stack buttons */
     gap: 10px; /* ✅ Add spacing */
   }
 
   .modal-buttons button {
     width: 100%; /* ✅ Make buttons full width */
   }
+
+  
 }
 
 /* Spacing between slides */
@@ -174,7 +178,7 @@
   border-radius: 12px;
   text-align: center;
   width: 90%; /* ✅ Use more flexible width */
-  max-width: 400px;  /* Responsive */
+  max-width: 460px;  /* Responsive */
   box-shadow: 0px 4px 15px black;
 }
 
