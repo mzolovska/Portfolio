@@ -37,7 +37,7 @@ cd pt
 
 cd backend
 
-./mvnw spring-boot:run
+docker compose up --build
 
 3️⃣ Start the Frontend
 
