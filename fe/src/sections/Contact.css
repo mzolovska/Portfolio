@@ -1,6 +1,5 @@
 .contact-section {
   padding: 60px 20px;
-	background: #effffb; 
   text-align: center;
 
 }
@@ -8,7 +7,7 @@
 .contact-container {
   max-width: 500px;
   margin: auto;
-  background: white;
+  background: #E9DCC9;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);

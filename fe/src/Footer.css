@@ -1,6 +1,7 @@
 .footer {
-	background: #118a7e; 
-    color: white;
+    background: #C4A484;
+    opacity: 0.85; 
+    color: black;
     text-align: center;
     padding: 20px 0;
     margin-top: 40px;
@@ -14,7 +15,7 @@
   }
   
   .social-icons a {
-    color: white;
+    color: black;
     transition: 0.3s;
   }
   

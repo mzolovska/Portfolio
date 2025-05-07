@@ -12,7 +12,6 @@
 }
 
 .comments-section {
-  background: #effffb; 
   width: 100%;
 }
 
@@ -28,7 +27,7 @@
 
 /* 💬 Comment Card */
 .comment-card {
-  background: #beebe9;
+  background: #E9DCC9;
   padding: 30px;
   border-radius: 12px;
   color: black;
@@ -124,7 +123,7 @@
 
 /* Add Comment Button */
 .add-comment-btn {
-  background: #effffb; 
+  background: #E9DCC9; 
   color: black;
   font-size: 24px;
   font-weight: bold;
@@ -163,7 +162,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #effffb; /* Light dimming effect */
+  background: #E9DCC9; /* Light dimming effect */
   padding: 20px;
   border-radius: 12px;
   z-index: 1000;
@@ -208,7 +207,7 @@
 }
 
 .modal-buttons button {
-  background: #3baea0; 
+  background: #E9DCC9; 
   color: white;
   padding: 10px;
   border: none;

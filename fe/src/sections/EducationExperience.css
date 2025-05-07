@@ -1,5 +1,4 @@
 .education-experience-section {
-  background: #effffb;
   padding: 50px 0;
 }
 
@@ -13,7 +12,7 @@
   content: "";
   position: absolute;
   width: 4px;
-  background: #8ac6d1; 
+  background: #E9DCC9; 
   top: 0;
   bottom: 0;
   left: 50%;
@@ -35,7 +34,7 @@
 }
 
 .timeline-content {
-  background: #beebe9;
+  background: #E9DCC9;
   padding: 15px 20px;
   border-radius: 8px;
   position: relative;
@@ -47,7 +46,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  background: #8ac6d1; 
+  background: #E9DCC9; 
   border-radius: 50%;
   top: 20px;
   left: 50%;

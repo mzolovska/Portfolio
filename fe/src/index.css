@@ -35,3 +35,11 @@ body {
   top: 0px !important;
   position: static !important;
 }
+
+body {
+  background-image: url('https://i.pinimg.com/1200x/40/f6/36/40f6367ea5be8eae7923585a5fe8cb82.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+}

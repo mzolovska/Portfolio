@@ -4,7 +4,7 @@
   max-width: 100%; /* ✅ Prevents stretching */
   margin: 0 auto; /* ✅ Centers within the wrapper */
   padding: 10px;
-  border: 3px solid #5585b5;
+  border: 3px solid #E9DCC9;
   border-radius: 15px;
   background: white;
   height: 120px; /* ✅ Adjust based on content */
