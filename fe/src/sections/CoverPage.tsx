@@ -3,6 +3,7 @@ import { ReactTyped } from 'react-typed';
 import './CoverPage.css'; // Add your CSS for the cover page
 import { useTranslation } from "react-i18next";
 import profileImage from "../assets/profile.jpg";
+import { ClassNames } from '@emotion/react';
 
 
 const CoverPage: React.FC = () => {
@@ -15,13 +16,15 @@ const CoverPage: React.FC = () => {
         <div className="about-image">
             <img src={profileImage} alt="Profile" />
           </div>
+          <div className="highlight">
+
           <ReactTyped
-          
             strings={["Hey there, my name is Mariya, and I am a developer."]}
             typeSpeed={50}
             backSpeed={30}
             showCursor={false}
           />
+          </div>
         </h1>
         <p>Scroll down to learn more about me!</p>
         <div className="scroll-indicator">↓</div>
