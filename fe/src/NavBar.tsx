@@ -23,19 +23,22 @@ const Navbar: React.FC = () => {
     // };
 
     const toggleLanguage = () => {
-      const currentLang = document.documentElement.lang || "en"; // Get current language
-      const newLang = currentLang === "en" ? "fr" : "en";
-  
-      const googleTranslateFrame = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-      if (googleTranslateFrame) {
-        googleTranslateFrame.value = newLang;
-        googleTranslateFrame.dispatchEvent(new Event("change"));
+      const newLang = i18n.language === "en" ? "fr" : "en";
+    
+      // Change language in i18next
+      i18n.changeLanguage(newLang);
+      localStorage.setItem("language", newLang);
+    
+      // Change Google Translate language
+      const googleTranslateSelect = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+      if (googleTranslateSelect) {
+        googleTranslateSelect.value = newLang;
+        googleTranslateSelect.dispatchEvent(new Event("change"));
       }
-  
+    
       document.documentElement.lang = newLang; // Update HTML lang attribute
-      localStorage.setItem("language", newLang); // Save language preference
     };
-
+    
 
   return (
     <nav className="navbar">

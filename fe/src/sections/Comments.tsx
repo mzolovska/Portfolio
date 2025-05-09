@@ -9,6 +9,8 @@ import { FaArrowLeft, FaArrowRight, FaTrash, FaCheck } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTranslation } from "react-i18next";
+
 
 const Comments = () => {
   const { fetchAllComments, createComment, deleteComment, approveComment } = useCommentApi();
@@ -18,6 +20,7 @@ const Comments = () => {
   const [newComment, setNewComment] = useState({ title: "", comment: "" });
   const { user } = useAuth0();
   const isAdmin = user?.email === "admin@pt.com";
+  const { t } = useTranslation();
 
   // 🔥 State for delete confirmation modal
   const [deleteConfirm, setDeleteConfirm] = useState<{ show: boolean; commentId: string | null }>({
@@ -46,7 +49,7 @@ const Comments = () => {
       await createComment(newComment);
       setShowModal(false);
       setNewComment({ title: "", comment: "" });
-      toast.success("Your comment has been sent for approval!");
+      toast.success(t("commentSent")); // Your comment has been sent for approval!
     } catch (error) {
       console.error("Error adding comment:", error);
     }
@@ -59,7 +62,7 @@ const Comments = () => {
       await deleteComment(deleteConfirm.commentId);
       setApprovedComments(prev => prev.filter(comment => comment.commentId !== deleteConfirm.commentId));
       setPendingComments(prev => prev.filter(comment => comment.commentId !== deleteConfirm.commentId));
-      toast.success("Comment deleted successfully!");
+      toast.success(t("commentDeleted")); // Comment deleted successfully!
     } catch (error) {
       console.error("Error deleting comment:", error);
     } finally {
@@ -75,7 +78,7 @@ const Comments = () => {
         const approvedComment = pendingComments.find(comment => comment.commentId === commentId);
         return approvedComment ? [...prev, { ...approvedComment, isApproved: true }] : prev;
       });
-      toast.success("Comment approved!");
+      toast.success(t("commentApproved")); // Comment approved!
     } catch (error) {
       console.error("Error approving comment:", error);
     }
