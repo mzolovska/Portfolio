@@ -73,7 +73,7 @@ export const useCommentApi = () => {
       console.log("API Response:", response.data); // ✅ Check response
       return response.data;
     } catch (error) {
-      console.error("API Error approving comment:", error.response?.data || error.message);
+      console.error("API Error approving comment:");
       throw error;
     }
   };
