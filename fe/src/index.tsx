@@ -10,6 +10,22 @@ import { AppRoutes } from "./shared/models/app.routes";
 import { BrowserRouter } from "react-router-dom";
 import './i18n';
 
+// Extend the Window interface to include googleTranslateElementInit
+declare global {
+  interface Window {
+    googleTranslateElementInit: () => void;
+  }
+
+  // Add google property to the Window interface
+  interface Window {
+    google: {
+      translate: {
+        TranslateElement: new (options: object, containerId: string) => void;
+      };
+    };
+  }
+}
+
 const onRedirectCallback = () => {
   window.location.replace(AppRoutes.Callback);
 };
