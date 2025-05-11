@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
               <span className="user-name">{user?.name}</span>
               <button
                 className="nav-btn"
-                onClick={() => logout({ returnTo: window.location.origin })}
+                onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
               >
                 <FaSignOutAlt size={20} /> Logout
               </button>
