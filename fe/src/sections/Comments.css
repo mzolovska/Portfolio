@@ -159,24 +159,26 @@
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 0; /* Cover full screen */
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.3); /* Optional: Dimmed background */
+  top: 50%;
+  left: 50%;
+  background: white; /* Light dimming effect */
+  padding: 20px;
+  border-radius: 12px;
   z-index: 1000;
 }
 
+
+
+/* Modal Content */
 .modal-content {
-  background: #ffffff; /* ✅ Solid white background */
+  background: white; /* Solid white background */
   padding: 25px;
   border-radius: 12px;
   text-align: center;
-  width: 90%;
-  max-width: 460px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3); /* Optional shadow */
+  width: 90%; /* ✅ Use more flexible width */
+  max-width: 460px;  /* Responsive */
+  box-shadow: 0px 4px 15px black;
 }
-
 
 /* Modal Inputs */
 .modal-content input,
