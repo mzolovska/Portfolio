@@ -155,15 +155,15 @@
 
 /* Modal Overlay */
 .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* darker semi-transparent overlay */
   display: flex;
   align-items: center;
   justify-content: center;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 20px;
-  border-radius: 12px;
   z-index: 1000;
 }
 
@@ -171,14 +171,15 @@
 
 /* Modal Content */
 .modal-content {
-  background: white; /* Solid white background */
+  background: white;
   padding: 25px;
   border-radius: 12px;
   text-align: center;
-  width: 90%; /* ✅ Use more flexible width */
-  max-width: 460px;  /* Responsive */
-  box-shadow: 0px 4px 15px black;
+  width: 90%;
+  max-width: 460px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
+
 
 /* Modal Inputs */
 .modal-content input,
