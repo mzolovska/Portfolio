@@ -162,7 +162,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #E9DCC9; /* Light dimming effect */
+  background: white; /* Light dimming effect */
   padding: 20px;
   border-radius: 12px;
   z-index: 1000;
@@ -207,7 +207,7 @@
 }
 
 .modal-buttons button {
-  background: #E9DCC9; 
+  background: white; 
   color: black;
   padding: 10px;
   border: none;

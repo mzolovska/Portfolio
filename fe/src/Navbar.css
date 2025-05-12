@@ -19,6 +19,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-left: 15px;
   z-index: 1001; /* Make sure it's above other content */
 }
 
