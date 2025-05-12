@@ -45,7 +45,9 @@ const Navbar: React.FC = () => {
       <div className="nav-container">
         {/* Left Side - Logo */}
         <div className="nav-logo">
+          <ScrollLink to="home" smooth={true} duration={500} className="nav-logo-link">
             Mariya Zolovska
+          </ScrollLink>
         </div>
 
         {/* Hamburger Menu Button */}

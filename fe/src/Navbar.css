@@ -12,6 +12,17 @@
   z-index: 1000;
 }
 
+.nav-logo-link {
+  font-size: 1.5rem;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  z-index: 1001; /* Make sure it's above other content */
+}
+
+
 .nav-container {
   display: flex;
   width: 90%;
@@ -19,13 +30,15 @@
   align-items: center;
 }
 
-/* Logo */
-.nav-logo a {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
+.nav-links.active {
+  display: flex;
+  background: rgba(255, 255, 255, 0.95); /* <- added background */
+  color: black; /* ensure text color remains black */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* optional: better visibility */
 }
+
+/* Logo */
+
 
 /* Navigation Links */
 .nav-links {
