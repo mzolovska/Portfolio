@@ -160,7 +160,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* darker semi-transparent overlay */
+  background: rgba(0, 0, 0, 0.3); /* ✅ Dim the rest of the screen */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,7 +171,7 @@
 
 /* Modal Content */
 .modal-content {
-  background: white;
+  background: white; /* ✅ white background only on modal box */
   padding: 25px;
   border-radius: 12px;
   text-align: center;
@@ -179,7 +179,6 @@
   max-width: 460px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
 }
-
 
 /* Modal Inputs */
 .modal-content input,
