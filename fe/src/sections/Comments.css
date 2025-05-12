@@ -161,6 +161,7 @@
   position: fixed;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   background: white; /* Light dimming effect */
   padding: 20px;
   border-radius: 12px;
