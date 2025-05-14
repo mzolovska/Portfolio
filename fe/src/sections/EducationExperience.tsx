@@ -157,7 +157,10 @@ const EducationExperience = () => {
             <div className="section-label">Experience</div>
             <div className="section-content">
               {experiences
-                .sort((a, b) => new Date(b.endDate || "").getTime() - new Date(a.endDate || "").getTime())
+                .sort((a, b) =>
+                  new Date(b.endDate || new Date().toISOString()).getTime() -
+                  new Date(a.endDate || new Date().toISOString()).getTime()
+                )
                 .map((exp) => (
                   <div key={exp.experienceId} className="entry-box">
                     <h3>{exp.role} at {exp.company}</h3>
