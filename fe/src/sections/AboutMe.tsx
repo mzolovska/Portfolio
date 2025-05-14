@@ -98,7 +98,7 @@ const AboutMe = () => {
           )}
 
           {/* ✅ Resume Section (Side by Side with About Me) */}
-          <div className="about-box resume-box">
+          <div className="about-box">
             <Resume />
           </div>
         </div>
