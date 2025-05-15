@@ -16,7 +16,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // Allow all endpoints
                         .allowedOrigins("http://localhost:3000") // Allow frontend
-                        .allowedOrigins("https://portfolio-navy-mu-78.vercel.app/")
+                        .allowedOrigins("https://monkfish-app-ldalo.ondigitalocean.app/")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true);
