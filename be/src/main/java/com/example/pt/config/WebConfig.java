@@ -17,7 +17,7 @@ public class WebConfig {
                 registry.addMapping("/**") // Allow all endpoints
                         //.allowedOrigins("http://localhost:3000") // Allow frontend
 
-                        .allowedOrigins("https://monkfish-app-ldalo.ondigitalocean.app")
+                        .allowedOrigins("https://squid-app-3dvkb.ondigitalocean.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true);
